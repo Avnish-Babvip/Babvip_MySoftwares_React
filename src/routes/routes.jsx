@@ -57,7 +57,7 @@ export const appRouter = createBrowserRouter([
         ),
       },
       {
-        path: "/category/online-erp-system",
+        path: "/category/:slug",
         element: (
           <Suspense fallback={<Loader />}>
             <Category />
@@ -65,7 +65,7 @@ export const appRouter = createBrowserRouter([
         ),
       },
       {
-        path: "/software/customer-management-system",
+        path: "/software/:slug",
         element: (
           <Suspense fallback={<Loader />}>
             <Software />

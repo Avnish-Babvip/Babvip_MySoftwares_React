@@ -1,15 +1,47 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Swiper from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import "../components/Styles/SoftwareListing/Softwares.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategoryDataBySlug } from "../features/actions/category";
+import Loader from "../components/Loader/Loader";
 
 const Category = () => {
   const swiperRef = useRef(null);
   const swiperRef2 = useRef(null);
+  const dispatch = useDispatch();
+  const { slug } = useParams();
+  const { data, software_category } = useSelector(
+    (action) => action.category?.categoryDetailData
+  );
+  const { isLoading } = useSelector((action) => action.category);
+  const isFirstRender = useRef(true); // Track first render
+
+  const [url, setUrl] = useState(
+    `${
+      import.meta.env.VITE_REACT_APP_API_BASE_URL_PRODUCTION
+    }/site/categoryallsoftware/${slug}`
+  );
+
+  console.log(data);
+
+  // useEffect(() => {
+  //   dispatch(getCategoryDataBySlug(slug));
+  // }, []);
+  useEffect(() => {
+    dispatch(getCategoryDataBySlug(url));
+
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Prevent scrolling on first render
+    } else {
+      window.scrollTo(0, 0); // Scroll only on `url` change
+    }
+  }, [url]);
+
   useEffect(() => {
     const swiperInstance = new Swiper(".testimonialSwiper", {
       modules: [Navigation],
@@ -94,6 +126,7 @@ const Category = () => {
       }
     };
   }, []);
+
   return (
     <>
       <section
@@ -105,11 +138,11 @@ const Category = () => {
         <div class="container">
           <div class="row">
             <div class="col-lg-8 col-md-12">
-              <h1 class="display-5 fw-bold">Online ERP SYSTEM</h1>
+              <h1 class="display-5 fw-bold">
+                {software_category?.category_title}
+              </h1>
               <p class="lead">
-                Online ERP SYSTEM Online ERP SYSTEM Online ERP SYSTEM Online ERP
-                SYSTEM Online ERP SYSTEM Online ERP SYSTEM Online ERP SYSTEM
-                Online ERP SYSTEM Online ERP SYSTEM{" "}
+                {software_category?.short_description}{" "}
                 <a href="#cat-description">Read More</a>
               </p>
             </div>
@@ -796,263 +829,206 @@ const Category = () => {
         </div>
       </section>
 
-      <section class="feature-promo">
-        <div class="container mb-4">
-          <div class="row">
-            <div class="col-md-8">
-              <h4>Our Best Online ERP System</h4>
-              <p>
-                <b>Total Records: 2 Showing 2 records per page</b>
-              </p>
-            </div>
-            <div class="col-md-4 text-end">
-              <button
-                class="btn btn-default px-4 py-2"
-                data-bs-toggle="modal"
-                data-bs-target="#filterModal"
-              >
-                <i class="fa fa-filter me-2"></i> Advanced Filter
-              </button>
-
-              <div class="dropdown d-inline-block">
-                <form
-                  action="https://my.babvipsoftwares.com/category/online-erp-system"
-                  method="get"
-                  id="sort-form"
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <section class="feature-promo">
+          <div class="container mb-4">
+            <div class="row">
+              <div class="col-md-8">
+                <h4>Our Best {software_category?.category_name}</h4>
+                <p>
+                  <b>
+                    Total Records: {data?.total} Showing {data?.per_page}{" "}
+                    records per page
+                  </b>
+                </p>
+              </div>
+              <div class="col-md-4 text-end">
+                <button
+                  class="btn btn-default px-4 py-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#filterModal"
                 >
-                  <input
-                    type="hidden"
-                    name="_token"
-                    value="ZUHmuf5nLBEW3PfSIGjJ6EqmNXOVsBR2ajXkkPCs"
-                    autocomplete="off"
-                  />
-                  <input type="hidden" value="" name="sort_by" id="sort_by" />
-                  <button
-                    class="btn btn-default px-4 py-2 dropdown-toggle"
-                    type="button"
-                    id="sortingDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <i class="fa fa-sort me-2"></i> Sort By
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="sortingDropdown">
-                    <li>
-                      <a class="dropdown-item software_sort" data="Newest">
-                        Newest
-                      </a>
-                    </li>
+                  <i class="fa fa-filter me-2"></i> Advanced Filter
+                </button>
 
-                    <li>
-                      <a class="dropdown-item software_sort" data="Oldest">
-                        Oldest
-                      </a>
+                <div class="dropdown d-inline-block">
+                  <form action="https://my.babvipsoftwares.com/category/online-erp-system">
+                    <input
+                      type="hidden"
+                      name="_token"
+                      value="ZUHmuf5nLBEW3PfSIGjJ6EqmNXOVsBR2ajXkkPCs"
+                      autocomplete="off"
+                    />
+                    <input type="hidden" value="" name="sort_by" id="sort_by" />
+                    <button
+                      class="btn btn-default px-4 py-2 dropdown-toggle"
+                      type="button"
+                      id="sortingDropdown"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i class="fa fa-sort me-2"></i> Sort By
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sortingDropdown">
+                      <li>
+                        <a class="dropdown-item software_sort" data="Newest">
+                          Newest
+                        </a>
+                      </li>
+
+                      <li>
+                        <a class="dropdown-item software_sort" data="Oldest">
+                          Oldest
+                        </a>
+                      </li>
+                    </ul>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <hr />
+          </div>
+
+          <div class="container">
+            {Array.isArray(data?.data) &&
+              data?.data.map((item, idx) => (
+                <div class="row justify-content-center mb-3">
+                  <div class="col-md-12">
+                    <div class="card flex-row">
+                      <Link
+                        to={`/software/${item?.software_slug}`}
+                        class="position-relative"
+                      >
+                        <img
+                          src={`${
+                            import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                          }/software-images/${item?.software_image}`}
+                          class="card-img-left m-3"
+                          alt="Product"
+                        />
+                        <span class="wishlist-icon">
+                          <i class="fa fa-heart"></i>
+                        </span>
+                      </Link>
+
+                      <Link to={`/software/${item?.software_slug}`}>
+                        <div class="card-body">
+                          <h5 class="card-title">
+                            <a>{item?.software_name}</a>
+                          </h5>
+                          <div class="ratting-wrap">
+                            <p class="mb-1">
+                              <b>5/5 Overall Rating</b>
+                            </p>
+                            <ul class="list-unstyled rating-list list-inline mb-1">
+                              <li class="list-inline-item">
+                                <i class="fas fa-star"></i>
+                              </li>
+                              <li class="list-inline-item">
+                                <i class="fas fa-star"></i>
+                              </li>
+                              <li class="list-inline-item">
+                                <i class="fas fa-star"></i>
+                              </li>
+                              <li class="list-inline-item">
+                                <i class="fas fa-star"></i>
+                              </li>
+                              <li class="list-inline-item">
+                                <i class="fas fa-star"></i>
+                              </li>
+                            </ul>
+                            <p class="mb-1">
+                              <b>100+ users</b>
+                            </p>
+                            <p class="text-muted">{item?.short_description}</p>
+                          </div>
+                        </div>
+                      </Link>
+
+                      <div class="text-center action-buttons">
+                        <p class="card-text fw-bold mb-3">Rs. {item?.price}</p>
+
+                        <div class="d-flex justify-content-center align-items-center mt-5">
+                          <button class="icon-btn" title="Call">
+                            <i class="fa fa-phone"></i>
+                          </button>
+                          <button
+                            class="icon-btn free_demo"
+                            title="Get a Free Demo"
+                            data="1"
+                          >
+                            <i class="fa fa-handshake"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="btn d-none"
+                            id="btn-enquiry-1"
+                            data-bs-toggle="modal"
+                            data-bs-target=".bs-example-modal-xl"
+                          >
+                            {" "}
+                            Enquery Now
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <nav aria-label="Page navigation example" class=" ">
+                  <ul class="pagination">
+                    {Array.isArray(data?.links) && (
+                      <li
+                        class={`page-item ${
+                          !data?.links[0]?.url && "disabled"
+                        }`}
+                        onClick={() =>
+                          data?.links[0]?.url && setUrl(data?.links[0]?.url)
+                        }
+                      >
+                        <span class="page-link">
+                          {data?.links[0]?.label?.replace("&laquo;", "")}
+                        </span>
+                      </li>
+                    )}
+
+                    {Array.isArray(data?.links) &&
+                      data?.links?.slice(1, -1).map((item, idx) => (
+                        <li class={`page-item ${item?.active && "active"}`}>
+                          <a
+                            onClick={() => item?.url && setUrl(item?.url)}
+                            class="page-link"
+                          >
+                            {item?.label}
+                          </a>
+                        </li>
+                      ))}
+                    <li
+                      class={`page-item ${
+                        !data?.links.at(-1)?.url && "disabled"
+                      }`}
+                      onClick={() =>
+                        data?.links[2]?.url && setUrl(data?.links.at(-1)?.url)
+                      }
+                    >
+                      <span class="page-link">
+                        {" "}
+                        {data?.links.at(-1)?.label?.replace("&raquo;", "")}
+                      </span>
                     </li>
                   </ul>
-                </form>
+                  <p>Total Records: 2 Showing 2 records per page</p>
+                </nav>
               </div>
             </div>
           </div>
-          <hr />
-        </div>
-
-        <div class="container">
-          <div class="row justify-content-center mb-3">
-            <div class="col-md-12">
-              <div class="card flex-row">
-                <div class="position-relative">
-                  <img
-                    src="https://my.babvipsoftwares.com/storage/uploads/software-images/83302ce0-26a6-46df-9e9b-c80e25c6b77f.png"
-                    class="card-img-left m-3"
-                    alt="Product"
-                  />
-                  <span class="wishlist-icon">
-                    <i class="fa fa-heart"></i>
-                  </span>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">
-                    <a href="https://my.babvipsoftwares.com/software/customer-management-system">
-                      Customer Management System
-                    </a>
-                  </h5>
-                  <div class="ratting-wrap">
-                    <p class="mb-1">
-                      <b>5/5 Overall Rating</b>
-                    </p>
-                    <ul class="list-unstyled rating-list list-inline mb-1">
-                      <li class="list-inline-item">
-                        <i class="fas fa-star"></i>
-                      </li>
-                      <li class="list-inline-item">
-                        <i class="fas fa-star"></i>
-                      </li>
-                      <li class="list-inline-item">
-                        <i class="fas fa-star"></i>
-                      </li>
-                      <li class="list-inline-item">
-                        <i class="fas fa-star"></i>
-                      </li>
-                      <li class="list-inline-item">
-                        <i class="fas fa-star"></i>
-                      </li>
-                    </ul>
-                    <p class="mb-1">
-                      <b>100+ users</b>
-                    </p>
-                    <p class="text-muted">
-                      A Customer Management System, often referred to as
-                      Customer Relationship Management (CRM) software, is a tool
-                      that helps businesses manage interactions and
-                      relationships with their customers and prospects. It is
-                      designed to organize and streamline communication, track.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="text-center action-buttons">
-                  <p class="card-text fw-bold mb-3">Rs. 2000.00</p>
-                  <a href="#" class="view-plans-link d-block mb-3">
-                    View Plans
-                  </a>
-                  <div class="d-flex justify-content-center align-items-center mt-5">
-                    <button class="icon-btn" title="Call">
-                      <i class="fa fa-phone"></i>
-                    </button>
-                    <button
-                      class="icon-btn free_demo"
-                      title="Get a Free Demo"
-                      data="1"
-                    >
-                      <i class="fa fa-handshake"></i>
-                    </button>
-                    <button
-                      type="button"
-                      class="btn d-none"
-                      id="btn-enquiry-1"
-                      data-bs-toggle="modal"
-                      data-bs-target=".bs-example-modal-xl"
-                    >
-                      {" "}
-                      Enquery Now
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-center mb-3">
-            <div class="col-md-12">
-              <div class="card flex-row">
-                <div class="position-relative">
-                  <img
-                    src="https://my.babvipsoftwares.com/storage/uploads/software-images/0c029d8a-8a6e-4064-aa90-f2b2b0a34131.png"
-                    class="card-img-left m-3"
-                    alt="Product"
-                  />
-                  <span class="wishlist-icon">
-                    <i class="fa fa-heart"></i>
-                  </span>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">
-                    <a href="https://my.babvipsoftwares.com/software/school-management-system">
-                      School Management System
-                    </a>
-                  </h5>
-                  <div class="ratting-wrap">
-                    <p class="mb-1">
-                      <b>5/5 Overall Rating</b>
-                    </p>
-                    <ul class="list-unstyled rating-list list-inline mb-1">
-                      <li class="list-inline-item">
-                        <i class="fas fa-star"></i>
-                      </li>
-                      <li class="list-inline-item">
-                        <i class="fas fa-star"></i>
-                      </li>
-                      <li class="list-inline-item">
-                        <i class="fas fa-star"></i>
-                      </li>
-                      <li class="list-inline-item">
-                        <i class="fas fa-star"></i>
-                      </li>
-                      <li class="list-inline-item">
-                        <i class="fas fa-star"></i>
-                      </li>
-                    </ul>
-                    <p class="mb-1">
-                      <b>100+ users</b>
-                    </p>
-                    <p class="text-muted">
-                      A Customer Management System, often referred to as
-                      Customer Relationship Management (CRM) software, is a tool
-                      that helps businesses manage interactions and
-                      relationships with their customers and prospects. It is
-                      designed to organize and streamline communication, track.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="text-center action-buttons">
-                  <p class="card-text fw-bold mb-3">Rs. 3000.00</p>
-                  <a href="#" class="view-plans-link d-block mb-3">
-                    View Plans
-                  </a>
-                  <div class="d-flex justify-content-center align-items-center mt-5">
-                    <button class="icon-btn" title="Call">
-                      <i class="fa fa-phone"></i>
-                    </button>
-                    <button
-                      class="icon-btn free_demo"
-                      title="Get a Free Demo"
-                      data="2"
-                    >
-                      <i class="fa fa-handshake"></i>
-                    </button>
-                    <button
-                      type="button"
-                      class="btn d-none"
-                      id="btn-enquiry-2"
-                      data-bs-toggle="modal"
-                      data-bs-target=".bs-example-modal-xl"
-                    >
-                      {" "}
-                      Enquery Now
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 text-center">
-              <nav aria-label="Page navigation example" class=" ">
-                <ul class="pagination">
-                  <li class="page-item disabled">
-                    <span class="page-link">Previous</span>
-                  </li>
-
-                  <li class="page-item active">
-                    <a
-                      class="page-link"
-                      href="https://my.babvipsoftwares.com/category/online-erp-system?page=1"
-                    >
-                      1
-                    </a>
-                  </li>
-                  <li class="page-item disabled">
-                    <span class="page-link">Next</span>
-                  </li>
-                </ul>
-                <p>Total Records: 2 Showing 2 records per page</p>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section class="feature-promo" id="cat-description">
         <div class="container mb-4">

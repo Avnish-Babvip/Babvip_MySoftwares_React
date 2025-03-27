@@ -1,11 +1,24 @@
 import React, { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Swiper from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
+import { getCategoryData } from "../../../features/actions/category";
+import { Link } from "react-router-dom";
 
 const Style1 = ({ data }) => {
+  const assetRoute = `${
+    import.meta.env.VITE_PRODUCTION === "true"
+      ? import.meta.env.VITE_ASSETS
+      : ""
+  }`;
   const swiperRef = useRef(null);
+  const dispatch = useDispatch();
+  const { categoryData } = useSelector((action) => action.category);
+  useEffect(() => {
+    dispatch(getCategoryData());
+  }, []);
   useEffect(() => {
     const swiperInstance = new Swiper(".testimonialSwiper", {
       modules: [Navigation],
@@ -57,14 +70,14 @@ const Style1 = ({ data }) => {
         <div class="row">
           <div class="col-lg-8 col-md-10">
             <div class="section-heading text-left">
-              <h5 class="h6 text-primary">Our Software Category</h5>
-              <h2>100+ Software Category and 5000 Software's Available</h2>
+              <h5 class="h6 text-primary">{data?.title}</h5>
+              <h2>{data?.sub_title}</h2>
             </div>
           </div>
           <div class="col-lg-4 col-md-4" style={{ float: "right" }}>
             <div class="section-heading text-right">
               <a href="#" target="_blank">
-                <button class="btn btn-primary">See All</button>
+                <button class="btn btn-primary">{data?.link_text}</button>
               </a>
             </div>
           </div>
@@ -74,93 +87,34 @@ const Style1 = ({ data }) => {
             <div class="position-relative w-100">
               <div class="swiper testimonialSwiper">
                 <div class="swiper-wrapper">
-                  <a
-                    href="https://my.babvipsoftwares.com/category/account-software"
-                    class="swiper-slide"
-                  >
-                    <div class="border border-2 p-3 rounded-custom position-relative">
-                      <div class="d-flex  align-items-center">
-                        <img
-                          src="https://my.babvipsoftwares.com/storage/uploads/software-category/66067529-adcb-47a5-83f4-4179207afeef.png"
-                          class="img-fluid me-3 rounded"
-                          width="60"
-                          alt="66067529-adcb-47a5-83f4-4179207afeef.png"
-                        />
-                        <div class="author-info">
-                          <h6 class="mb-0">Account software</h6>
+                  {Array.isArray(categoryData) &&
+                    categoryData.map((item, idx) => (
+                      <Link
+                        key={idx}
+                        to={`/category/${item?.category_slug}`}
+                        class="swiper-slide"
+                      >
+                        <div class="border border-2 p-3 rounded-custom position-relative">
+                          <div class="d-flex  align-items-center">
+                            <img
+                              src={
+                                item?.category_image
+                                  ? `${
+                                      import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                                    }/software-category/${item?.category_image}`
+                                  : `${assetRoute}/placeholder.webp`
+                              }
+                              class="img-fluid me-3 rounded"
+                              width="60"
+                              alt="66067529-adcb-47a5-83f4-4179207afeef.png"
+                            />
+                            <div class="author-info">
+                              <h6 class="mb-0">{item?.category_name}</h6>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a
-                    href="https://my.babvipsoftwares.com/category/cms-content-management-system-"
-                    class="swiper-slide "
-                  >
-                    <div class="border border-2 p-3 rounded-custom position-relative">
-                      <div class="d-flex  align-items-center">
-                        <img
-                          src="https://my.babvipsoftwares.com/admin/images/noimage.jpg"
-                          width="60"
-                          class="img-fluid me-3 rounded"
-                          id="photo-preview"
-                        />
-                        <div class="author-info">
-                          <h6 class="mb-0">CMS (Content management System)</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a href="/category/online-erp-system" class="swiper-slide">
-                    <div class="border border-2 p-3 rounded-custom position-relative">
-                      <div class="d-flex  align-items-center">
-                        <img
-                          src="https://my.babvipsoftwares.com/admin/images/noimage.jpg"
-                          width="60"
-                          class="img-fluid me-3 rounded"
-                          id="photo-preview"
-                        />
-                        <div class="author-info">
-                          <h6 class="mb-0">Online ERP System</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a
-                    href="https://my.babvipsoftwares.com/category/pos"
-                    class="swiper-slide"
-                  >
-                    <div class="border border-2 p-3 rounded-custom position-relative">
-                      <div class="d-flex  align-items-center">
-                        <img
-                          src="https://my.babvipsoftwares.com/admin/images/noimage.jpg"
-                          width="60"
-                          class="img-fluid me-3 rounded"
-                          id="photo-preview"
-                        />
-                        <div class="author-info">
-                          <h6 class="mb-0">Online POS System</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a
-                    href="https://my.babvipsoftwares.com/category/talley-softwares"
-                    class="swiper-slide"
-                  >
-                    <div class="border border-2 p-3 rounded-custom position-relative">
-                      <div class="d-flex  align-items-center">
-                        <img
-                          src="https://my.babvipsoftwares.com/storage/uploads/software-category/8cac1495-0551-42cd-b0d7-4734bb45b20d.png"
-                          class="img-fluid me-3 rounded"
-                          width="60"
-                          alt="8cac1495-0551-42cd-b0d7-4734bb45b20d.png"
-                        />
-                        <div class="author-info">
-                          <h6 class="mb-0">Talley Softwares</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
+                      </Link>
+                    ))}
                 </div>
               </div>
               <div class="swiper-nav-control">

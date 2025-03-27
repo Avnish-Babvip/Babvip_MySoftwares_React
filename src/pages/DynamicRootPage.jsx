@@ -20,7 +20,9 @@ import OurTeam from "../components/Styles/OurTeam/OurTeam";
 import HelpCenter from "../components/Styles/HelpCenter/HelpCenter";
 import BlogStyle from "../components/Styles/BlogStyle/BlogStyle";
 import PrivacyAndTerms from "../components/Styles/PrivacyAndTerms/PrivacyAndTerms";
-import Style1 from "../components/Styles/Category/Style1";
+import Loader from "../components/Loader/Loader";
+import Category from "../components/Styles/Category/Category";
+import SoftwareListing from "../components/Styles/SoftwareListing/SoftwareListing";
 
 const DynamicRootPage = () => {
   const { slug } = useParams();
@@ -74,6 +76,8 @@ const DynamicRootPage = () => {
     "Help Center": HelpCenter,
     Portfolio: Portfolio,
     "Privacy & Terms": PrivacyAndTerms,
+    "Software Category": Category,
+    "Software List": SoftwareListing,
   };
 
   useEffect(() => {
@@ -115,7 +119,7 @@ const DynamicRootPage = () => {
         )}
       </Helmet>
 
-      {/* {isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : Array.isArray(mainData) && mainData.length > 0 ? (
         mainData.map((item, idx) => {
@@ -136,12 +140,11 @@ const DynamicRootPage = () => {
             />
           );
         })
-      ) : ( */}
-      {/* // <p className="text-center text-primary fw-bold fs-5 mt-5 mx-5">
-        //   Sorry, no content available on this page right now.
-        // </p> */}
-      <Style1 />
-      {/* // )} */}
+      ) : (
+        <p className="text-center text-primary fw-bold fs-5 mt-5 mx-5">
+          Sorry, no content available on this page right now.
+        </p>
+      )}
     </>
   );
 };

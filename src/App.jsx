@@ -98,7 +98,7 @@ function App() {
         <RouterProvider
           key={siteSetting?.setting_data?.page_is_home || "default"} // Ensures re-render when settings change
           router={
-            siteSetting?.setting_data?.page_is_home === "0"
+            siteSetting?.setting_data?.page_is_home !== "0"
               ? appRouter
               : maintenanceAppRouter
           }

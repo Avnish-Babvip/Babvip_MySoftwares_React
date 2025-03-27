@@ -13,6 +13,7 @@ import submission from "./slices/submission"
 import dynamicRootPage from "./slices/dynamicRootPage"
 import portfolio from "./slices/portfolio"
 import home from "./slices/home"
+import category from "./slices/category"
 
 const rootReducer = combineReducers({
   headMenu ,
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
   team,
   submission,
   portfolio,
-  home
+  home,
+  category
   });
 
   

@@ -529,8 +529,12 @@ const Software = () => {
         </div>
       </section>
 
-      <div style={{ paddingTop: isSticky ? "60px" : "0" }}>
-        <section class="feature-promo section-custom" id="description">
+      <div>
+        <section
+          class="feature-promo "
+          id="description"
+          style={{ paddingTop: isSticky ? "100px" : "0" }}
+        >
           <div class="container mb-4">
             <div class="row">
               <div class="col-md-12">
@@ -608,308 +612,312 @@ const Software = () => {
           </div>
         </section>
       </div>
-      {/* <section
-        class="dg-pricing-section ptb-120 position-relative overflow-hidden z-1 section-custom"
-        id="pricing"
-      >
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-5">
-              <h4>Software Pricing Plans:</h4>
+
+      <div>
+        <section
+          class="dg-pricing-section ptb-120 position-relative overflow-hidden z-1 "
+          id="pricing"
+          style={{ paddingTop: isSticky ? "100px" : "0" }}
+        >
+          <div class="container">
+            <div class="row">
+              <div class="col-xl-5">
+                <h4>Software Pricing Plans:</h4>
+              </div>
             </div>
-          </div>
-          <div class="dg-pricing-tab text-center">
-            <ul
-              class="nav nav-tabs border-0 d-inline-flex bg-white rounded overflow-hidden p-0"
-              role="tablist"
-            >
-              <li>
-                <a
-                  href="#tabplan1"
-                  class="
+            <div class="dg-pricing-tab text-center">
+              <ul
+                class="nav nav-tabs border-0 d-inline-flex bg-white rounded overflow-hidden p-0"
+                role="tablist"
+              >
+                <li>
+                  <a
+                    href="#tabplan1"
+                    class="
                                         active
                                         "
-                  data-bs-toggle="tab"
-                  aria-selected="true"
-                  role="tab"
-                >
-                  Halfyearly
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#tabplan2"
-                  class="
+                    data-bs-toggle="tab"
+                    aria-selected="true"
+                    role="tab"
+                  >
+                    Halfyearly
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#tabplan2"
+                    class="
                                         "
-                  data-bs-toggle="tab"
-                  aria-selected="false"
-                  role="tab"
-                  tabindex="-1"
-                >
-                  Yearly
-                </a>
-              </li>
-            </ul>
-            <div class="tab-content mt-5">
-              <div
-                class="tab-pane fade 
+                    data-bs-toggle="tab"
+                    aria-selected="false"
+                    role="tab"
+                    tabindex="-1"
+                  >
+                    Yearly
+                  </a>
+                </li>
+              </ul>
+              <div class="tab-content mt-5">
+                <div
+                  class="tab-pane fade 
                     active show
                 "
-                id="tabplan1"
-                role="tabpanel"
-              >
-                <div class="row g-4 justify-content-center">
-                  <div class="col-xl-4 col-md-6">
-                    <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
-                      <img
-                        src="https://my.babvipsoftwares.com/storage/uploads/software-plan/a8bec783-15bf-41e6-96e4-a31506097689.png"
-                        alt="a8bec783-15bf-41e6-96e4-a31506097689.png"
-                        class="position-absolute top-0 offer-badge z-2"
-                      />
-    
-                      <div class="icon-wrapper d-inline-block rounded-circle bg-white">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
-                          <img
-                            src="https://my.babvipsoftwares.com/storage/uploads/software-plan/5169cd61-81c2-4208-bef6-c9318d25a6a7.png"
-                            alt="5169cd61-81c2-4208-bef6-c9318d25a6a7.png"
-                          />
-                        </span>
-                      </div>
-    
-                      <h5 class="mt-4 mb-3">Default</h5>
-                      <p class="mb-4 fm">This is plan short description.</p>
-    
-                      <ul
-                        class="dg-feature-list list-unstyled d-inline-block text-start p-0"
-                        id="default-module-list-1"
-                      >
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i class="fas fa-check"></i>
+                  id="tabplan1"
+                  role="tabpanel"
+                >
+                  <div class="row g-4 justify-content-center">
+                    <div class="col-xl-4 col-md-6">
+                      <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
+                        <img
+                          src="https://my.babvipsoftwares.com/storage/uploads/software-plan/a8bec783-15bf-41e6-96e4-a31506097689.png"
+                          alt="a8bec783-15bf-41e6-96e4-a31506097689.png"
+                          class="position-absolute top-0 offer-badge z-2"
+                        />
+
+                        <div class="icon-wrapper d-inline-block rounded-circle bg-white">
+                          <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
+                            <img
+                              src="https://my.babvipsoftwares.com/storage/uploads/software-plan/5169cd61-81c2-4208-bef6-c9318d25a6a7.png"
+                              alt="5169cd61-81c2-4208-bef6-c9318d25a6a7.png"
+                            />
                           </span>
-                          Multi User Access
-                        </li>
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i class="fas fa-check"></i>
-                          </span>
-                          Easy To Access
-                        </li>
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i class="fas fa-check"></i>
-                          </span>
-                          Attendence Management
-                        </li>
-                        {showMore && (
-                          <li className="fs-sm">
-                            <span className="me-2">
-                              <i className="fas fa-check"></i>
+                        </div>
+
+                        <h5 class="mt-4 mb-3">Default</h5>
+                        <p class="mb-4 fm">This is plan short description.</p>
+
+                        <ul
+                          class="dg-feature-list list-unstyled d-inline-block text-start p-0"
+                          id="default-module-list-1"
+                        >
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i class="fas fa-check"></i>
                             </span>
-                            Library Management System
+                            Multi User Access
                           </li>
-                        )}
-                      </ul>
-                      <button
-                        class="btn btn-link p-0 fs-sm toggle-btn"
-                        data-target="default-module-list-1"
-                        style={{ width: "0" }}
-                        onClick={() => setShowMore(!showMore)}
-                      >
-                        {showMore ? "See Less" : "See More"}
-                      </button>
-    
-                      <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
-                        <h2 style={{ "font-size": "22px" }}>
-                          <span>₹ 2000.00</span>
-                          <span class="ms-2 fs-md fw-normal">6 months</span>
-                        </h2>
-                        <a href="#" class="btn dg-outline-btn rounded-pill">
-                          Purchase Now
-                        </a>
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i class="fas fa-check"></i>
+                            </span>
+                            Easy To Access
+                          </li>
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i class="fas fa-check"></i>
+                            </span>
+                            Attendence Management
+                          </li>
+                          {showMore && (
+                            <li className="fs-sm">
+                              <span className="me-2">
+                                <i className="fas fa-check"></i>
+                              </span>
+                              Library Management System
+                            </li>
+                          )}
+                        </ul>
+                        <button
+                          class="btn btn-link p-0 fs-sm toggle-btn"
+                          data-target="default-module-list-1"
+                          style={{ width: "0" }}
+                          onClick={() => setShowMore(!showMore)}
+                        >
+                          {showMore ? "See Less" : "See More"}
+                        </button>
+
+                        <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
+                          <h2 style={{ "font-size": "22px" }}>
+                            <span>₹ 2000.00</span>
+                            <span class="ms-2 fs-md fw-normal">6 months</span>
+                          </h2>
+                          <a href="#" class="btn dg-outline-btn rounded-pill">
+                            Purchase Now
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-xl-4 col-md-6">
-                    <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
-                      <div class="icon-wrapper d-inline-block rounded-circle bg-white">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
-                          <img
-                            src="https://my.babvipsoftwares.com/storage/uploads/software-plan/032f19da-3757-417c-b2ba-07309202e504.png"
-                            alt="032f19da-3757-417c-b2ba-07309202e504.png"
-                          />
-                        </span>
-                      </div>
-    
-                      <h5 class="mt-4 mb-3">Silver Plan</h5>
-                      <p class="mb-4 fm">This is test Description.</p>
-    
-                      <ul
-                        class="dg-feature-list list-unstyled d-inline-block text-start p-0"
-                        id="default-module-list-4"
-                      >
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i class="fas fa-check"></i>
+                    <div class="col-xl-4 col-md-6">
+                      <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
+                        <div class="icon-wrapper d-inline-block rounded-circle bg-white">
+                          <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
+                            <img
+                              src="https://my.babvipsoftwares.com/storage/uploads/software-plan/032f19da-3757-417c-b2ba-07309202e504.png"
+                              alt="032f19da-3757-417c-b2ba-07309202e504.png"
+                            />
                           </span>
-                          Multi User Access
-                        </li>
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i class="fas fa-check"></i>
-                          </span>
-                          Easy To Access
-                        </li>
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i class="fas fa-check"></i>
-                          </span>
-                          Attendence Management
-                        </li>
-                        {showMore && (
-                          <li className="fs-sm">
-                            <span className="me-2">
-                              <i className="fas fa-check"></i>
+                        </div>
+
+                        <h5 class="mt-4 mb-3">Silver Plan</h5>
+                        <p class="mb-4 fm">This is test Description.</p>
+
+                        <ul
+                          class="dg-feature-list list-unstyled d-inline-block text-start p-0"
+                          id="default-module-list-4"
+                        >
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i class="fas fa-check"></i>
                             </span>
-                            Library Management System
+                            Multi User Access
                           </li>
-                        )}
-                      </ul>
-                      <button
-                        class="btn btn-link p-0 fs-sm toggle-btn"
-                        data-target="default-module-list-4"
-                        style={{ width: "0" }}
-                        onClick={() => setShowMore(!showMore)}
-                      >
-                        {showMore ? "See Less" : "See More"}
-                      </button>
-    
-                      <ul
-                        class="dg-feature-list list-unstyled d-inline-block text-start p-0"
-                        id="additional-module-list-4"
-                      >
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i
-                              class="fa-solid fa-circle-check"
-                              style={{ color: "red" }}
-                            ></i>
-                          </span>
-                          Advance Features
-                        </li>
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i
-                              class="fa-solid fa-circle-check"
-                              style={{ color: "red" }}
-                            ></i>
-                          </span>
-                          HR Management
-                        </li>
-                      </ul>
-    
-                      <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
-                        <h2 style={{ "font-size": "22px" }}>
-                          <span>₹ 5000.00</span>
-                          <span class="ms-2 fs-md fw-normal">6 months</span>
-                        </h2>
-                        <a href="#" class="btn dg-outline-btn rounded-pill">
-                          Purchase Now
-                        </a>
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i class="fas fa-check"></i>
+                            </span>
+                            Easy To Access
+                          </li>
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i class="fas fa-check"></i>
+                            </span>
+                            Attendence Management
+                          </li>
+                          {showMore && (
+                            <li className="fs-sm">
+                              <span className="me-2">
+                                <i className="fas fa-check"></i>
+                              </span>
+                              Library Management System
+                            </li>
+                          )}
+                        </ul>
+                        <button
+                          class="btn btn-link p-0 fs-sm toggle-btn"
+                          data-target="default-module-list-4"
+                          style={{ width: "0" }}
+                          onClick={() => setShowMore(!showMore)}
+                        >
+                          {showMore ? "See Less" : "See More"}
+                        </button>
+
+                        <ul
+                          class="dg-feature-list list-unstyled d-inline-block text-start p-0"
+                          id="additional-module-list-4"
+                        >
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i
+                                class="fa-solid fa-circle-check"
+                                style={{ color: "red" }}
+                              ></i>
+                            </span>
+                            Advance Features
+                          </li>
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i
+                                class="fa-solid fa-circle-check"
+                                style={{ color: "red" }}
+                              ></i>
+                            </span>
+                            HR Management
+                          </li>
+                        </ul>
+
+                        <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
+                          <h2 style={{ "font-size": "22px" }}>
+                            <span>₹ 5000.00</span>
+                            <span class="ms-2 fs-md fw-normal">6 months</span>
+                          </h2>
+                          <a href="#" class="btn dg-outline-btn rounded-pill">
+                            Purchase Now
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div
-                class="tab-pane fade 
+                <div
+                  class="tab-pane fade 
                 "
-                id="tabplan2"
-                role="tabpanel"
-              >
-                <div class="row g-4 justify-content-center">
-                  <div class="col-xl-4 col-md-6">
-                    <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
-                      <img
-                        src="https://my.babvipsoftwares.com/storage/uploads/software-plan/6f46c072-1564-4da6-865a-9e4b3ef3792d.png"
-                        alt="6f46c072-1564-4da6-865a-9e4b3ef3792d.png"
-                        class="position-absolute top-0 offer-badge z-2"
-                      />
-    
-                      <div class="icon-wrapper d-inline-block rounded-circle bg-white">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
-                          <img
-                            src="https://my.babvipsoftwares.com/storage/uploads/software-plan/f6e4aae6-1079-470a-ab20-544fa1295571.png"
-                            alt="f6e4aae6-1079-470a-ab20-544fa1295571.png"
-                          />
-                        </span>
-                      </div>
-    
-                      <h5 class="mt-4 mb-3">Gold</h5>
-                      <p class="mb-4 fm">This is test Description.</p>
-    
-                      <ul
-                        class="dg-feature-list list-unstyled d-inline-block text-start p-0"
-                        id="default-module-list-3"
-                      >
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i class="fas fa-check"></i>
+                  id="tabplan2"
+                  role="tabpanel"
+                >
+                  <div class="row g-4 justify-content-center">
+                    <div class="col-xl-4 col-md-6">
+                      <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
+                        <img
+                          src="https://my.babvipsoftwares.com/storage/uploads/software-plan/6f46c072-1564-4da6-865a-9e4b3ef3792d.png"
+                          alt="6f46c072-1564-4da6-865a-9e4b3ef3792d.png"
+                          class="position-absolute top-0 offer-badge z-2"
+                        />
+
+                        <div class="icon-wrapper d-inline-block rounded-circle bg-white">
+                          <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
+                            <img
+                              src="https://my.babvipsoftwares.com/storage/uploads/software-plan/f6e4aae6-1079-470a-ab20-544fa1295571.png"
+                              alt="f6e4aae6-1079-470a-ab20-544fa1295571.png"
+                            />
                           </span>
-                          Multi User Access
-                        </li>
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i class="fas fa-check"></i>
-                          </span>
-                          Easy To Access
-                        </li>
-                        <li class="fs-sm ">
-                          <span class="me-2">
-                            <i class="fas fa-check"></i>
-                          </span>
-                          Attendence Management
-                        </li>
-                        {showMore && (
-                          <li className="fs-sm">
-                            <span className="me-2">
-                              <i className="fas fa-check"></i>
+                        </div>
+
+                        <h5 class="mt-4 mb-3">Gold</h5>
+                        <p class="mb-4 fm">This is test Description.</p>
+
+                        <ul
+                          class="dg-feature-list list-unstyled d-inline-block text-start p-0"
+                          id="default-module-list-3"
+                        >
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i class="fas fa-check"></i>
                             </span>
-                            Library Management System
+                            Multi User Access
                           </li>
-                        )}
-                      </ul>
-                      <button
-                        class="btn btn-link p-0 fs-sm toggle-btn"
-                        data-target="default-module-list-3"
-                        style={{ width: "0" }}
-                        onClick={() => setShowMore(!showMore)}
-                      >
-                        {showMore ? "See Less" : "See More"}
-                      </button>
-    
-                      <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
-                        <h2 style={{ "font-size": "22px" }}>
-                          <span>₹ 2000.00</span>
-                          <span class="ms-2 fs-md fw-normal">1 years</span>
-                        </h2>
-                        <a href="#" class="btn dg-outline-btn rounded-pill">
-                          Purchase Now
-                        </a>
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i class="fas fa-check"></i>
+                            </span>
+                            Easy To Access
+                          </li>
+                          <li class="fs-sm ">
+                            <span class="me-2">
+                              <i class="fas fa-check"></i>
+                            </span>
+                            Attendence Management
+                          </li>
+                          {showMore && (
+                            <li className="fs-sm">
+                              <span className="me-2">
+                                <i className="fas fa-check"></i>
+                              </span>
+                              Library Management System
+                            </li>
+                          )}
+                        </ul>
+                        <button
+                          class="btn btn-link p-0 fs-sm toggle-btn"
+                          data-target="default-module-list-3"
+                          style={{ width: "0" }}
+                          onClick={() => setShowMore(!showMore)}
+                        >
+                          {showMore ? "See Less" : "See More"}
+                        </button>
+
+                        <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
+                          <h2 style={{ "font-size": "22px" }}>
+                            <span>₹ 2000.00</span>
+                            <span class="ms-2 fs-md fw-normal">1 years</span>
+                          </h2>
+                          <a href="#" class="btn dg-outline-btn rounded-pill">
+                            Purchase Now
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <img
+              src="https://my.babvipsoftwares.com/site/assets/img/digital-agency/pr-doted.png"
+              alt="doted shape"
+              class="pr-doted position-absolute z--1"
+            />
           </div>
-          <img
-            src="https://my.babvipsoftwares.com/site/assets/img/digital-agency/pr-doted.png"
-            alt="doted shape"
-            class="pr-doted position-absolute z--1"
-          />
-        </div>
-      </section> */}
+        </section>
+      </div>
     </>
   );
 };
