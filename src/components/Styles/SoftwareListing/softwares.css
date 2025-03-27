@@ -1,0 +1,147 @@
+    .card {
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-left {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .wishlist-icon {
+        position: absolute;
+        top: 10px;
+        left: 15px;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 0px 5px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        color: #ff6f61;
+        cursor: pointer;
+    }
+
+    .wishlist-icon:hover {
+        color: #dc3545;
+    }
+
+    .rating-list .fa-star {
+        color: #ffc107;
+    }
+
+    .view-plans-link {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .view-plans-link:hover {
+        text-decoration: underline;
+    }
+
+    .action-buttons {
+        background-color: #f8f9fa;
+        /* Light grey background */
+        padding: 15px;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .action-buttons .icon-btn {
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 1rem;
+        margin: 0 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .action-buttons .icon-btn:hover {
+        background-color: #0056b3;
+    }
+
+    /* Center pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+    }
+
+    /* Style the pagination items (optional, for better aesthetics) */
+    .pagination .page-item {
+        margin: 0 1px;
+    }
+
+    .pagination .page-link {
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-align: center;
+        color: #007bff;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        cursor: not-allowed;
+    }
+
+   
+    .modal-content {
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #ddd;
+    }
+
+    .form-select,
+    .form-range {
+        width: 100%;
+    }
+
+    .btn-close {
+        background-color: #6c757d;
+    }
+
+    #clearFilters {
+        background-color: #dc3545;
+    }
+
+    /* Styling pagination */
+    /* Circle badge styles */
+    .circle-badge {
+        position: absolute;
+        top: -2px;
+        left: -10px;
+        width: 40px;
+        height: 40px;
+        background-color: #007bff;
+        color: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    
