@@ -9,17 +9,19 @@ import "../components/Styles/SoftwareListing/Softwares.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategoryDataBySlug } from "../features/actions/category";
 import Loader from "../components/Loader/Loader";
+import parse from "html-react-parser";
+import FilterModal from "../components/CategoryModal/FilterModal";
+import SoftwarePagination from "../components/SoftwarePagination/SoftwarePagination";
 
 const Category = () => {
   const swiperRef = useRef(null);
   const swiperRef2 = useRef(null);
   const dispatch = useDispatch();
   const { slug } = useParams();
-  const { data, software_category } = useSelector(
+  const { data,software_category } = useSelector(
     (action) => action.category?.categoryDetailData
   );
   const { isLoading } = useSelector((action) => action.category);
-  const isFirstRender = useRef(true); // Track first render
 
   const [url, setUrl] = useState(
     `${
@@ -27,19 +29,10 @@ const Category = () => {
     }/site/categoryallsoftware/${slug}`
   );
 
-  console.log(data);
-
-  // useEffect(() => {
-  //   dispatch(getCategoryDataBySlug(slug));
-  // }, []);
+ 
   useEffect(() => {
     dispatch(getCategoryDataBySlug(url));
 
-    if (isFirstRender.current) {
-      isFirstRender.current = false; // Prevent scrolling on first render
-    } else {
-      window.scrollTo(0, 0); // Scroll only on `url` change
-    }
   }, [url]);
 
   useEffect(() => {
@@ -832,260 +825,19 @@ const Category = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <section class="feature-promo">
-          <div class="container mb-4">
-            <div class="row">
-              <div class="col-md-8">
-                <h4>Our Best {software_category?.category_name}</h4>
-                <p>
-                  <b>
-                    Total Records: {data?.total} Showing {data?.per_page}{" "}
-                    records per page
-                  </b>
-                </p>
-              </div>
-              <div class="col-md-4 text-end">
-                <button
-                  class="btn btn-default px-4 py-2"
-                  data-bs-toggle="modal"
-                  data-bs-target="#filterModal"
-                >
-                  <i class="fa fa-filter me-2"></i> Advanced Filter
-                </button>
-
-                <div class="dropdown d-inline-block">
-                  <form action="https://my.babvipsoftwares.com/category/online-erp-system">
-                    <input
-                      type="hidden"
-                      name="_token"
-                      value="ZUHmuf5nLBEW3PfSIGjJ6EqmNXOVsBR2ajXkkPCs"
-                      autocomplete="off"
-                    />
-                    <input type="hidden" value="" name="sort_by" id="sort_by" />
-                    <button
-                      class="btn btn-default px-4 py-2 dropdown-toggle"
-                      type="button"
-                      id="sortingDropdown"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i class="fa fa-sort me-2"></i> Sort By
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="sortingDropdown">
-                      <li>
-                        <a class="dropdown-item software_sort" data="Newest">
-                          Newest
-                        </a>
-                      </li>
-
-                      <li>
-                        <a class="dropdown-item software_sort" data="Oldest">
-                          Oldest
-                        </a>
-                      </li>
-                    </ul>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <hr />
-          </div>
-
-          <div class="container">
-            {Array.isArray(data?.data) &&
-              data?.data.map((item, idx) => (
-                <div class="row justify-content-center mb-3">
-                  <div class="col-md-12">
-                    <div class="card flex-row">
-                      <Link
-                        to={`/software/${item?.software_slug}`}
-                        class="position-relative"
-                      >
-                        <img
-                          src={`${
-                            import.meta.env.VITE_REACT_APP_IMAGE_PATH
-                          }/software-images/${item?.software_image}`}
-                          class="card-img-left m-3"
-                          alt="Product"
-                        />
-                        <span class="wishlist-icon">
-                          <i class="fa fa-heart"></i>
-                        </span>
-                      </Link>
-
-                      <Link to={`/software/${item?.software_slug}`}>
-                        <div class="card-body">
-                          <h5 class="card-title">
-                            <a>{item?.software_name}</a>
-                          </h5>
-                          <div class="ratting-wrap">
-                            <p class="mb-1">
-                              <b>5/5 Overall Rating</b>
-                            </p>
-                            <ul class="list-unstyled rating-list list-inline mb-1">
-                              <li class="list-inline-item">
-                                <i class="fas fa-star"></i>
-                              </li>
-                              <li class="list-inline-item">
-                                <i class="fas fa-star"></i>
-                              </li>
-                              <li class="list-inline-item">
-                                <i class="fas fa-star"></i>
-                              </li>
-                              <li class="list-inline-item">
-                                <i class="fas fa-star"></i>
-                              </li>
-                              <li class="list-inline-item">
-                                <i class="fas fa-star"></i>
-                              </li>
-                            </ul>
-                            <p class="mb-1">
-                              <b>100+ users</b>
-                            </p>
-                            <p class="text-muted">{item?.short_description}</p>
-                          </div>
-                        </div>
-                      </Link>
-
-                      <div class="text-center action-buttons">
-                        <p class="card-text fw-bold mb-3">Rs. {item?.price}</p>
-
-                        <div class="d-flex justify-content-center align-items-center mt-5">
-                          <button class="icon-btn" title="Call">
-                            <i class="fa fa-phone"></i>
-                          </button>
-                          <button
-                            class="icon-btn free_demo"
-                            title="Get a Free Demo"
-                            data="1"
-                          >
-                            <i class="fa fa-handshake"></i>
-                          </button>
-                          <button
-                            type="button"
-                            class="btn d-none"
-                            id="btn-enquiry-1"
-                            data-bs-toggle="modal"
-                            data-bs-target=".bs-example-modal-xl"
-                          >
-                            {" "}
-                            Enquery Now
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-            <div class="row">
-              <div class="col-md-12 text-center">
-                <nav aria-label="Page navigation example" class=" ">
-                  <ul class="pagination">
-                    {Array.isArray(data?.links) && (
-                      <li
-                        class={`page-item ${
-                          !data?.links[0]?.url && "disabled"
-                        }`}
-                        onClick={() =>
-                          data?.links[0]?.url && setUrl(data?.links[0]?.url)
-                        }
-                      >
-                        <span class="page-link">
-                          {data?.links[0]?.label?.replace("&laquo;", "")}
-                        </span>
-                      </li>
-                    )}
-
-                    {Array.isArray(data?.links) &&
-                      data?.links?.slice(1, -1).map((item, idx) => (
-                        <li class={`page-item ${item?.active && "active"}`}>
-                          <a
-                            onClick={() => item?.url && setUrl(item?.url)}
-                            class="page-link"
-                          >
-                            {item?.label}
-                          </a>
-                        </li>
-                      ))}
-                    <li
-                      class={`page-item ${
-                        !data?.links.at(-1)?.url && "disabled"
-                      }`}
-                      onClick={() =>
-                        data?.links[2]?.url && setUrl(data?.links.at(-1)?.url)
-                      }
-                    >
-                      <span class="page-link">
-                        {" "}
-                        {data?.links.at(-1)?.label?.replace("&raquo;", "")}
-                      </span>
-                    </li>
-                  </ul>
-                  <p>Total Records: 2 Showing 2 records per page</p>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </section>
+     <SoftwarePagination data={data} software_category={software_category} setUrl={setUrl}/>
       )}
+
+
 
       <section class="feature-promo" id="cat-description">
         <div class="container mb-4">
           <div class="row">
             <div class="col-md-12">
               <h4>Category Description:</h4>
-              <p>
-                ERP software is an integrated system designed to streamline and
-                unify business processes across various departments within an
-                organization, such as finance, human resources, supply chain,
-                manufacturing, sales, and customer service. By centralizing data
-                into a single database, ERP systems enable real-time data
-                sharing and improved communication across all departments,
-                allowing for better decision-making, efficiency, and
-                scalability.
-              </p>
-              <p>
-                ERP software typically includes modules that can be customized
-                to meet the unique needs of different industries, whether in
-                manufacturing, retail, healthcare, or service sectors. Key
-                features include financial management, inventory control, order
-                processing, customer relationship management (CRM), human
-                resources, and reporting and analytics tools.
-              </p>
-              <p>The core benefits of ERP software include:</p>
-              <ol>
-                <li>
-                  <strong>Data Integration</strong>: Consolidates data from
-                  multiple sources, reducing data silos and promoting data
-                  accuracy.
-                </li>
-                <li>
-                  <strong>Efficiency Improvement</strong>: Automates repetitive
-                  tasks and streamlines workflows, leading to increased
-                  productivity.
-                </li>
-                <li>
-                  <strong>Real-Time Data Access</strong>: Provides up-to-date
-                  insights, enabling faster responses to market demands and
-                  customer needs.
-                </li>
-                <li>
-                  <strong>Scalability</strong>: Modular design allows for
-                  expansion as business needs grow, supporting scalability.
-                </li>
-                <li>
-                  <strong>Enhanced Compliance</strong>: Built-in compliance
-                  tools help organizations adhere to regulatory standards and
-                  industry requirements.
-                </li>
-              </ol>
-              <p>
-                Overall, ERP software is a comprehensive tool that helps
-                businesses optimize resources, reduce operational costs, and
-                improve customer satisfaction by creating a cohesive environment
-                for all business activities.
-              </p>
+          {parse(software_category?.description)}
+         
+  
             </div>
           </div>
         </div>
@@ -1427,81 +1179,8 @@ const Category = () => {
         </div>
       </section>
 
-      <div
-        class="modal"
-        id="filterModal"
-        tabindex="-1"
-        aria-labelledby="filterModalLabel"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="filterModalLabel">
-                Advanced Filter
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <form
-                action="https://my.babvipsoftwares.com/category/online-erp-system"
-                method="get"
-                id="advance-filter"
-              >
-                <input
-                  type="hidden"
-                  name="_token"
-                  value="ZUHmuf5nLBEW3PfSIGjJ6EqmNXOVsBR2ajXkkPCs"
-                  autocomplete="off"
-                />{" "}
-                <div class="mb-3">
-                  <label for="filterCategory" class="form-label">
-                    Software Name
-                  </label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="software_name"
-                    name="software_name"
-                    placeholder="Enter Software Name"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="filterRating" class="form-label">
-                    Rating
-                  </label>
-                  <select class="form-select" id="filterRating">
-                    <option selected="">Choose Rating</option>
-                    <option value="5">5 Stars</option>
-                    <option value="4">4 Stars</option>
-                    <option value="3">3 Stars</option>
-                  </select>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    id="clear-filter"
-                  >
-                    Clear Filter
-                  </button>
-                  <button
-                    type="submit"
-                    class="btn btn-danger"
-                    id="clearFilters"
-                  >
-                    Search
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      <FilterModal slug={slug} setUrl={setUrl}/>
+      
     </>
   );
 };

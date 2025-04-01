@@ -3,16 +3,23 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { getSoftwareDataBySlug } from "../features/actions/category";
+import { useParams } from "react-router-dom";
+import parse from "html-react-parser";
+
 
 const Software = () => {
   const [showMore, setShowMore] = useState(false);
-  const images = [
-    "https://my.babvipsoftwares.com/storage/uploads/software-images/5aeb4471-3c1d-406d-9a5f-2061d4cd5555.jpg",
-    "https://my.babvipsoftwares.com/storage/uploads/software-images/b3aad372-92b2-4710-a5e9-91d0fa5c5c7e.jpg",
-    "https://my.babvipsoftwares.com/storage/uploads/software-images/480f70a7-1c04-484e-8e21-17a9567f5e0e.jpg",
-    "https://my.babvipsoftwares.com/storage/uploads/software-images/5aeb4471-3c1d-406d-9a5f-2061d4cd5555.jpg",
-    "https://my.babvipsoftwares.com/storage/uploads/software-images/b3aad372-92b2-4710-a5e9-91d0fa5c5c7e.jpg",
-  ];
+  const dispatch = useDispatch();
+  const {slug}= useParams()
+  const { softwareDetailData } = useSelector(
+    (action) => action.category
+  );
+  
+
+  console.log(softwareDetailData)
+ 
 
   const [activeIndex, setActiveIndex] = useState(0);
   const mainSwiperRef = useRef(null);
@@ -24,6 +31,10 @@ const Software = () => {
   };
 
   const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(()=>{
+    dispatch(getSoftwareDataBySlug(slug))
+  },[])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -306,10 +317,10 @@ const Software = () => {
                 onSwiper={(swiper) => (mainSwiperRef.current = swiper)}
                 className="rounded"
               >
-                {images.map((image, index) => (
+                {Array.isArray(softwareDetailData?.software_images) && softwareDetailData?.software_images.map((image, index) => (
                   <SwiperSlide key={index}>
                     <img
-                      src={image}
+                      src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-images/${image.image_path}`}
                       alt={`Product ${index + 1}`}
                       className="img-fluid rounded"
                     />
@@ -370,14 +381,14 @@ const Software = () => {
                   }}
                   onSwiper={(swiper) => (thumbSwiperRef.current = swiper)}
                 >
-                  {images.map((image, index) => (
+                  {Array.isArray(softwareDetailData.software_images) && softwareDetailData?.software_images.map((image, index) => (
                     <SwiperSlide
                       key={index}
                       onClick={() => handleThumbnailClick(index)}
                       style={{ cursor: "pointer" }}
                     >
                       <img
-                        src={image}
+                        src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-images/${image.image_path}`}
                         alt={`Thumbnail ${index + 1}`}
                         className={`img-thumbnail mx-1 ${
                           activeIndex === index ? "border border-primary" : ""
@@ -393,12 +404,12 @@ const Software = () => {
 
             {/* Product Info */}
             <div className="col-md-8">
-              <h2 className="fw-bold">Customer Management System</h2>
+              <h2 className="fw-bold">{softwareDetailData?.software_name}</h2>
               <a
                 href="#"
                 className="badge bg-primary text-white text-decoration-none"
               >
-                Online ERP System
+                {softwareDetailData?.category?.category_title}
               </a>
 
               {/* Ratings */}
@@ -414,15 +425,11 @@ const Software = () => {
               </div>
 
               {/* Price */}
-              <h4 className="text-danger mt-3">Price: ₹ 2000.00</h4>
+              <h4 className="text-danger mt-3">Price: ₹ {softwareDetailData?.price}</h4>
 
               {/* Description */}
               <p className="mt-3">
-                A Customer Management System, often referred to as Customer
-                Relationship Management (CRM) software, is a tool that helps
-                businesses manage interactions and relationships with their
-                customers and prospects. It is designed to organize and
-                streamline communication.
+              {softwareDetailData?.short_description}
               </p>
 
               {/* Buttons */}
@@ -539,74 +546,7 @@ const Software = () => {
             <div class="row">
               <div class="col-md-12">
                 <h4>Software Description:</h4>
-                <p>
-                  A Customer Management System, often referred to as Customer
-                  Relationship Management (CRM) software, is a tool that helps
-                  businesses manage interactions and relationships with their
-                  customers and prospects. It is designed to organize and
-                  streamline communication, track customer data, and improve
-                  customer satisfaction and retention. By centralizing customer
-                  information and tracking interactions across various channels,
-                  a CMS enables businesses to provide personalized and
-                  responsive customer service.
-                </p>
-                <p>Key features of a Customer Management System include:</p>
-                <ol>
-                  <li>
-                    <strong>Contact Management</strong>: Stores customer
-                    details, such as contact information, interaction history,
-                    purchase records, and personal preferences, in one place for
-                    easy access and retrieval.
-                  </li>
-                  <li>
-                    <strong>Interaction Tracking</strong>: Logs all customer
-                    interactions across multiple channels—like email, phone,
-                    social media, and in-person—allowing teams to maintain
-                    consistent communication and follow up effectively.
-                  </li>
-                  <li>
-                    <strong>Sales Management</strong>: Helps track the sales
-                    pipeline, manage leads, and automate sales processes,
-                    providing visibility into the status of deals and improving
-                    conversion rates.
-                  </li>
-                  <li>
-                    <strong>Customer Support</strong>: Offers tools to manage
-                    customer inquiries, track issues, and resolve cases
-                    efficiently, often with ticketing systems and live chat
-                    capabilities.
-                  </li>
-                  <li>
-                    <strong>Task and Activity Management</strong>: Assigns tasks
-                    to team members, sets reminders, and tracks progress on
-                    customer-related activities to ensure timely follow-ups and
-                    accountability.
-                  </li>
-                  <li>
-                    <strong>Reporting and Analytics</strong>: Provides insights
-                    into customer behavior, sales performance, and customer
-                    service effectiveness, enabling data-driven decision-making.
-                  </li>
-                  <li>
-                    <strong>Automated Workflows</strong>: Streamlines repetitive
-                    tasks, such as sending follow-up emails or reminders, to
-                    increase efficiency and reduce manual work.
-                  </li>
-                  <li>
-                    <strong>Customization and Scalability</strong>: Allows
-                    businesses to tailor fields, dashboards, and reports to meet
-                    their unique needs and expand as the business grows.
-                  </li>
-                </ol>
-                <p>
-                  A Customer Management System is an essential tool for
-                  businesses looking to build stronger customer relationships,
-                  improve communication, and enhance the overall customer
-                  experience. By centralizing customer data and providing tools
-                  for engagement, it empowers teams to respond to customer needs
-                  proactively and efficiently, ultimately driving customer
-                  loyalty and business growth.
-                </p>
+              {parse(softwareDetailData?.description)}
               </div>
             </div>
           </div>
@@ -646,8 +586,6 @@ const Software = () => {
                 <li>
                   <a
                     href="#tabplan2"
-                    class="
-                                        "
                     data-bs-toggle="tab"
                     aria-selected="false"
                     role="tab"
@@ -666,48 +604,41 @@ const Software = () => {
                   role="tabpanel"
                 >
                   <div class="row g-4 justify-content-center">
-                    <div class="col-xl-4 col-md-6">
+                    {Array.isArray(softwareDetailData?.software_plans) && softwareDetailData?.software_plans.map((plan,idx)=>
+                      plan?.plan_type?.plan_type_name==="Halfyearly" && 
+                     ( <div key={idx} class="col-xl-4 col-md-6">
                       <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
                         <img
-                          src="https://my.babvipsoftwares.com/storage/uploads/software-plan/a8bec783-15bf-41e6-96e4-a31506097689.png"
-                          alt="a8bec783-15bf-41e6-96e4-a31506097689.png"
+                          src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.badge_icon}`}
+                         
                           class="position-absolute top-0 offer-badge z-2"
                         />
 
                         <div class="icon-wrapper d-inline-block rounded-circle bg-white">
                           <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
                             <img
-                              src="https://my.babvipsoftwares.com/storage/uploads/software-plan/5169cd61-81c2-4208-bef6-c9318d25a6a7.png"
-                              alt="5169cd61-81c2-4208-bef6-c9318d25a6a7.png"
+                              src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.plan_icon}`}
+                             
                             />
                           </span>
                         </div>
 
-                        <h5 class="mt-4 mb-3">Default</h5>
-                        <p class="mb-4 fm">This is plan short description.</p>
+                        <h5 class="mt-4 mb-3">{plan?.plan_name}</h5>
+                        <p class="mb-4 fm">{plan?.plan_short_description}</p>
 
                         <ul
                           class="dg-feature-list list-unstyled d-inline-block text-start p-0"
                           id="default-module-list-1"
                         >
-                          <li class="fs-sm ">
-                            <span class="me-2">
+                        {Array.isArray(softwareDetailData?.software_module) && softwareDetailData?.software_module.map((plan,idx)=> <><li class="fs-sm ">
+                          {plan?.additional_info ===0 ? <span class="me-2">
                               <i class="fas fa-check"></i>
-                            </span>
-                            Multi User Access
+                            </span> :
+                                        <span class="me-2"><i class="fa-solid fa-circle-check" style={{"color":"red"}}></i></span>
+                                    }
+                            {plan?.module_name}
                           </li>
-                          <li class="fs-sm ">
-                            <span class="me-2">
-                              <i class="fas fa-check"></i>
-                            </span>
-                            Easy To Access
-                          </li>
-                          <li class="fs-sm ">
-                            <span class="me-2">
-                              <i class="fas fa-check"></i>
-                            </span>
-                            Attendence Management
-                          </li>
+                 
                           {showMore && (
                             <li className="fs-sm">
                               <span className="me-2">
@@ -716,6 +647,8 @@ const Software = () => {
                               Library Management System
                             </li>
                           )}
+                          </>
+                        )}
                         </ul>
                         <button
                           class="btn btn-link p-0 fs-sm toggle-btn"
@@ -728,104 +661,18 @@ const Software = () => {
 
                         <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
                           <h2 style={{ "font-size": "22px" }}>
-                            <span>₹ 2000.00</span>
-                            <span class="ms-2 fs-md fw-normal">6 months</span>
+                            <span>₹ {plan?.plan_price}</span>
+                            <span class="ms-2 fs-md fw-normal">{plan?.plan_type?.duration_value} {plan?.plan_type?.duration_type}</span>
                           </h2>
                           <a href="#" class="btn dg-outline-btn rounded-pill">
                             Purchase Now
                           </a>
                         </div>
                       </div>
-                    </div>
-                    <div class="col-xl-4 col-md-6">
-                      <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
-                        <div class="icon-wrapper d-inline-block rounded-circle bg-white">
-                          <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
-                            <img
-                              src="https://my.babvipsoftwares.com/storage/uploads/software-plan/032f19da-3757-417c-b2ba-07309202e504.png"
-                              alt="032f19da-3757-417c-b2ba-07309202e504.png"
-                            />
-                          </span>
-                        </div>
-
-                        <h5 class="mt-4 mb-3">Silver Plan</h5>
-                        <p class="mb-4 fm">This is test Description.</p>
-
-                        <ul
-                          class="dg-feature-list list-unstyled d-inline-block text-start p-0"
-                          id="default-module-list-4"
-                        >
-                          <li class="fs-sm ">
-                            <span class="me-2">
-                              <i class="fas fa-check"></i>
-                            </span>
-                            Multi User Access
-                          </li>
-                          <li class="fs-sm ">
-                            <span class="me-2">
-                              <i class="fas fa-check"></i>
-                            </span>
-                            Easy To Access
-                          </li>
-                          <li class="fs-sm ">
-                            <span class="me-2">
-                              <i class="fas fa-check"></i>
-                            </span>
-                            Attendence Management
-                          </li>
-                          {showMore && (
-                            <li className="fs-sm">
-                              <span className="me-2">
-                                <i className="fas fa-check"></i>
-                              </span>
-                              Library Management System
-                            </li>
-                          )}
-                        </ul>
-                        <button
-                          class="btn btn-link p-0 fs-sm toggle-btn"
-                          data-target="default-module-list-4"
-                          style={{ width: "0" }}
-                          onClick={() => setShowMore(!showMore)}
-                        >
-                          {showMore ? "See Less" : "See More"}
-                        </button>
-
-                        <ul
-                          class="dg-feature-list list-unstyled d-inline-block text-start p-0"
-                          id="additional-module-list-4"
-                        >
-                          <li class="fs-sm ">
-                            <span class="me-2">
-                              <i
-                                class="fa-solid fa-circle-check"
-                                style={{ color: "red" }}
-                              ></i>
-                            </span>
-                            Advance Features
-                          </li>
-                          <li class="fs-sm ">
-                            <span class="me-2">
-                              <i
-                                class="fa-solid fa-circle-check"
-                                style={{ color: "red" }}
-                              ></i>
-                            </span>
-                            HR Management
-                          </li>
-                        </ul>
-
-                        <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
-                          <h2 style={{ "font-size": "22px" }}>
-                            <span>₹ 5000.00</span>
-                            <span class="ms-2 fs-md fw-normal">6 months</span>
-                          </h2>
-                          <a href="#" class="btn dg-outline-btn rounded-pill">
-                            Purchase Now
-                          </a>
-                        </div>
-                      </div>
-                    </div>
+                    </div>)
+                    )
+                    }
+                   
                   </div>
                 </div>
                 <div
@@ -835,25 +682,27 @@ const Software = () => {
                   role="tabpanel"
                 >
                   <div class="row g-4 justify-content-center">
-                    <div class="col-xl-4 col-md-6">
+                  {Array.isArray(softwareDetailData?.software_plans) && softwareDetailData?.software_plans.map((plan,idx)=>
+                      plan?.plan_type?.plan_type_name==="Yearly" && 
+                     ( <div key={idx} class="col-xl-4 col-md-6">
                       <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
                         <img
-                          src="https://my.babvipsoftwares.com/storage/uploads/software-plan/6f46c072-1564-4da6-865a-9e4b3ef3792d.png"
-                          alt="6f46c072-1564-4da6-865a-9e4b3ef3792d.png"
+                            src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.badge_icon}`}
+                          
                           class="position-absolute top-0 offer-badge z-2"
                         />
 
                         <div class="icon-wrapper d-inline-block rounded-circle bg-white">
                           <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
                             <img
-                              src="https://my.babvipsoftwares.com/storage/uploads/software-plan/f6e4aae6-1079-470a-ab20-544fa1295571.png"
-                              alt="f6e4aae6-1079-470a-ab20-544fa1295571.png"
+                              src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.plan_icon}`}
+                              
                             />
                           </span>
                         </div>
 
-                        <h5 class="mt-4 mb-3">Gold</h5>
-                        <p class="mb-4 fm">This is test Description.</p>
+                        <h5 class="mt-4 mb-3">{plan?.plan_name}</h5>
+                        <p class="mb-4 fm">{plan?.plan_short_description}</p>
 
                         <ul
                           class="dg-feature-list list-unstyled d-inline-block text-start p-0"
@@ -897,8 +746,8 @@ const Software = () => {
 
                         <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
                           <h2 style={{ "font-size": "22px" }}>
-                            <span>₹ 2000.00</span>
-                            <span class="ms-2 fs-md fw-normal">1 years</span>
+                            <span>₹ {plan?.plan_price}</span>
+                            <span class="ms-2 fs-md fw-normal">{plan?.plan_type?.duration_value} {plan?.plan_type?.duration_type}</span>
                           </h2>
                           <a href="#" class="btn dg-outline-btn rounded-pill">
                             Purchase Now
@@ -906,6 +755,8 @@ const Software = () => {
                         </div>
                       </div>
                     </div>
+                    ))
+                  }
                   </div>
                 </div>
               </div>

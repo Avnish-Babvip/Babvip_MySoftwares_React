@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCategoryData, getCategoryDataBySlug } from "../actions/category";
+import { getCategoryData, getCategoryDataBySlug, getSoftwareDataBySlug, getStyle1SoftwareListing } from "../actions/category";
 
 
 const initialState = {
@@ -7,6 +7,8 @@ const initialState = {
   categoryData:{},
   categoryDetailData:{},
   errorMessage: "",
+  softwareDetailData:{},
+  styleSoftware:[],
 };
 
 // ---------------------------------------------------------------------------------------
@@ -43,6 +45,36 @@ const initialState = {
         state.categoryDetailData = action.payload; 
       })
       .addCase(getCategoryDataBySlug.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.errorMessage = action.payload || "Failed to fetch category data.";
+      })
+
+      .addCase(getSoftwareDataBySlug.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(getSoftwareDataBySlug.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        state.softwareDetailData = action.payload.data; 
+      })
+      .addCase(getSoftwareDataBySlug.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.errorMessage = action.payload || "Failed to fetch category data.";
+      })
+
+      .addCase(getStyle1SoftwareListing.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(getStyle1SoftwareListing.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        state.styleSoftware = action.payload.data; 
+      })
+      .addCase(getStyle1SoftwareListing.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.errorMessage = action.payload || "Failed to fetch category data.";
