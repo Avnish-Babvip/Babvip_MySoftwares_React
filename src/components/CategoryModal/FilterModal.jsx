@@ -4,16 +4,14 @@ const FilterModal = ({ slug, setUrl }) => {
   const [softwareName, setSoftwareName] = useState("");
   const [rating, setRating] = useState("");
 
-  console.log(softwareName)
-
   const handleSearch = (event) => {
     event.preventDefault(); // Prevent default form submission
 
-    const baseUrl = `${import.meta.env.VITE_REACT_APP_API_BASE_URL_PRODUCTION}/site/categoryallsoftware/${slug}`;
+    const baseUrl = slug ?  `${import.meta.env.VITE_REACT_APP_API_BASE_URL_PRODUCTION}/site/categoryallsoftware/${slug}`:
+    `${import.meta.env.VITE_REACT_APP_API_BASE_URL_PRODUCTION}/site/softwarestyle2`;
     
     const url = `${baseUrl}?software_name=${encodeURIComponent(softwareName)}&rating=${encodeURIComponent(rating)}`;
     
-    console.log("Updated URL:", url); // Debugging
     setUrl(url);
     // Manually trigger modal close (optional, since data-bs-dismiss is used)
   
@@ -22,8 +20,7 @@ const FilterModal = ({ slug, setUrl }) => {
   const handleClear = () => {
     setSoftwareName("");
     setRating("");
-    const baseUrl = `${import.meta.env.VITE_REACT_APP_API_BASE_URL_PRODUCTION}/site/categoryallsoftware/${slug}`;
-    console.log("Clearing filters, resetting URL to:", baseUrl);
+    const baseUrl = slug ? `${import.meta.env.VITE_REACT_APP_API_BASE_URL_PRODUCTION}/site/categoryallsoftware/${slug}` :`${import.meta.env.VITE_REACT_APP_API_BASE_URL_PRODUCTION}/site/softwarestyle2`;
     setUrl(baseUrl);
   };
 

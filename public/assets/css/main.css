@@ -110,3 +110,12 @@
 .ptb-80{
   padding: 80px 0px !important;
 }
+
+.nunitoSans-font {
+  font-family: "Nunito Sans", sans-serif;
+}
+
+.dropdown-menu.no-shadow {
+  box-shadow: none !important;
+}
+

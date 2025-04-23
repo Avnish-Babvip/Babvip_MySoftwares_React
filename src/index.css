@@ -3,8 +3,13 @@
 @import "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap";
 @import "https://fonts.googleapis.com/css2?family=Lily+Script+One&display=swap";
 
+/* //Nunito sans Font //  */
+@import "https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap";
+
 /* Bootstrap */
 @import "/assets/css/main.css"; /* Import your custom Bootstrap styles here */
+
+
 
 
 

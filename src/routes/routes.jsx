@@ -7,6 +7,12 @@ import DynamicRootPage from "../pages/DynamicRootPage";
 import Loader from "../components/Loader/Loader";
 import Category from "../pages/Category";
 import Software from "../pages/Software";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import DashboardDefaultLayout from "../layout/DefaultLayout/DashboardDefaultLayout";
+import Payment from "../pages/Dashboard/Payment";
+import MySoftware from "../pages/Dashboard/MySoftware";
+import Profile from "../pages/Dashboard/Profile";
+import Login from "../pages/Authentication/Login";
 
 // Lazy Loading 😴
 const Blog = lazy(() => import("../pages/Blog"));
@@ -19,6 +25,15 @@ const Portfolio = lazy(() => import("../pages/Portfolio"));
 
 // ---------------------------------------------------------------------------------------------------
 console.log("enter inside the routes page");
+
+const NotFound = () => (
+  <p className="text-center text-primary fw-bold fs-5 mt-5 mx-5">
+    Sorry, no content available on this page right now.
+  </p>
+);
+
+
+
 export const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -28,6 +43,28 @@ export const appRouter = createBrowserRouter([
         path: "/",
         element: <DynamicRootPage />,
       },
+      {
+        path: "/login/customer", // 👈 separate login route
+        element: <Login />,
+      },
+      {
+        path: "/customer/dashboard", // 👈 separate dashboard routes
+        element: 
+        <Dashboard />,
+      },
+      {
+        path: "/customer/myProducts", // 👈 separate dashboard routes
+        element: <MySoftware />,
+      },
+      {
+        path: "/customer/payment", // 👈 separate dashboard routes
+        element: <Payment />,
+      },
+      {
+        path: "/customer/profile", // 👈 separate dashboard routes
+        element: <Profile />,
+      },
+
       {
         path: "/:slug",
         element: <DynamicRootPage />,
@@ -72,13 +109,57 @@ export const appRouter = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+                path: "*",
+                element: <NotFound />, // 404 fallback
+              },
     ],
   },
 ]);
 
+// export const maintenanceAppRouter = createBrowserRouter([
+//   {
+//     path: "/",
+//     element:  <DashboardDefaultLayout />,
+//     children: [
+//       {
+//         path: "/",
+//         element: <Login />,
+//       },
+//       {
+//         path: "/",
+//         element: <Dashboard />,
+//       },
+//       {
+//         path: "/payment",
+//         element: <Payment />,
+//       },
+//       {
+//         path: "/mySoftware",
+//         element: <MySoftware />,
+//       },
+//       {
+//         path: "/profile",
+//         element: <Profile />,
+//       },
+//       {
+//         path: "*",
+//         element: <NotFound />, // 404 fallback
+//       },
+
+//     ]
+    
+//   },
+//   {
+//     path: "/login",
+//     element: <Login />,
+//   },
+// ]);
+
 export const maintenanceAppRouter = createBrowserRouter([
   {
-    path: "/",
-    element: <Maintenance />,
+    path: "*",
+    element: <Maintenance />, // 404 fallback
   },
 ]);
+

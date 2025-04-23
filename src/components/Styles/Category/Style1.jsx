@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Swiper from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
+import { Navigation,Autoplay } from "swiper/modules";
 import { getCategoryData } from "../../../features/actions/category";
 import { Link } from "react-router-dom";
 
@@ -20,50 +20,50 @@ const Style1 = ({ data }) => {
     dispatch(getCategoryData());
   }, []);
   useEffect(() => {
-    const swiperInstance = new Swiper(".testimonialSwiper", {
-      modules: [Navigation],
+    const swiperInstance = new Swiper(".testimonialSwiperCategory", {
+      modules: [Navigation, Autoplay],
       slidesPerView: 1,
       speed: 700,
       spaceBetween: 30,
       slidesPerGroup: 1,
       loop: true,
+      autoplay: {
+        delay: 2000, // 2 seconds delay between slides
+        disableOnInteraction: false, // Continue autoplay after user interaction
+      },
       breakpoints: {
-        320: {
-          slidesPerView: 1,
-        },
-        640: {
-          slidesPerView: 1,
-        },
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 20,
-        },
-        1024: {
-          slidesPerView: 3,
-          spaceBetween: 20,
-        },
-        1142: {
-          slidesPerView: 4,
-          spaceBetween: 25,
-        },
+        320: { slidesPerView: 1 },
+        640: { slidesPerView: 2 },
+        1024: { slidesPerView: 3, spaceBetween: 20 },
+        1142: { slidesPerView: 4, spaceBetween: 25 },
       },
       navigation: {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev",
       },
     });
-    // Store the Swiper instance in the ref
+  
+    // Store the Swiper instance
     swiperRef.current = swiperInstance;
-
+  
+    // Add hover event listeners to stop/start autoplay
+    const swiperElement = document.querySelector(".testimonialSwiperCategory");
+    if (swiperElement) {
+      swiperElement.addEventListener("mouseenter", () => {
+        swiperInstance.autoplay.stop();
+      });
+      swiperElement.addEventListener("mouseleave", () => {
+        swiperInstance.autoplay.start();
+      });
+    }
+  
     return () => {
-      if (
-        swiperRef.current &&
-        typeof swiperRef.current.destroy === "function"
-      ) {
+      if (swiperRef.current && typeof swiperRef.current.destroy === "function") {
         swiperRef.current.destroy(true, true);
       }
     };
   }, []);
+  
   return (
     <section class="feature-section ptb-120">
       <div class="container">
@@ -85,7 +85,7 @@ const Style1 = ({ data }) => {
         <div class="row">
           <div class="col-12">
             <div class="position-relative w-100">
-              <div class="swiper testimonialSwiper">
+              <div class="swiper testimonialSwiperCategory">
                 <div class="swiper-wrapper">
                   {Array.isArray(categoryData) &&
                     categoryData.map((item, idx) => (
@@ -104,9 +104,11 @@ const Style1 = ({ data }) => {
                                     }/software-category/${item?.category_image}`
                                   : `${assetRoute}/placeholder.webp`
                               }
+                              style={{ width: "60px", height: "60px", objectFit: "cover" }}
                               class="img-fluid me-3 rounded"
                               width="60"
-                              alt="66067529-adcb-47a5-83f4-4179207afeef.png"
+                              height="60"
+                              
                             />
                             <div class="author-info">
                               <h6 class="mb-0">{item?.category_name}</h6>

@@ -13,7 +13,6 @@ const Style2 = ({ data }) => {
     }/site/blogspaginate?page=1`
   );
 
-  console.log(blogData);
   const isFirstRender = useRef(true); // Track first render
 
   useEffect(() => {
@@ -198,14 +197,14 @@ const Style2 = ({ data }) => {
             {Array.isArray(blogData?.links) && (
               <div
                 onClick={() =>
-                  blogData?.links?.at(-1)?.url &&
-                  setUrl(blogData?.links?.at(-1)?.url)
+                  blogData?.links.slice(-1)[0]?.url &&
+                  setUrl(blogData?.links.slice(-1)[0]?.url)
                 }
                 class={`btn btn-soft-primary btn-sm ${
-                  blogData?.links?.at(-1)?.url && "active"
+                  blogData?.links.slice(-1)[0]?.url && "active"
                 }`}
               >
-                {blogData?.links?.at(-1)?.label?.replace("&raquo;", "")}
+                {blogData?.links.slice(-1)[0]?.label?.replace("&raquo;", "")}
               </div>
             )}
           </div>

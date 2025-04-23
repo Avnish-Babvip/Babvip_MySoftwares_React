@@ -1,79 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-
-const statesByCountry = {
-  India:  [
-    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
-    "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", 
-    "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", 
-    "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", 
-    "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", 
-    "Dadra and Nagar Haveli and Daman and Diu", "Lakshadweep", "Delhi", 
-    "Puducherry", "Ladakh", "Jammu and Kashmir"
-  ],
-};
-
-const citiesByState = {
-  "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Kadapa", "Rajahmundry", "Kakinada", "Tirupati", "Anantapur", "Srikakulam", "Ongole", "Eluru", "Chittoor", "Machilipatnam", "Nandyal", "Tenali", "Proddatur"],
-  "Arunachal Pradesh": ["Itanagar", "Tawang", "Pasighat", "Ziro", "Bomdila", "Roing", "Tezu", "Daporijo", "Aalo", "Changlang"],
-  Assam: ["Guwahati", "Dibrugarh", "Silchar", "Jorhat", "Tezpur", "Nagaon", "Tinsukia", "Diphu", "Karimganj", "Bongaigaon", "Barpeta", "Sivasagar", "Dhubri", "Goalpara"],
-  Bihar: ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Darbhanga", "Begusarai", "Purnia", "Arrah", "Chapra", "Katihar", "Munger", "Saharsa", "Samastipur", "Bettiah", "Sitamarhi"],
-  Chhattisgarh: ["Raipur", "Bhilai", "Bilaspur", "Korba", "Durg", "Rajnandgaon", "Jagdalpur", "Raigarh", "Ambikapur", "Dhamtari", "Kanker", "Mahasamund"],
-  Goa: ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Bicholim", "Curchorem", "Canacona"],
-  Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Junagadh", "Gandhinagar", "Anand", "Navsari", "Morbi", "Bharuch", "Vapi", "Mehsana", "Patan"],
-  Haryana: ["Gurugram", "Faridabad", "Panipat", "Ambala", "Yamunanagar", "Hisar", "Karnal", "Sonipat", "Rohtak", "Panchkula", "Bhiwani", "Sirsa", "Kurukshetra", "Rewari", "Jhajjar"],
-  "Himachal Pradesh": ["Shimla", "Manali", "Dharamshala", "Kullu", "Mandi", "Solan", "Chamba", "Bilaspur", "Kangra", "Una", "Hamirpur", "Nahan"],
-  Jharkhand: ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh", "Deoghar", "Giridih", "Ramgarh", "Medininagar"],
-  Karnataka: ["Bangalore", "Mysore", "Hubli", "Mangalore", "Belgaum", "Gulbarga", "Davanagere", "Shimoga", "Tumkur", "Udupi", "Bijapur", "Raichur", "Hassan"],
-  Kerala: ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kollam", "Palakkad", "Alappuzha", "Kottayam", "Malappuram", "Kannur", "Pathanamthitta"],
-  "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain", "Sagar", "Ratlam", "Rewa", "Satna", "Chhindwara"],
-  Maharashtra: ["Mumbai", "Pune", "Nagpur", "Nashik", "Thane", "Aurangabad", "Solapur", "Kolhapur", "Amravati", "Nanded", "Sangli", "Jalgaon", "Ahmednagar", "Latur"],
-  Manipur: ["Imphal", "Thoubal", "Bishnupur", "Churachandpur", "Kakching"],
-  Meghalaya: ["Shillong", "Tura", "Jowai", "Nongstoin"],
-  Mizoram: ["Aizawl", "Lunglei", "Serchhip", "Champhai"],
-  Nagaland: ["Kohima", "Dimapur", "Mokokchung", "Zunheboto", "Wokha"],
-  Odisha: ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur", "Balasore", "Puri", "Berhampur", "Bhadrak", "Jeypore"],
-  Punjab: ["Amritsar", "Ludhiana", "Chandigarh", "Jalandhar", "Patiala", "Bathinda", "Mohali", "Hoshiarpur", "Ferozepur"],
-  Rajasthan: ["Jaipur", "Jodhpur", "Udaipur", "Ajmer", "Kota", "Bikaner", "Bhilwara", "Alwar", "Sikar"],
-  Sikkim: ["Gangtok", "Namchi", "Mangan"],
-  "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirapalli", "Salem", "Vellore", "Erode", "Tirunelveli"],
-  Telangana: ["Hyderabad", "Warangal", "Karimnagar", "Nizamabad", "Khammam"],
-  Tripura: ["Agartala", "Udaipur", "Dharmanagar"],
-  "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Agra", "Meerut", "Allahabad", "Gorakhpur", "Bareilly", "Jhansi"],
-  Uttarakhand: ["Dehradun", "Haridwar", "Nainital", "Rudrapur", "Haldwani"],
-  "West Bengal": ["Kolkata", "Howrah", "Darjeeling", "Siliguri", "Durgapur", "Asansol", "Bardhaman"],
-  "Andaman and Nicobar Islands": ["Port Blair"],
-  Chandigarh: ["Chandigarh"],
-  "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Silvassa"],
-  Lakshadweep: ["Kavaratti"],
-  Delhi: ["New Delhi", "Dwarka", "Rohini", "Saket", "Karol Bagh"],
-  Puducherry: ["Puducherry", "Karaikal", "Yanam", "Mahe"],
-  Ladakh: ["Leh", "Kargil"],
-  "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla"]
-};
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCityById, getAllCountries, getAllStatesById } from "../../features/actions/countryStateCity";
+import { addCustomerLeads } from "../../features/actions/submission";
+import ButtonLoader from "../Loader/ButtonLoader"
 
 
-const ContactModal = () => {
+const ContactModal = ({modalData}) => {
   const dispatch = useDispatch();
+  const {countryData,stateData,cityData} = useSelector((state)=>state.countryStateCity);
+  const {isLoading} = useSelector((state)=>state.submission);
+  const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
 
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors },
   } = useForm();
 
-  const country = watch("country", "India");
 
   const onSubmit = (data) => {
-    console.log("Form Submitted:", data);
-    // dispatch(submitForm(data));
+    const newData={...data,software_id:modalData.id,message:"asdsdas"}
+    console.log(newData)
+
+    dispatch(addCustomerLeads(newData));
   };
+
+  useEffect(()=>{
+    dispatch(getAllCountries())
+    
+  },[])
 
   return (
     <div className="modal fade bs-example-modal-xl" id="btn-enquiry-1">
@@ -150,63 +109,76 @@ const ContactModal = () => {
                         <label className="form-label">Select Country *</label>
                         <select
                           className="form-control"
-                          {...register("country")}
-                          disabled
+                          {...register("country_id")}
+                          onChange={(e) => {
+                            dispatch(getAllStatesById(e.target.selectedIndex))
+                            setSelectedCountry(e.target.value)
+                            setValue("state_id", ""); // Reset city selection
+                          }}
                         >
-                          <option value="India">India</option>
+                          <option value="">Select Country</option>
+                          {countryData.map((country) => (
+                            <option key={country?.id} value={country?.id}>
+                              {country?.country_name}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
+                    {errors.country_id && <span className="text-danger">{errors.country_id.message}</span>}
 
-                    {/* State Dropdown (Shown after Country is selected) */}
-                    <div className="col-md-6">
+
+                {selectedCountry &&    <div className="col-md-6">
                       <div className="mb-3">
                         <label className="form-label">Select State *</label>
                         <select
                           className="form-control"
-                          {...register("state", { required: "State is required" })}
+                          {...register("state_id", { required: "State is required" })}
                           onChange={(e) => {
+                            dispatch(getAllCityById(e.target.selectedIndex))
                             setSelectedState(e.target.value);
-                            setValue("city", ""); // Reset city selection
+                            setValue("city_id", ""); // Reset city selection
                           }}
                         >
                           <option value="">Select State</option>
-                          {statesByCountry["India"].map((state) => (
-                            <option key={state} value={state}>
-                              {state}
+                          {stateData.map((state) => (
+                            <option key={state?.id} value={state?.id}>
+                              {state?.state_name}
                             </option>
                           ))}
                         </select>
-                        {errors.state && <span className="text-danger">{errors.state.message}</span>}
+                        {errors.state_id && <span className="text-danger">{errors.state_id.message}</span>}
                       </div>
-                    </div>
+                    </div>}
                   </div>
 
                   {/* City Dropdown (Shown after State is selected) */}
-                  {selectedState && (
-                    <div className="row">
+                  <div className="row">
+                  {selectedCountry&& selectedState && (
                       <div className="col-md-6">
                         <div className="mb-3">
                           <label className="form-label">Select City *</label>
                           <select
                             className="form-control"
-                            {...register("city", { required: "City is required" })}
+                            {...register("city_id", { required: "City is required" })}
+                            onChange={(e) => {
+                              setSelectedCity(e.target.value);
+                              
+                            }}
                           >
                             <option value="">Select City</option>
-                            {citiesByState[selectedState]?.map((city) => (
-                              <option key={city} value={city}>
-                                {city}
+                            {cityData?.map((city) => (
+                              <option key={city?.id} value={city?.id}>
+                                {city?.city_name}
                               </option>
                             ))}
+                            <option value="Other">Other</option>
                           </select>
-                          {errors.city && <span className="text-danger">{errors.city.message}</span>}
+                          {errors.city_id && <span className="text-danger">{errors.city_id.message}</span>}
                         </div>
                       </div>
-                    </div>
                   )}
-
-                  <div className="row">
-                    <div className="col-md-6">
+                   {selectedCountry&& selectedState&&selectedCity && <div className="col-md-6">
                       <div className="mb-3">
                         <label className="form-label">Postal Code *</label>
                         <input
@@ -217,8 +189,10 @@ const ContactModal = () => {
                         />
                         {errors.postal_code && <span className="text-danger">{errors.postal_code.message}</span>}
                       </div>
-                    </div>
+                    </div>}
                   </div>
+
+               
 
                   <div className="row">
                     <div className="col-md-12">
@@ -236,8 +210,8 @@ const ContactModal = () => {
                   </div>
 
                   <div className="modal-footer">
-                    <button type="submit" className="btn btn-primary">
-                      Send Now
+                    <button className="btn btn-primary" disabled={isLoading}>
+                     {isLoading? <ButtonLoader/> :" Send Now"}
                     </button>
                   </div>
                 </form>
@@ -245,9 +219,9 @@ const ContactModal = () => {
 
               <div className="col-md-4 p-0" style={{ background: "#b04373" }}>
                 <div className="modal-header d-block">
-                  <h5 className="modal-title text-white">Customer Management System</h5>
-                  <p className="text-white">
-                    A CRM software that helps businesses manage customer relationships.
+                  <h5 className="modal-title text-white">{modalData?.software_name}</h5>
+                  <p className="text-white truncate-2">
+                    {modalData?.short_description}
                   </p>
                 </div>
                 <iframe

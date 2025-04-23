@@ -14,6 +14,9 @@ import dynamicRootPage from "./slices/dynamicRootPage"
 import portfolio from "./slices/portfolio"
 import home from "./slices/home"
 import category from "./slices/category"
+import countryStateCity from "./slices/countryStateCity"
+import authentication from "./slices/authentication"
+import dashboard from "./slices/dashboard"
 
 const rootReducer = combineReducers({
   headMenu ,
@@ -26,7 +29,10 @@ const rootReducer = combineReducers({
   submission,
   portfolio,
   home,
-  category
+  category,
+  countryStateCity,
+  authentication,
+  dashboard
   });
 
   

@@ -69,3 +69,19 @@ export const getSoftwareDataBySlug = createAsyncThunk(
     }
   }
 );
+export const getAllSoftwaresStyle2 = createAsyncThunk(
+  "/site/softwarestyle2",
+  async (url, { rejectWithValue }) => {
+    try {
+      const { data } = await instance.get(url, {
+        withCredentials: false,
+        headers: headers,
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response.data.message || "Failed to fetch software "
+      );
+    }
+  }
+);

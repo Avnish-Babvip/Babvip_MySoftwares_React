@@ -825,7 +825,7 @@ const Category = () => {
       {isLoading ? (
         <Loader />
       ) : (
-     <SoftwarePagination data={data} software_category={software_category} setUrl={setUrl}/>
+     <SoftwarePagination data={data}  setUrl={setUrl} slug={slug} software_category={software_category}/>
       )}
 
 
@@ -835,7 +835,7 @@ const Category = () => {
           <div class="row">
             <div class="col-md-12">
               <h4>Category Description:</h4>
-          {parse(software_category?.description)}
+          {software_category?.description && parse(String(software_category?.description))}
          
   
             </div>
@@ -847,7 +847,7 @@ const Category = () => {
         <div class="container">
           <div class="row mb-5">
             <div class="col-md-12">
-              <h4> Online ERP System Review:</h4>
+              <h4> {software_category?.category_name} Review:</h4>
             </div>
           </div>
           <div class="row">
@@ -1179,7 +1179,6 @@ const Category = () => {
         </div>
       </section>
 
-      <FilterModal slug={slug} setUrl={setUrl}/>
       
     </>
   );

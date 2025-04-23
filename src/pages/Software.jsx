@@ -1,26 +1,35 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
+import Swiper2 from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { getSoftwareDataBySlug } from "../features/actions/category";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
+import ContactModal from "../components/SoftwareModal/ContactModal"
 
 
 const Software = () => {
-  const [showMore, setShowMore] = useState(false);
+   const swiperRef = useRef(null);
+  const [showMoreStates, setShowMoreStates] = useState({});
+
+  const [activeSection, setActiveSection] = useState("");
+
+
+const toggleShowMore = (idx) => {
+  setShowMoreStates((prevState) => ({
+    ...prevState,
+    [idx]: !prevState[idx], // Toggle the specific index
+  }));
+};
   const dispatch = useDispatch();
   const {slug}= useParams()
   const { softwareDetailData } = useSelector(
     (action) => action.category
   );
   
-
-  console.log(softwareDetailData)
- 
-
   const [activeIndex, setActiveIndex] = useState(0);
   const mainSwiperRef = useRef(null);
   const thumbSwiperRef = useRef(null);
@@ -30,6 +39,10 @@ const Software = () => {
     mainSwiperRef.current?.slideTo(index);
   };
 
+  const [showImageModal, setShowImageModal] = useState(false);
+const [activeImage, setActiveImage] = useState(null);
+
+
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(()=>{
@@ -37,17 +50,79 @@ const Software = () => {
   },[])
 
   useEffect(() => {
+    const sectionIds = ["description", "pricing", "faq", "specification", "features", "reviews"];
+  
     const handleScroll = () => {
       const descriptionSection = document.getElementById("description");
       if (descriptionSection) {
         const descriptionOffset = descriptionSection.offsetTop;
         setIsSticky(window.scrollY > descriptionOffset - 100);
       }
+  
+      const scrollPos = window.scrollY + 150; // Add some offset to trigger earlier
+  
+      for (let id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollPos && el.offsetTop + el.offsetHeight > scrollPos) {
+          setActiveSection(id);
+          break;
+        }
+      }
     };
-
+  
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  
+
+  useEffect(() => {
+    const swiperInstance = new Swiper2(".testimonialSwiperreview", {
+      modules: [Navigation],
+           slidesPerView: 1,
+           speed: 700,
+           spaceBetween: 30,
+           slidesPerGroup: 1,
+           loop: false,
+           breakpoints: {
+             320: {
+               slidesPerView: 1,
+             },
+             640: {
+               slidesPerView: 1,
+             },
+             768: {
+               slidesPerView: 2,
+               spaceBetween: 20,
+             },
+             1024: {
+               slidesPerView: 3,
+               spaceBetween: 20,
+             },
+             1142: {
+               slidesPerView: 3,
+               spaceBetween: 25,
+             },
+           },
+           navigation: {
+             nextEl: ".swiper-button-next",
+             prevEl: ".swiper-button-prev",
+           },
+    });
+
+    // Store the Swiper instance in the ref
+    swiperRef.current = swiperInstance;
+
+    return () => {
+      if (
+        swiperRef.current &&
+        typeof swiperRef.current.destroy === "function"
+      ) {
+        swiperRef.current.destroy(true, true);
+      }
+    
+    };
+  }, []);
+
 
   return (
     <>
@@ -319,11 +394,17 @@ const Software = () => {
               >
                 {Array.isArray(softwareDetailData?.software_images) && softwareDetailData?.software_images.map((image, index) => (
                   <SwiperSlide key={index}>
-                    <img
-                      src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-images/${image.image_path}`}
-                      alt={`Product ${index + 1}`}
-                      className="img-fluid rounded"
-                    />
+                   <img
+  src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-images/${image.image_path}`}
+  alt={`Product ${index + 1}`}
+  className="img-fluid rounded"
+  style={{ cursor: "pointer" }}
+  onClick={() => {
+    setActiveImage(`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-images/${image.image_path}`);
+    setShowImageModal(true);
+  }}
+/>
+
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -458,36 +539,38 @@ const Software = () => {
       </section>
 
       {/* Sticky Header Section */}
-      <section
-        style={{
-          padding: 0,
-          height: "auto",
-          position: isSticky ? "fixed" : "static",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: isSticky ? 1000 : "auto",
-          backgroundColor: "white",
-          boxShadow: isSticky ? "0 2px 10px rgba(0,0,0,0.1)" : "none",
-          transition: "all 0.3s ease",
-        }}
-      >
-        <div className="container mb-4">
-          <div className="row" id="tab-custom">
+     <section
+  style={{
+    // even smaller vertical padding
+    height: "auto",
+    position: isSticky ? "fixed" : "static",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: isSticky ? 1000 : "auto",
+    backgroundColor: "white",
+    boxShadow: isSticky ? "0 2px 10px rgba(0,0,0,0.1)" : "none",
+    transition: "all 0.3s ease",
+  }}
+>
+
+        <div className="container m-3 ">
+          <div className="row " id="tab-custom">
             <div className="col-12">
               <ul className="nav-custom feature-tab-list-2" id="nav-tab-2">
                 <li className="nav-item">
-                  <a
-                    className="nav-link nav-link-custom"
-                    href="#description"
-                    onClick={(e) => scrollToSection("description", e)}
-                  >
-                    Description
-                  </a>
+                <a
+  className={`nav-link nav-link-custom ${activeSection === "description" ? "active" : ""}`}
+  href="#description"
+  onClick={(e) => scrollToSection("description", e)}
+>
+  Description
+</a>
+
                 </li>
                 <li className="nav-item">
                   <a
-                    className="nav-link nav-link-custom"
+                    className={`nav-link nav-link-custom ${activeSection === "pricing" ? "active" : ""}`}
                     href="#pricing"
                     onClick={(e) => scrollToSection("pricing", e)}
                   >
@@ -496,7 +579,7 @@ const Software = () => {
                 </li>
                 <li className="nav-item">
                   <a
-                    className="nav-link nav-link-custom"
+                    className={`nav-link nav-link-custom ${activeSection === "faq" ? "active" : ""}`}
                     href="#faq"
                     onClick={(e) => scrollToSection("faq", e)}
                   >
@@ -505,7 +588,7 @@ const Software = () => {
                 </li>
                 <li className="nav-item">
                   <a
-                    className="nav-link nav-link-custom"
+                    className={`nav-link nav-link-custom ${activeSection === "specification" ? "active" : ""}`}
                     href="#specification"
                     onClick={(e) => scrollToSection("specification", e)}
                   >
@@ -514,7 +597,7 @@ const Software = () => {
                 </li>
                 <li className="nav-item">
                   <a
-                    className="nav-link nav-link-custom"
+                    className={`nav-link nav-link-custom ${activeSection === "features" ? "active" : ""}`}
                     href="#features"
                     onClick={(e) => scrollToSection("features", e)}
                   >
@@ -523,7 +606,7 @@ const Software = () => {
                 </li>
                 <li className="nav-item">
                   <a
-                    className="nav-link nav-link-custom"
+                    className={`nav-link nav-link-custom ${activeSection === "reviews" ? "active" : ""}`}
                     href="#reviews"
                     onClick={(e) => scrollToSection("reviews", e)}
                   >
@@ -536,7 +619,7 @@ const Software = () => {
         </div>
       </section>
 
-      <div>
+     
         <section
           class="feature-promo "
           id="description"
@@ -546,14 +629,12 @@ const Software = () => {
             <div class="row">
               <div class="col-md-12">
                 <h4>Software Description:</h4>
-              {parse(softwareDetailData?.description)}
+              {softwareDetailData?.description && parse(String(softwareDetailData?.description))}
               </div>
             </div>
           </div>
         </section>
-      </div>
-
-      <div>
+  
         <section
           class="dg-pricing-section ptb-120 position-relative overflow-hidden z-1 "
           id="pricing"
@@ -603,77 +684,71 @@ const Software = () => {
                   id="tabplan1"
                   role="tabpanel"
                 >
-                  <div class="row g-4 justify-content-center">
-                    {Array.isArray(softwareDetailData?.software_plans) && softwareDetailData?.software_plans.map((plan,idx)=>
-                      plan?.plan_type?.plan_type_name==="Halfyearly" && 
-                     ( <div key={idx} class="col-xl-4 col-md-6">
-                      <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
-                        <img
-                          src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.badge_icon}`}
-                         
-                          class="position-absolute top-0 offer-badge z-2"
-                        />
+               <div className="row g-4 justify-content-center">
+    {Array.isArray(softwareDetailData?.software_plans) &&
+      softwareDetailData?.software_plans.map((plan, idx) =>
+        plan?.plan_type?.plan_type_name === "Halfyearly" && (
+          <div key={idx} className="col-xl-4 col-md-6">
+            <div className="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
+             {plan?.badge_icon && <img
+                src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.badge_icon}`}
+                className="position-absolute top-0 offer-badge z-2"
+              />}
 
-                        <div class="icon-wrapper d-inline-block rounded-circle bg-white">
-                          <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
-                            <img
-                              src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.plan_icon}`}
-                             
-                            />
-                          </span>
-                        </div>
+              <div className="icon-wrapper d-inline-block rounded-circle bg-white">
+                <span className="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
+                  <img
+                    src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.plan_icon}`}
+                  />
+                </span>
+              </div>
 
-                        <h5 class="mt-4 mb-3">{plan?.plan_name}</h5>
-                        <p class="mb-4 fm">{plan?.plan_short_description}</p>
+              <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
+              <p className="mb-4 fm">{plan?.plan_short_description}</p>
 
-                        <ul
-                          class="dg-feature-list list-unstyled d-inline-block text-start p-0"
-                          id="default-module-list-1"
-                        >
-                        {Array.isArray(softwareDetailData?.software_module) && softwareDetailData?.software_module.map((plan,idx)=> <><li class="fs-sm ">
-                          {plan?.additional_info ===0 ? <span class="me-2">
-                              <i class="fas fa-check"></i>
-                            </span> :
-                                        <span class="me-2"><i class="fa-solid fa-circle-check" style={{"color":"red"}}></i></span>
-                                    }
-                            {plan?.module_name}
-                          </li>
-                 
-                          {showMore && (
-                            <li className="fs-sm">
-                              <span className="me-2">
-                                <i className="fas fa-check"></i>
-                              </span>
-                              Library Management System
-                            </li>
-                          )}
-                          </>
-                        )}
-                        </ul>
-                        <button
-                          class="btn btn-link p-0 fs-sm toggle-btn"
-                          data-target="default-module-list-1"
-                          style={{ width: "0" }}
-                          onClick={() => setShowMore(!showMore)}
-                        >
-                          {showMore ? "See Less" : "See More"}
-                        </button>
+              <ul className="dg-feature-list list-unstyled d-inline-block text-start p-0">
+  {Array.isArray(softwareDetailData?.software_module) &&
+    softwareDetailData?.software_module.map((module, moduleIdx) => (
+      <li className="fs-sm" key={moduleIdx} style={{ display: moduleIdx < 4 || showMoreStates[idx] ? "block" : "none" }}>
+        {module?.additional_info === 0 ? (
+          <span className="me-2">
+            <i className="fas fa-check"></i>
+          </span>
+        ) : (
+          <span className="me-2">
+            <i className="fa-solid fa-circle-check" style={{ color: "red" }}></i>
+          </span>
+        )}
+        {module?.module_name}
+      </li>
+    ))}
+</ul>
 
-                        <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
-                          <h2 style={{ "font-size": "22px" }}>
-                            <span>₹ {plan?.plan_price}</span>
-                            <span class="ms-2 fs-md fw-normal">{plan?.plan_type?.duration_value} {plan?.plan_type?.duration_type}</span>
-                          </h2>
-                          <a href="#" class="btn dg-outline-btn rounded-pill">
-                            Purchase Now
-                          </a>
-                        </div>
-                      </div>
-                    </div>)
-                    )
-                    }
-                   
-                  </div>
+
+
+              <button
+                className="btn btn-link p-0 fs-sm "
+                onClick={() => toggleShowMore(idx)}
+              >
+                {showMoreStates[idx] ? "See Less" : "See More"}
+              </button>
+
+              <div className="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
+                <h2 style={{ fontSize: "22px" }}>
+                  <span>₹ {plan?.plan_price}</span>
+                  <span className="ms-2 fs-md fw-normal">
+                    {plan?.plan_type?.duration_value} {plan?.plan_type?.duration_type}
+                  </span>
+                </h2>
+                <a href="#" className="btn dg-outline-btn rounded-pill">
+                  Purchase Now
+                </a>
+              </div>
+            </div>
+          </div>
+        )
+      )}
+  </div>
                 </div>
                 <div
                   class="tab-pane fade 
@@ -681,83 +756,71 @@ const Software = () => {
                   id="tabplan2"
                   role="tabpanel"
                 >
-                  <div class="row g-4 justify-content-center">
-                  {Array.isArray(softwareDetailData?.software_plans) && softwareDetailData?.software_plans.map((plan,idx)=>
-                      plan?.plan_type?.plan_type_name==="Yearly" && 
-                     ( <div key={idx} class="col-xl-4 col-md-6">
-                      <div class="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
-                        <img
-                            src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.badge_icon}`}
-                          
-                          class="position-absolute top-0 offer-badge z-2"
-                        />
+                         <div className="row g-4 justify-content-center">
+    {Array.isArray(softwareDetailData?.software_plans) &&
+      softwareDetailData?.software_plans.map((plan, idx) =>
+        plan?.plan_type?.plan_type_name === "Yearly" && (
+          <div key={idx} className="col-xl-4 col-md-6">
+            <div className="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
+              <img
+                src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.badge_icon}`}
+                className="position-absolute top-0 offer-badge z-2"
+              />
 
-                        <div class="icon-wrapper d-inline-block rounded-circle bg-white">
-                          <span class="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
-                            <img
-                              src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.plan_icon}`}
-                              
-                            />
-                          </span>
-                        </div>
+              <div className="icon-wrapper d-inline-block rounded-circle bg-white">
+                <span className="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
+                  <img
+                    src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.plan_icon}`}
+                  />
+                </span>
+              </div>
 
-                        <h5 class="mt-4 mb-3">{plan?.plan_name}</h5>
-                        <p class="mb-4 fm">{plan?.plan_short_description}</p>
+              <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
+              <p className="mb-4 fm">{plan?.plan_short_description}</p>
 
-                        <ul
-                          class="dg-feature-list list-unstyled d-inline-block text-start p-0"
-                          id="default-module-list-3"
-                        >
-                          <li class="fs-sm ">
-                            <span class="me-2">
-                              <i class="fas fa-check"></i>
-                            </span>
-                            Multi User Access
-                          </li>
-                          <li class="fs-sm ">
-                            <span class="me-2">
-                              <i class="fas fa-check"></i>
-                            </span>
-                            Easy To Access
-                          </li>
-                          <li class="fs-sm ">
-                            <span class="me-2">
-                              <i class="fas fa-check"></i>
-                            </span>
-                            Attendence Management
-                          </li>
-                          {showMore && (
-                            <li className="fs-sm">
-                              <span className="me-2">
-                                <i className="fas fa-check"></i>
-                              </span>
-                              Library Management System
-                            </li>
-                          )}
-                        </ul>
-                        <button
-                          class="btn btn-link p-0 fs-sm toggle-btn"
-                          data-target="default-module-list-3"
-                          style={{ width: "0" }}
-                          onClick={() => setShowMore(!showMore)}
-                        >
-                          {showMore ? "See Less" : "See More"}
-                        </button>
+              <ul className="dg-feature-list list-unstyled d-inline-block text-start p-0">
+  {Array.isArray(softwareDetailData?.software_module) &&
+    softwareDetailData?.software_module.map((module, moduleIdx) => (
+      <li className="fs-sm" key={moduleIdx} style={{ display: moduleIdx < 4 || showMoreStates[idx] ? "block" : "none" }}>
+        {module?.additional_info === 0 ? (
+          <span className="me-2">
+            <i className="fas fa-check"></i>
+          </span>
+        ) : (
+          <span className="me-2">
+            <i className="fa-solid fa-circle-check" style={{ color: "red" }}></i>
+          </span>
+        )}
+        {module?.module_name}
+      </li>
+    ))}
+</ul>
 
-                        <div class="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
-                          <h2 style={{ "font-size": "22px" }}>
-                            <span>₹ {plan?.plan_price}</span>
-                            <span class="ms-2 fs-md fw-normal">{plan?.plan_type?.duration_value} {plan?.plan_type?.duration_type}</span>
-                          </h2>
-                          <a href="#" class="btn dg-outline-btn rounded-pill">
-                            Purchase Now
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    ))
-                  }
-                  </div>
+
+
+              <button
+                className="btn btn-link p-0 fs-sm "
+                onClick={() => toggleShowMore(idx)}
+              >
+                {showMoreStates[idx] ? "See Less" : "See More"}
+              </button>
+
+              <div className="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
+                <h2 style={{ fontSize: "22px" }}>
+                  <span>₹ {plan?.plan_price}</span>
+                  <span className="ms-2 fs-md fw-normal">
+                    {plan?.plan_type?.duration_value} {plan?.plan_type?.duration_type}
+                  </span>
+                </h2>
+                <a href="#" className="btn dg-outline-btn rounded-pill">
+                  Purchase Now
+                </a>
+              </div>
+            </div>
+          </div>
+        )
+      )}
+  </div>
                 </div>
               </div>
             </div>
@@ -768,7 +831,449 @@ const Software = () => {
             />
           </div>
         </section>
+
+        <section class="faq-section section-custom" id="faq">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12 col-12">
+                <h4>Software Faq's:</h4>
+                <div class="accordion faq-accordion" id="accordionExample">
+                  {Array.isArray(softwareDetailData?.software_faq) && softwareDetailData?.software_faq.map((faq,faqIndex)=>
+                                                   <div key={faqIndex} class={`accordion-item border border-2 
+                                                   ${faqIndex === 0 && "active"}`}>
+                                                       <h5 class="accordion-header" >
+                                                           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${faqIndex}`} >
+                                                               {faq?.question}
+                                                           </button>
+                                                       </h5>
+                                                       <div id={`collapse-${faqIndex}`} class={`accordion-collapse collapse   
+                                                       ${faqIndex ===0 && "show"}`}  data-bs-parent="#accordionExample">
+                                                           <div class="accordion-body">
+                                                              {faq?.answer}
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                  )}
+                           
+                
+                                        
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-white section-custom" id="specification">
+    <div class="container custom-container">
+        <h4 class="custom-heading">Software Specification:</h4>
+        {Array.isArray(softwareDetailData?.software_specification) && softwareDetailData?.software_specification.map((spec,specIndex)=> 
+        <div key={specIndex} class="row justify-content-center custom-rowcontent">
+            <div class="col-md-3 custom-column-left">
+                <div class="row">
+                                        <div class="col-md-12 custom-item">{spec?.title}</div>
+                    
+                </div>
+            </div>
+                                    <div class="col-md-9 custom-column-right">
+
+                <div class="row">
+                    <div class="col-md-12 custom-faq-row">
+                    {Array.isArray(spec?.content?.step_data) && spec?.content?.step_data.map((step,stepIndex)=>
+                      <>
+                                                                        <img src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-images/${step?.step_image}`} alt=""/>
+                                                <div class="custom-faq-text">{step?.step_title}</div>
+                                                </>)}
+                                            </div>
+                </div>
+            </div>
+            
+        </div>
+        )}
+    </div>
+</section>
+
+<section class="faq-section section-custom" id="features">
+    <div class="container custom-container">
+        <h4 class="custom-heading">Software Features:</h4>
+        <div class="row justify-content-center">
+            
+        {Array.isArray(softwareDetailData?.software_feature) && softwareDetailData?.software_feature.map((feature,featureIndex)=>    <div key={featureIndex} class="col-md-12">
+                <h5>{feature?.feature_title}</h5>
+                <div class="row p-2">
+                                      {Array.isArray(feature?.feature_steps) && feature?.feature_steps.map((featureStep,featureStepIndex)=>    <div key={featureStepIndex} class="col-md-3"><i class="fa fa-check-circle custom-icon" aria-hidden="true"></i> {featureStep}</div>
+                                       )}
+                                    </div>
+            </div>
+          )}
+                    </div>
+    </div>
+</section>
+
+<section class="feature-promo ptb-120" id="reviews">
+        <div class="container">
+          <div class="row mb-5">
+            <div class="col-md-12">
+              <h4>{softwareDetailData?.software_name} Review:</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="position-relative w-100">
+                <div class="swiper testimonialSwiperreview ">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                      <div class="border border-2 p-3 rounded-custom position-relative">
+                        <div class="circle-badge">SN</div>
+                        <div class="d-flex align-items-center  mt-4">
+                          <div class="author-info">
+                            <h6 class="mb-0">Software Name</h6>
+                            <div class="ratting-wrap">
+                              <p class="mb-0">4.5</p>
+                              <ul class="list-unstyled rating-list list-inline mb-0">
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                              </ul>
+                              <p>
+                                ERP software is an integrated system designed to
+                                streamline and unify business processes across
+                                various departments within an organization, such
+                                as finance, human resources, supply chain,
+                                manufacturing, sales, and customer service. By
+                                centralizing data into a single database.
+                              </p>
+                              <p class="mb-0">
+                                <b>Gaurav Negi</b>
+                              </p>
+                              <p class="mb-0">10 Dec 2024 05:00 AM</p>
+                              <hr class="my-4" />
+                              <div class="d-flex justify-content-between align-items-center">
+                                <a
+                                  href="#"
+                                  class="text-gray d-inline-flex align-items-center text-decoration-none"
+                                >
+                                  See all software reviews
+                                  <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="swiper-slide ">
+                      <div class="border border-2 p-3 rounded-custom position-relative">
+                        <div class="circle-badge">New</div>
+                        <div class="d-flex align-items-center  mt-4">
+                          <div class="author-info">
+                            <h6 class="mb-0">Software Name</h6>
+                            <div class="ratting-wrap">
+                              <p class="mb-0">4.5</p>
+                              <ul class="list-unstyled rating-list list-inline mb-0">
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                              </ul>
+                              <p>
+                                ERP software is an integrated system designed to
+                                streamline and unify business processes across
+                                various departments within an organization, such
+                                as finance, human resources, supply chain,
+                                manufacturing, sales, and customer service. By
+                                centralizing data into a single database.
+                              </p>
+                              <p class="mb-0">
+                                <b>Gaurav Negi</b>
+                              </p>
+                              <p class="mb-0">10 Dec 2024 05:00 AM</p>
+                              <hr class="my-4" />
+                              <div class="d-flex justify-content-between align-items-center">
+                                <a
+                                  href="#"
+                                  class="text-gray d-inline-flex align-items-center text-decoration-none"
+                                >
+                                  See all software reviews
+                                  <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="swiper-slide ">
+                      <div class="border border-2 p-3 rounded-custom position-relative">
+                        <div class="circle-badge">SN</div>
+                        <div class="d-flex align-items-center  mt-4">
+                          <div class="author-info">
+                            <h6 class="mb-0">Software Name</h6>
+                            <div class="ratting-wrap">
+                              <p class="mb-0">4.5</p>
+                              <ul class="list-unstyled rating-list list-inline mb-0">
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                              </ul>
+                              <p>
+                                ERP software is an integrated system designed to
+                                streamline and unify business processes across
+                                various departments within an organization, such
+                                as finance, human resources, supply chain,
+                                manufacturing, sales, and customer service. By
+                                centralizing data into a single database.
+                              </p>
+                              <p class="mb-0">
+                                <b>Gaurav Negi</b>
+                              </p>
+                              <p class="mb-0">10 Dec 2024 05:00 AM</p>
+                              <hr class="my-4" />
+                              <div class="d-flex justify-content-between align-items-center">
+                                <a
+                                  href="#"
+                                  class="text-gray d-inline-flex align-items-center text-decoration-none"
+                                >
+                                  See all software reviews
+                                  <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="swiper-slide ">
+                      <div class="border border-2 p-3 rounded-custom position-relative">
+                        <div class="circle-badge">SN</div>
+                        <div class="d-flex align-items-center  mt-4">
+                          <div class="author-info">
+                            <h6 class="mb-0">Software Name</h6>
+                            <div class="ratting-wrap">
+                              <p class="mb-0">4.5</p>
+                              <ul class="list-unstyled rating-list list-inline mb-0">
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                              </ul>
+                              <p>
+                                ERP software is an integrated system designed to
+                                streamline and unify business processes across
+                                various departments within an organization, such
+                                as finance, human resources, supply chain,
+                                manufacturing, sales, and customer service. By
+                                centralizing data into a single database.
+                              </p>
+                              <p class="mb-0">
+                                <b>Gaurav Negi</b>
+                              </p>
+                              <p class="mb-0">10 Dec 2024 05:00 AM</p>
+                              <hr class="my-4" />
+                              <div class="d-flex justify-content-between align-items-center">
+                                <a
+                                  href="#"
+                                  class="text-gray d-inline-flex align-items-center text-decoration-none"
+                                >
+                                  See all software reviews
+                                  <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="swiper-slide">
+                      <div class="border border-2 p-3 rounded-custom position-relative">
+                        <div class="circle-badge">SN</div>
+                        <div class="d-flex align-items-center  mt-4">
+                          <div class="author-info">
+                            <h6 class="mb-0">Software Name</h6>
+                            <div class="ratting-wrap">
+                              <p class="mb-0">4.5</p>
+                              <ul class="list-unstyled rating-list list-inline mb-0">
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                              </ul>
+                              <p>
+                                ERP software is an integrated system designed to
+                                streamline and unify business processes across
+                                various departments within an organization, such
+                                as finance, human resources, supply chain,
+                                manufacturing, sales, and customer service. By
+                                centralizing data into a single database.
+                              </p>
+                              <p class="mb-0">
+                                <b>Gaurav Negi</b>
+                              </p>
+                              <p class="mb-0">10 Dec 2024 05:00 AM</p>
+                              <hr class="my-4" />
+                              <div class="d-flex justify-content-between align-items-center">
+                                <a
+                                  href="#"
+                                  class="text-gray d-inline-flex align-items-center text-decoration-none"
+                                >
+                                  See all software reviews
+                                  <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="swiper-slide">
+                      <div class="border border-2 p-3 rounded-custom position-relative">
+                        <div class="circle-badge">SN</div>
+                        <div class="d-flex align-items-center mt-4">
+                          <div class="author-info">
+                            <h6 class="mb-0">Software Name</h6>
+                            <div class="ratting-wrap">
+                              <p class="mb-0">4.5</p>
+                              <ul class="list-unstyled rating-list list-inline mb-0">
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                  <i class="fas fa-star text-warning"></i>
+                                </li>
+                              </ul>
+                              <p>
+                                ERP software is an integrated system designed to
+                                streamline and unify business processes across
+                                various departments within an organization, such
+                                as finance, human resources, supply chain,
+                                manufacturing, sales, and customer service. By
+                                centralizing data into a single database.
+                              </p>
+                              <p class="mb-0">
+                                <b>Gaurav Negi</b>
+                              </p>
+                              <p class="mb-0">10 Dec 2024 05:00 AM</p>
+                              <hr class="my-4" />
+                              <div class="d-flex justify-content-between align-items-center">
+                                <a
+                                  href="#"
+                                  class="text-gray d-inline-flex align-items-center text-decoration-none"
+                                >
+                                  See all software reviews
+                                  <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="swiper-nav-control">
+                  <span class="swiper-button-next"></span>
+                  <span class="swiper-button-prev"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {showImageModal && (
+  <div
+    className="modal fade show d-block"
+    tabIndex="-1"
+    style={{
+      backgroundColor: "rgba(0,0,0,0.8)",
+      zIndex: 1050,
+    }}
+    onClick={() => setShowImageModal(false)}
+  >
+    <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content bg-transparent border-0">
+        <div className="modal-body text-center p-0">
+          <img
+            src={activeImage}
+            alt="Large View"
+            className="img-fluid rounded"
+            style={{ maxHeight: "90vh" }}
+          />
+        </div>
+      
       </div>
+    </div>
+  </div>
+)}
+
+     
+
+      <ContactModal modalData={softwareDetailData}/>
     </>
   );
 };

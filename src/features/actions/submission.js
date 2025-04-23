@@ -63,3 +63,21 @@ export const addNewsletter = createAsyncThunk(
       }
     }
   );
+
+  export const addCustomerLeads = createAsyncThunk(
+    "/site/savecustomerlead",
+    async (payload, { rejectWithValue }) => {
+      try {
+        const ipAddress = await getIpAddress();  
+          const {data} = await instance.post(`/site/savecustomerlead`, {...payload,ip_address:ipAddress,_token:await getCsrfToken()}, {
+              withCredentials: false,
+              headers: headers,
+            });
+        return data;
+      } catch (error) {
+        return rejectWithValue(error.response.data.message || "Failed to post customer leads");
+      }
+    }
+  );
+
+  

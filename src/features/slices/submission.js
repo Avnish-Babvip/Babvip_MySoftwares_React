@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addContactDetails, addMaintenanceEnquiry, addNewsletter} from "../actions/submission";
+import { addContactDetails, addCustomerLeads, addMaintenanceEnquiry, addNewsletter} from "../actions/submission";
 import { toast } from "sonner";
   
 const formattedDate = new Date().toLocaleString("en-US", {
@@ -86,6 +86,27 @@ const initialState = {
         state.isSuccess = false;
         state.errorMessage = action.payload || "Failed to fetch head menu.";
         toast("Failed to subscribe. Please try again", {
+            description: formattedDate,
+          });
+      })
+      .addCase(addCustomerLeads.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(addCustomerLeads.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        console.log(action.payload )  
+        toast(action.payload.status == 409 ? action.payload.message : "Your form has been submitted.", {
+            description: formattedDate,
+          });
+
+      })
+      .addCase(addCustomerLeads.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.errorMessage = action.payload || "Failed to fetch customer leads.";
+        toast("Failed to submit the form. Please try again", {
             description: formattedDate,
           });
       })
