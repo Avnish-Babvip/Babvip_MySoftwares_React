@@ -53,18 +53,17 @@ const formattedDate = new Date().toLocaleString("en-US", {
 
       })
       .addCase(getProfileData.pending, (state) => {
-        state.isLoading = true;
+      
         state.errorMessage = "";
       })
       .addCase(getProfileData.fulfilled, (state, action) => {
-        state.isLoading = false;
+  
         state.errorMessage = "";
         state.profileData= action.payload.data
 
 
       })
       .addCase(getProfileData.rejected, (state, action) => {
-        state.isLoading = false;
         state.errorMessage = action.payload;
       })
       .addCase(changePasswordDashboard.pending, (state) => {

@@ -331,7 +331,7 @@ const Header = () => {
                             </div>
                           </Link>
                           <Link
-                            to={"#"}
+                            to={"https://my.babvipsoftwares.com/dealer/login"}
                             className="col-md-6 "
                             onClick={() => setActiveDropdown2(null)}
                             style={{ cursor: "pointer" }}
@@ -356,11 +356,11 @@ const Header = () => {
                                     className="card-title d-flex gap-2 fs-6  custom-hover-color"
                                     style={{ color: "#175cff" }}
                                   >
-                                    Admin Login
+                                    Dealer Login
                                     <span>›</span>
                                   </h5>
                                   <p className="card-text truncate-2 text-muted text-capitalize small font-weight-semibold">
-                                    Login as a Admin
+                                    Login as a Dealer
                                   </p>
                                 </div>
                               </div>
@@ -581,7 +581,7 @@ const Header = () => {
                         </div>
                       </Link>
                       <Link
-                        to={"#"}
+                        to={"https://my.babvipsoftwares.com/dealer/login"}
                         onClick={closeOffcanvas} // Close offcanvas on click
                         class="dropdown-link"
                       >
