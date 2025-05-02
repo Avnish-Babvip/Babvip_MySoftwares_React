@@ -8,5 +8,4 @@ const ButtonLoader = () => {
   );
 };
 
-
 export default ButtonLoader;

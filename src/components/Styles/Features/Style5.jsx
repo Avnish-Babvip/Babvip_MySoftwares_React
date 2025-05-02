@@ -34,7 +34,7 @@ const Style5 = ({ data }) => {
                             item?.step_image
                           }`}
                           alt={item?.step_image_icon_alt_tag}
-                          class="img-fluid p-0"
+                          class=" p-0"
                         />
                       </div>
                       <h3 class="h5 fw-bold">{item?.step_title}</h3>
@@ -51,7 +51,7 @@ const Style5 = ({ data }) => {
                             item?.step_image
                           }`}
                           alt={item?.step_image_icon_alt_tag}
-                          class="img-fluid p-0"
+                          class=" p-0"
                         />
                       </div>
                       <h3 class="h5 fw-bold">{item?.step_title}</h3>

@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { customerLogin } from "../../features/actions/authentication";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import ButtonLoader from "../../components/Loader/ButtonLoader";
-import { resetForgotPasswordState } from "../../features/slices/authentication";
+import { changePassword } from "../../features/actions/authentication";
 
-const Login = () => {
+const ChangePassword = () => {
   const assetRoute = `${
     import.meta.env.VITE_PRODUCTION === "true"
       ? import.meta.env.VITE_ASSETS
@@ -14,34 +13,44 @@ const Login = () => {
   }`;
 
   const dispatch = useDispatch();
-  const { isUserLoggedIn, isLoading, errorMessage } = useSelector(
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const email = queryParams.get("email");
+  const { slug } = useParams();
+
+  const { isLoading, isPasswordChanged, errorMessage } = useSelector(
     (state) => state.authentication
   );
   const navigate = useNavigate();
+
+  const validatePassword = (password) => {
+    return (
+      password.length >= 8 || "Password must be at least 8 characters long"
+    );
+  };
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
-    dispatch(customerLogin(data));
+    const newData = { ...data, token: slug, email };
+    dispatch(changePassword(newData));
     reset();
   };
 
   useEffect(() => {
-    isUserLoggedIn && navigate("/customer/dashboard");
-  }, [isUserLoggedIn]);
+    isPasswordChanged && navigate("/login/customer");
+  }, [isPasswordChanged]);
 
-  useEffect(() => {
-    dispatch(resetForgotPasswordState());
-  }, []);
   return (
     <>
       <section
-        class="sign-up-in-section bg-dark ptb-40"
+        class="sign-up-in-section bg-dark pb-40"
         style={{
           background: `url('assets/img/page-header-bg.svg')no-repeat right bottom`,
         }}
@@ -59,41 +68,14 @@ const Login = () => {
                 />
               </a>
               <div class="register-wrap p-5 bg-light-subtle shadow rounded-custom">
-                <h1 class="h3">Nice to Seeing You Again</h1>
-                <p class="text-muted">
-                  Please log in to access your account web-enabled methods of
-                  innovative niches.
-                </p>
+                <h1 class="h3">Reset Password</h1>
+                <p class="text-muted">Please enter your new password.</p>
 
                 <form
                   class="mt-4 register-form"
                   onSubmit={handleSubmit(onSubmit)}
                 >
                   <div class="row">
-                    <div class="col-sm-12 mb-3 ">
-                      <label for="customer_id" class="mb-1">
-                        Customer Id <span class="text-danger">*</span>
-                      </label>
-                      <div class="input-group ">
-                        <input
-                          {...register("customer_id", {
-                            required: "Customer Id is required",
-                          })}
-                          type="text"
-                          class="form-control"
-                          placeholder="Customer Id"
-                          id="customer_id"
-                        />
-                      </div>
-                      {errors.customer_id && (
-                        <span
-                          className="text-danger"
-                          style={{ "font-size": "14px" }}
-                        >
-                          {errors.customer_id.message}
-                        </span>
-                      )}
-                    </div>
                     <div class="col-sm-12 mb-3">
                       <label for="password" class="mb-1">
                         Password <span class="text-danger">*</span>
@@ -102,8 +84,9 @@ const Login = () => {
                         <input
                           {...register("password", {
                             required: "Password is required",
+                            validate: validatePassword,
                           })}
-                          type="password"
+                          type="text"
                           class="form-control"
                           placeholder="Password"
                           id="password"
@@ -111,13 +94,41 @@ const Login = () => {
                       </div>
                       {errors.password && (
                         <span
-                          className="text-danger "
+                          className="text-danger"
                           style={{ "font-size": "14px" }}
                         >
                           {errors.password.message}
                         </span>
                       )}
                     </div>
+                    <div class="col-sm-12 mb-3">
+                      <label for="confirmPassword" class="mb-1">
+                        Confirm Password <span class="text-danger">*</span>
+                      </label>
+                      <div class="input-group ">
+                        <input
+                          {...register("password_confirmation", {
+                            required: "Confirm password is required",
+                            validate: (value) =>
+                              value === watch("password") ||
+                              "Passwords do not match",
+                          })}
+                          type="text"
+                          class="form-control"
+                          placeholder="Confirm Password"
+                          id="confirmPassword"
+                        />
+                      </div>
+                      {errors.password_confirmation && (
+                        <span
+                          className="text-danger"
+                          style={{ "font-size": "14px" }}
+                        >
+                          {errors.password_confirmation.message}
+                        </span>
+                      )}
+                    </div>
+
                     {errorMessage && (
                       <span
                         className="text-danger text-center"
@@ -126,27 +137,17 @@ const Login = () => {
                         {errorMessage}
                       </span>
                     )}
+
                     <div class="col-12">
                       <button
                         disabled={isLoading}
                         type="submit"
                         class="btn btn-primary mt-3 d-block w-100"
                       >
-                        {isLoading ? <ButtonLoader /> : "Log in"}
+                        {isLoading ? <ButtonLoader /> : "Create a new password"}
                       </button>
                     </div>
                   </div>
-                  <p class="font-monospace fw-medium text-center text-muted mt-3 pt-4 mb-0">
-                    Don’t have an account?{" "}
-                    <Link class="text-decoration-none">Sign up Today</Link>
-                    <br />
-                    <Link
-                      to={"/login/password-reset"}
-                      class="text-decoration-none"
-                    >
-                      Forgot password
-                    </Link>
-                  </p>
                 </form>
               </div>
             </div>
@@ -157,4 +158,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ChangePassword;

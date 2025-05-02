@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "sonner";
-import { customerLogin, customerLogout } from "../actions/authentication";
+import { changePassword, customerLogin, customerLogout, resetPasswordMail } from "../actions/authentication";
   
 const formattedDate = new Date().toLocaleString("en-US", {
     weekday: "long",
@@ -15,7 +15,9 @@ const formattedDate = new Date().toLocaleString("en-US", {
 const initialState = {
   isLoading: false,
   isUserLoggedIn:false,
+  isPasswordChanged:false,
   customerData: {},
+  response:{},
   errorMessage: "",
 };
 
@@ -27,6 +29,10 @@ const initialState = {
   name: "customerSlice",
   initialState,
   reducers: {
+    resetForgotPasswordState:(state) => {
+      state.isPasswordChanged = false;
+      state.errorMessage = "";
+    },
     resetCustomerState: (state) => {
       state.isUserLoggedIn = false;
       state.customerData = {};
@@ -51,9 +57,48 @@ const initialState = {
       })
       .addCase(customerLogin.rejected, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = false;
         state.errorMessage = action.payload || "Failed to login API.";
-        toast("Login failed. Please try again", {
+        toast(action.payload, {
+            description: formattedDate,
+          });
+      })
+      .addCase(resetPasswordMail.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(resetPasswordMail.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.response=action.payload;
+        state.errorMessage = "";
+        toast(action.payload.message, {
+            description: formattedDate,
+          });
+
+      })
+      .addCase(resetPasswordMail.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload || "Failed to login API.";
+        toast(action.payload, {
+            description: formattedDate,
+          });
+      })
+      .addCase(changePassword.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        state.isPasswordChanged=true
+        toast("Password reset successfully.", {
+            description: formattedDate,
+          });
+
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload || "Failed to login API.";
+        toast(action.payload, {
             description: formattedDate,
           });
       })
@@ -87,5 +132,5 @@ const initialState = {
 // -------------------------------------------------------------------------
 
 // Action creators are generated for each case reducer function
-export const {resetCustomerState} = customerSlice.actions;
+export const {resetCustomerState,resetForgotPasswordState} = customerSlice.actions;
 export default customerSlice.reducer;

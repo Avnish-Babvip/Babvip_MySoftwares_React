@@ -25,6 +25,35 @@ const getCsrfToken = async () => {
       }
     }
   );
+  export const resetPasswordMail = createAsyncThunk(
+    "/customer/sendresetlinkemail",
+    async (payload, { rejectWithValue }) => {
+      try {
+          const {data} = await instance.post(`/customer/sendresetlinkemail`, {...payload,_token:await getCsrfToken()}, {
+              withCredentials: false,
+              headers: headers,
+            });
+        return data;
+      } catch (error) {
+        return rejectWithValue(error.response.data.message);
+      }
+    }
+  );
+
+  export const changePassword = createAsyncThunk(
+    "/customer/resetpassword",
+    async (payload, { rejectWithValue }) => {
+      try {
+          const {data} = await instance.post(`/customer/resetpassword`, {...payload,_token:await getCsrfToken()}, {
+              withCredentials: false,
+              headers: headers,
+            });
+        return data;
+      } catch (error) {
+        return rejectWithValue(error.response.data.message);
+      }
+    }
+  );
 
   export const customerLogout = createAsyncThunk(
     "customerLogout",
@@ -43,5 +72,7 @@ const getCsrfToken = async () => {
       }
     }
   );
+
+  
 
   

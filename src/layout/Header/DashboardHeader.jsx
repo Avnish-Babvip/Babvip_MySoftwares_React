@@ -1,18 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { customerLogout } from '../../features/actions/authentication';
+import React, { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { customerLogout } from "../../features/actions/authentication";
 
 const DashboardHeader = ({ onHamburgerClick }) => {
   const assetRoute = `${
-    import.meta.env.VITE_PRODUCTION === 'true'
+    import.meta.env.VITE_PRODUCTION === "true"
       ? import.meta.env.VITE_ASSETS
-      : ''
+      : ""
   }`;
 
-  const dispatch = useDispatch()
-  const { customer } = useSelector((state) => state.authentication.customerData);
-  const {customerData}= useSelector((state)=>state.authentication)
+  const dispatch = useDispatch();
+  const { customer } = useSelector((state) => state.dashboard.profileData);
+  const { customerData } = useSelector((state) => state.authentication);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef();
 
@@ -23,8 +23,8 @@ const DashboardHeader = ({ onHamburgerClick }) => {
         setDropdownOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -38,33 +38,42 @@ const DashboardHeader = ({ onHamburgerClick }) => {
           <img
             src={`${assetRoute}/assets/img/dashboardIcons/menu.png`}
             alt="Menu"
-            style={{ width: '28px', height: '28px' }}
+            style={{ width: "28px", height: "28px" }}
           />
         </button>
 
-        <div className="d-flex align-items-center gap-4 ms-auto" ref={dropdownRef}>
+        <div
+          className="d-flex align-items-center gap-4 ms-auto"
+          ref={dropdownRef}
+        >
           <img
             src={`${assetRoute}/assets/img/dashboardIcons/bell_icon.svg`}
             className="img-fluid"
             alt="Notifications"
-            style={{ height: '18px', width: '24px', cursor: 'pointer' }}
+            style={{ height: "18px", width: "24px", cursor: "pointer" }}
           />
           <img
             src={`${assetRoute}/assets/img/dashboardIcons/Chat.svg`}
             className="img-fluid"
             alt="Chat"
-            style={{ height: '18px', width: '24px', cursor: 'pointer' }}
+            style={{ height: "18px", width: "24px", cursor: "pointer" }}
           />
-          
+
           {/* Profile with dropdown */}
           <div className="position-relative">
             <div
               className="d-flex align-items-center gap-2"
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: "pointer" }}
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               <img
-                src={`${assetRoute}/assets/img/dashboardIcons/profile.jpg`}
+                src={
+                  customer?.profile_image
+                    ? `${
+                        import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                      }/customer-profile/${customer?.profile_image}`
+                    : `${assetRoute}/placeholder.webp`
+                }
                 height={40}
                 width={40}
                 className="rounded-circle"
@@ -76,12 +85,32 @@ const DashboardHeader = ({ onHamburgerClick }) => {
             </div>
 
             {dropdownOpen && (
-              <div className="dropdown-menu show mt-2 p-2 shadow rounded-3" style={{ right: 0, left: 'auto', minWidth: '160px', position: 'absolute' }}>
-                <Link to="/" className="dropdown-item">Back to Main Site</Link>
-                <Link to="/customer/profile" className="dropdown-item">My Profile</Link>
-                <Link   onClick={() => {
-        dispatch(customerLogout(customerData?.login_token))
-        }} className="dropdown-item text-danger">Logout</Link>
+              <div
+                className="dropdown-menu show mt-2 p-2 shadow rounded-3"
+                style={{
+                  right: 0,
+                  left: "auto",
+                  minWidth: "160px",
+                  position: "absolute",
+                }}
+              >
+                <Link to="/" className="dropdown-item">
+                  Back to Main Site
+                </Link>
+                <Link to="/customer/profile" className="dropdown-item">
+                  My Profile
+                </Link>
+                <Link to="/customer/changePassword" className="dropdown-item">
+                  Change Password
+                </Link>
+                <Link
+                  onClick={() => {
+                    dispatch(customerLogout(customerData?.login_token));
+                  }}
+                  className="dropdown-item text-danger"
+                >
+                  Logout
+                </Link>
               </div>
             )}
           </div>

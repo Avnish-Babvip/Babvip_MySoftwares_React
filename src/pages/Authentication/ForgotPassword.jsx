@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { customerLogin } from "../../features/actions/authentication";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import ButtonLoader from "../../components/Loader/ButtonLoader";
+import { resetPasswordMail } from "../../features/actions/authentication";
 import { resetForgotPasswordState } from "../../features/slices/authentication";
 
-const Login = () => {
+const ForgotPassword = () => {
   const assetRoute = `${
     import.meta.env.VITE_PRODUCTION === "true"
       ? import.meta.env.VITE_ASSETS
@@ -14,7 +14,7 @@ const Login = () => {
   }`;
 
   const dispatch = useDispatch();
-  const { isUserLoggedIn, isLoading, errorMessage } = useSelector(
+  const { isLoading, errorMessage } = useSelector(
     (state) => state.authentication
   );
   const navigate = useNavigate();
@@ -27,21 +27,18 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    dispatch(customerLogin(data));
+    dispatch(resetPasswordMail(data));
     reset();
   };
 
   useEffect(() => {
-    isUserLoggedIn && navigate("/customer/dashboard");
-  }, [isUserLoggedIn]);
-
-  useEffect(() => {
     dispatch(resetForgotPasswordState());
   }, []);
+
   return (
     <>
       <section
-        class="sign-up-in-section bg-dark ptb-40"
+        class="sign-up-in-section bg-dark pb-40"
         style={{
           background: `url('assets/img/page-header-bg.svg')no-repeat right bottom`,
         }}
@@ -59,92 +56,62 @@ const Login = () => {
                 />
               </a>
               <div class="register-wrap p-5 bg-light-subtle shadow rounded-custom">
-                <h1 class="h3">Nice to Seeing You Again</h1>
-                <p class="text-muted">
-                  Please log in to access your account web-enabled methods of
-                  innovative niches.
-                </p>
+                <h1 class="h3">Forgot Password</h1>
+                <p class="text-muted">Please enter your registered email ID.</p>
 
                 <form
                   class="mt-4 register-form"
                   onSubmit={handleSubmit(onSubmit)}
                 >
                   <div class="row">
-                    <div class="col-sm-12 mb-3 ">
-                      <label for="customer_id" class="mb-1">
-                        Customer Id <span class="text-danger">*</span>
+                    <div class="col-sm-12 mb-3">
+                      <label for="email" class="mb-1">
+                        Email <span class="text-danger">*</span>
                       </label>
                       <div class="input-group ">
                         <input
-                          {...register("customer_id", {
-                            required: "Customer Id is required",
+                          {...register("email", {
+                            required: "Email is required",
                           })}
                           type="text"
                           class="form-control"
-                          placeholder="Customer Id"
-                          id="customer_id"
+                          placeholder="Email"
+                          id="email"
                         />
                       </div>
-                      {errors.customer_id && (
+
+                      {errorMessage && (
                         <span
-                          className="text-danger"
+                          className="text-danger text-center"
                           style={{ "font-size": "14px" }}
                         >
-                          {errors.customer_id.message}
+                          {errorMessage}
                         </span>
                       )}
                     </div>
-                    <div class="col-sm-12 mb-3">
-                      <label for="password" class="mb-1">
-                        Password <span class="text-danger">*</span>
-                      </label>
-                      <div class="input-group ">
-                        <input
-                          {...register("password", {
-                            required: "Password is required",
-                          })}
-                          type="password"
-                          class="form-control"
-                          placeholder="Password"
-                          id="password"
-                        />
-                      </div>
-                      {errors.password && (
-                        <span
-                          className="text-danger "
-                          style={{ "font-size": "14px" }}
-                        >
-                          {errors.password.message}
-                        </span>
-                      )}
-                    </div>
-                    {errorMessage && (
-                      <span
-                        className="text-danger text-center"
-                        style={{ "font-size": "14px" }}
-                      >
-                        {errorMessage}
-                      </span>
-                    )}
+
                     <div class="col-12">
                       <button
                         disabled={isLoading}
                         type="submit"
                         class="btn btn-primary mt-3 d-block w-100"
                       >
-                        {isLoading ? <ButtonLoader /> : "Log in"}
+                        {isLoading ? (
+                          <ButtonLoader />
+                        ) : (
+                          "Click here to verify email"
+                        )}
                       </button>
                     </div>
                   </div>
-                  <p class="font-monospace fw-medium text-center text-muted mt-3 pt-4 mb-0">
-                    Don’t have an account?{" "}
-                    <Link class="text-decoration-none">Sign up Today</Link>
+
+                  <p class="font-monospace fw-medium text-center text-muted  mb-0">
                     <br />
                     <Link
-                      to={"/login/password-reset"}
+                      onClick={() => navigate(-1)}
                       class="text-decoration-none"
                     >
-                      Forgot password
+                      ← Go Back
                     </Link>
                   </p>
                 </form>
@@ -157,4 +124,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

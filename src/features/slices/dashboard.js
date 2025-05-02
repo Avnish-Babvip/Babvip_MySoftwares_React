@@ -1,15 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "sonner";
-import { getDashboardData } from "../actions/dashboard";
+import { changePasswordDashboard, getDashboardData, getProfileData, updateProfileDashboard, updateProfilePhotoDashboard } from "../actions/dashboard";
   
 
 const initialState = {
   isLoading: false,
+  isImageLoading: false,
   isUserLoggedIn:false,
   dashboardData: {},
+  profileData:{},
   errorMessage: "",
+  updateResponse:{}
 };
 
+const formattedDate = new Date().toLocaleString("en-US", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "2-digit",
+  hour: "numeric",
+  minute: "2-digit",
+  hour12: true,
+});
 
 
 // ---------------------------------------------------------------------------------------
@@ -17,7 +29,11 @@ const initialState = {
  const dashboardSlice = createSlice({
   name: "dashboardSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    resetUpdateResponse: (state) => {
+      state.updateResponse = {};
+    },
+  },
   extraReducers: (builder) => {
     builder
       
@@ -30,12 +46,86 @@ const initialState = {
         state.errorMessage = "";
         state.dashboardData= action.payload.data
 
-
       })
       .addCase(getDashboardData.rejected, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = false;
         state.errorMessage = action.payload;
+
+      })
+      .addCase(getProfileData.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(getProfileData.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        state.profileData= action.payload.data
+
+
+      })
+      .addCase(getProfileData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+      })
+      .addCase(changePasswordDashboard.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(changePasswordDashboard.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        toast("Password changed successfully.", {
+                    description: formattedDate,
+                  });
+      })
+      .addCase(changePasswordDashboard.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+        toast(action.payload, {
+                    description: formattedDate,
+                  });
+
+      })
+      .addCase(updateProfileDashboard.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(updateProfileDashboard.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        state.updateResponse= action.payload
+        toast("Profile updated successfully.", {
+                    description: formattedDate,
+                  });
+        
+      })
+      .addCase(updateProfileDashboard.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+        toast(action.payload, {
+                    description: formattedDate,
+                  });
+
+      })
+      .addCase(updateProfilePhotoDashboard.pending, (state) => {
+        state.isImageLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(updateProfilePhotoDashboard.fulfilled, (state, action) => {
+        state.isImageLoading = false;
+        state.errorMessage = "";
+        state.updateResponse= action.payload
+        toast("Profile photo updated successfully.", {
+                    description: formattedDate,
+                  });
+        
+      })
+      .addCase(updateProfilePhotoDashboard.rejected, (state, action) => {
+        state.isImageLoading = false;
+        state.errorMessage = action.payload;
+        toast(action.payload, {
+                    description: formattedDate,
+                  });
 
       })
       
@@ -46,5 +136,5 @@ const initialState = {
 // -------------------------------------------------------------------------
 
 // Action creators are generated for each case reducer function
-export const {} = dashboardSlice.actions;
+export const {resetUpdateResponse} = dashboardSlice.actions;
 export default dashboardSlice.reducer;

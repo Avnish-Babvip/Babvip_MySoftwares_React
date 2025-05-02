@@ -23,7 +23,7 @@ const Style1 = ({ data }) => {
                     item?.step_image
                   }`}
                   alt={item?.step_image_icon_alt_tag}
-                  className="img-fluid object-fit-contain p-0"
+                  className=" object-fit-contain p-0"
                 />
                 <div class="ms-4 mt-2">
                   <h5>{item?.step_title}</h5>

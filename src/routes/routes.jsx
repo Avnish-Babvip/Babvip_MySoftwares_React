@@ -8,11 +8,13 @@ import Loader from "../components/Loader/Loader";
 import Category from "../pages/Category";
 import Software from "../pages/Software";
 import Dashboard from "../pages/Dashboard/Dashboard";
-import DashboardDefaultLayout from "../layout/DefaultLayout/DashboardDefaultLayout";
 import Payment from "../pages/Dashboard/Payment";
 import MySoftware from "../pages/Dashboard/MySoftware";
 import Profile from "../pages/Dashboard/Profile";
 import Login from "../pages/Authentication/Login";
+import ForgotPassword from "../pages/Authentication/ForgotPassword";
+import ChangePassword from "../pages/Authentication/ChangePassword";
+import DashboardChangePassword from "../pages/Dashboard/DashboardChangePassword";
 
 // Lazy Loading 😴
 const Blog = lazy(() => import("../pages/Blog"));
@@ -32,8 +34,6 @@ const NotFound = () => (
   </p>
 );
 
-
-
 export const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -43,14 +43,26 @@ export const appRouter = createBrowserRouter([
         path: "/",
         element: <DynamicRootPage />,
       },
+
       {
-        path: "/login/customer", // 👈 separate login route
+        path: "/:slug",
+        element: <DynamicRootPage />,
+      },
+      {
+        path: "/login/customer", // 👈 separate route
         element: <Login />,
       },
       {
+        path: "/login/password-reset", // 👈 separate route
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/reset/password-customer/:slug", // 👈 separate route
+        element: <ChangePassword />,
+      },
+      {
         path: "/customer/dashboard", // 👈 separate dashboard routes
-        element: 
-        <Dashboard />,
+        element: <Dashboard />,
       },
       {
         path: "/customer/myProducts", // 👈 separate dashboard routes
@@ -64,11 +76,11 @@ export const appRouter = createBrowserRouter([
         path: "/customer/profile", // 👈 separate dashboard routes
         element: <Profile />,
       },
-
       {
-        path: "/:slug",
-        element: <DynamicRootPage />,
+        path: "/customer/changePassword", // 👈 separate dashboard routes
+        element: <DashboardChangePassword />,
       },
+
       {
         path: "/blog/:slug",
         element: (
@@ -110,51 +122,12 @@ export const appRouter = createBrowserRouter([
         ),
       },
       {
-                path: "*",
-                element: <NotFound />, // 404 fallback
-              },
+        path: "*",
+        element: <NotFound />, // 404 fallback
+      },
     ],
   },
 ]);
-
-// export const maintenanceAppRouter = createBrowserRouter([
-//   {
-//     path: "/",
-//     element:  <DashboardDefaultLayout />,
-//     children: [
-//       {
-//         path: "/",
-//         element: <Login />,
-//       },
-//       {
-//         path: "/",
-//         element: <Dashboard />,
-//       },
-//       {
-//         path: "/payment",
-//         element: <Payment />,
-//       },
-//       {
-//         path: "/mySoftware",
-//         element: <MySoftware />,
-//       },
-//       {
-//         path: "/profile",
-//         element: <Profile />,
-//       },
-//       {
-//         path: "*",
-//         element: <NotFound />, // 404 fallback
-//       },
-
-//     ]
-    
-//   },
-//   {
-//     path: "/login",
-//     element: <Login />,
-//   },
-// ]);
 
 export const maintenanceAppRouter = createBrowserRouter([
   {
@@ -162,4 +135,3 @@ export const maintenanceAppRouter = createBrowserRouter([
     element: <Maintenance />, // 404 fallback
   },
 ]);
-

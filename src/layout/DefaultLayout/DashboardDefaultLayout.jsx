@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import DashboardHeader from '../Header/DashboardHeader';
-import DashboardSidebar from '../Sidebar/DashboardSidebar';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React, { useState } from "react";
+import ErrorBoundary from "../../components/ErrorBoundary/ErrorBoundary";
+import DashboardHeader from "../Header/DashboardHeader";
+import DashboardSidebar from "../Sidebar/DashboardSidebar";
+import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const DashboardDefaultLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState('Dashboard');
+  const [activeMenu, setActiveMenu] = useState("Dashboard");
 
-  const {isUserLoggedIn} = useSelector((state)=>state.authentication)
+  const { isUserLoggedIn } = useSelector((state) => state.authentication);
 
   if (!isUserLoggedIn) {
     return <Navigate to="/login/customer" replace />;
   }
-  
 
   return (
     <ErrorBoundary>
@@ -22,20 +21,25 @@ const DashboardDefaultLayout = () => {
         {/* Sidebar */}
         <div
           className={`bg-light d-none d-md-block`}
-          style={{ width: '220px' }}
+          style={{ width: "220px" }}
         >
-          <DashboardSidebar activeMenu={activeMenu}
-  setActiveMenu={setActiveMenu} />
+          <DashboardSidebar
+            activeMenu={activeMenu}
+            setActiveMenu={setActiveMenu}
+          />
         </div>
 
         {/* Popup sidebar for small screens */}
         {isSidebarOpen && (
           <div
             className="position-fixed top-0 start-0 bg-white shadow h-100"
-            style={{ width: '250px', zIndex: 1050 }}
+            style={{ width: "250px", zIndex: 1050 }}
           >
-            <DashboardSidebar activeMenu={activeMenu}
-  setActiveMenu={setActiveMenu}  closeSidebar={()=>setSidebarOpen(false)} />
+            <DashboardSidebar
+              activeMenu={activeMenu}
+              setActiveMenu={setActiveMenu}
+              closeSidebar={() => setSidebarOpen(false)}
+            />
             <button
               className="border-0 bg-white  position-absolute top-0 end-0 m-2 d-md-none"
               onClick={() => setSidebarOpen(false)}
@@ -48,7 +52,10 @@ const DashboardDefaultLayout = () => {
         {/* Right side - header and content */}
         <div className="flex-grow-1 d-flex flex-column">
           <DashboardHeader onHamburgerClick={() => setSidebarOpen(true)} />
-          <main className="flex-grow-1 p-3 " style={{ backgroundColor: '#F7F7F7' }}>
+          <main
+            className="flex-grow-1 p-3 "
+            style={{ backgroundColor: "#F7F7F7" }}
+          >
             <Outlet />
           </main>
         </div>
