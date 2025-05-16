@@ -6,7 +6,9 @@ const Style12 = ({ data }) => {
     <section
       class="hero-section ptb-120 bg-purple text-white"
       style={{
-        background: `url('assets/img/app-two-mockup-bg.png')no-repeat
+        background: `url(${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+          data?.banner_bg_image
+        })no-repeat
       center center / cover`,
       }}
     >
@@ -14,25 +16,25 @@ const Style12 = ({ data }) => {
         <div class="row justify-content-xl-between align-items-center">
           <div class="col-lg-5 col-xl-5 col-xl-5 col-md-10">
             <div class="hero-content-wrap mt-5 mt-lg-0 mt-xl-0">
-              <h5 class="text-warning">Build your best quality app</h5>
-              <h1 class="fw-bold display-5">Develop Your App with Quiety</h1>
-              <p class="lead">
-                Completely incubate client-centric data for robust
-                infrastructures. Quickly extend revolutionary accurate strategic
-                theme areas without cooperative.
-              </p>
+              <h5 class="text-warning">{data?.sub_title}</h5>
+              <h1 class="fw-bold display-5">{data?.banner_title}</h1>
+              <p class="lead">{data?.banner_description}</p>
               <div class="action-btns mt-5">
-                <Link to={"#"} class="btn btn-outline-light">
-                  Explore More
-                </Link>
+                {data?.button_text && (
+                  <Link to={data?.button_url} class="btn btn-outline-light">
+                    {data?.button_text}
+                  </Link>
+                )}
               </div>
             </div>
           </div>
           <div class="col-lg-5 col-md-8 mt-5">
             <div class="hero-app-img position-relative text-center">
               <img
-                src="assets/img/app-two-phone.png"
-                alt="app screen"
+                src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                  data?.banner_image
+                }`}
+                alt={data?.banner_image_alt_tag}
                 class="img-fluid"
               />
             </div>

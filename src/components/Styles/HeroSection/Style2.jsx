@@ -41,19 +41,23 @@ const Style2 = ({ data }) => {
                 <h1 class="fw-bold display-5">{data?.banner_title}</h1>
                 <p class="lead">{data?.banner_description}</p>
                 <div class="action-btn mt-5 align-items-center d-block d-sm-flex d-lg-flex d-md-flex">
-                  <Link to={data?.button_url} class="btn btn-primary me-3">
-                    {data?.button_text}
-                  </Link>
-                  <Link
-                    onClick={() =>
-                      data?.video_button_link && setShowVideo(true)
-                    }
-                    class="text-decoration-none popup-youtube d-inline-flex align-items-center watch-now-btn mt-3 mt-lg-0 mt-md-0"
-                  >
-                    {" "}
-                    <i class="fas fa-play"></i>
-                    {data?.video_button_text}{" "}
-                  </Link>
+                  {data?.button_text && (
+                    <Link to={data?.button_url} class="btn btn-primary me-3">
+                      {data?.button_text}
+                    </Link>
+                  )}
+                  {data?.video_button_text && (
+                    <Link
+                      onClick={() =>
+                        data?.video_button_link && setShowVideo(true)
+                      }
+                      class="text-decoration-none popup-youtube d-inline-flex align-items-center watch-now-btn mt-3 mt-lg-0 mt-md-0"
+                    >
+                      {" "}
+                      <i class="fas fa-play"></i>
+                      {data?.video_button_text}{" "}
+                    </Link>
+                  )}
                 </div>
                 <div class="row justify-content-lg-start mt-60">
                   <h6 class="text-white-70 mb-2">{data?.trusted_title}</h6>

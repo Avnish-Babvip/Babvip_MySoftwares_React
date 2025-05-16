@@ -41,9 +41,7 @@ const Style20 = ({ data }) => {
           <i class="fa-solid fa-heart"></i>
         </span>
         <Link
-          onClick={() =>
-            "http://www.youtube.com/watch?v=hAP2QF--2Dg" && setShowVideo(true)
-          }
+          onClick={() => data?.you_tube_url && setShowVideo(true)}
           class="hero-play video-icon popup-youtube bg-white rounded-circle d-inline-flex align-items-center justify-content-center position-absolute"
         >
           <i class="fas fa-play"></i>
@@ -54,22 +52,24 @@ const Style20 = ({ data }) => {
               <div class="ins-hero-content text-center">
                 <div class="ins-title text-center">
                   <h1 class="display-3 ins-heading mb-20 fw-semibold">
-                    Insurance for the <mark>Better</mark> Your Family Life.
+                    {data?.banner_title} <mark>{data?.highlighted_title}</mark>
                   </h1>
-                  <p class="mb-5">
-                    White Board sustainable products with premier total linkage
-                    Energistically Monetize.
-                  </p>
-                  <Link
-                    to="#"
-                    class="ins-btn ins-primary-btn ins-primary-btn-shadow"
-                  >
-                    Let's Get Started
-                  </Link>
+                  <p class="mb-5">{data?.banner_description}</p>
+                  {data?.button_text && (
+                    <Link
+                      to={data?.button_url}
+                      target="_blank"
+                      class="ins-btn ins-primary-btn ins-primary-btn-shadow"
+                    >
+                      {data?.button_text}
+                    </Link>
+                  )}
                 </div>
                 <img
-                  src="assets/img/insurance/hero-1.png"
-                  alt="not found"
+                  src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                    data?.banner_image
+                  }`}
+                  alt={data?.banner_1_image_alt_tag}
                   class="img-fluid mt-4 position-relative"
                 />
               </div>
@@ -78,10 +78,7 @@ const Style20 = ({ data }) => {
         </div>
       </section>
       {showVideo && (
-        <VideoModal
-          videoUrl={"http://www.youtube.com/watch?v=hAP2QF--2Dg"}
-          setShowVideo={setShowVideo}
-        />
+        <VideoModal videoUrl={data?.you_tube_url} setShowVideo={setShowVideo} />
       )}
     </>
   );

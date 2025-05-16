@@ -3,6 +3,11 @@ import VideoModal from "../../VideoModal/VideoModal";
 import { Link } from "react-router-dom";
 
 const Style28 = ({ data }) => {
+  const assetRoute = `${
+    import.meta.env.VITE_PRODUCTION === "true"
+      ? import.meta.env.VITE_ASSETS
+      : ""
+  }`;
   const [showVideo, setShowVideo] = useState(false);
   return (
     <>
@@ -12,13 +17,17 @@ const Style28 = ({ data }) => {
             <div class="col-lg-12">
               <div class="section-shape position-relative">
                 <img
-                  src="assets/img/design-agency/two/hero_4.png"
-                  alt=""
+                  src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                    data?.image3
+                  }`}
+                  alt={data?.image3_alt_tag}
                   class="position-absolute one"
                 />
                 <img
-                  src="assets/img/design-agency/two/hero_5.png"
-                  alt=""
+                  src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                    data?.image4
+                  }`}
+                  alt={data?.image4_alt_tag}
                   class="position-absolute two"
                 />
               </div>
@@ -27,21 +36,27 @@ const Style28 = ({ data }) => {
           <div class="row justify-content-center">
             <div class="col-xl-7">
               <h1 class="design-agency-two-hero__title text-center clr-text mb-30">
-                RIGHT DESIGN STRATEGY FOR YOUR BUSINESS
+                {data?.banner_title}
               </h1>
               <div class="design-agency-two-hero__btn-box d-flex justify-content-center align-items-center flex-wrap gap-10 mb-80">
-                <Link to="#" class="btn btn-dat-one clr-white">
-                  Download Now
-                </Link>
-                <Link
-                  onClick={() =>
-                    "http://www.youtube.com/watch?v=hAP2QF--2Dg" &&
-                    setShowVideo(true)
-                  }
-                  class="text-decoration-none popup-youtube d-inline-flex align-items-center watch-now-btn-dat mt-lg-0 mt-md-0 clr-text"
-                >
-                  <i class="fas fa-play"></i> How it Work{" "}
-                </Link>
+                {data?.button_text && (
+                  <Link
+                    to={data?.button_url}
+                    target="_blank"
+                    class="btn btn-dat-one clr-white"
+                  >
+                    {data?.button_text}
+                  </Link>
+                )}
+                {data?.video_button_text && (
+                  <Link
+                    onClick={() => data?.video_button_url && setShowVideo(true)}
+                    class="text-decoration-none popup-youtube d-inline-flex align-items-center watch-now-btn-dat mt-lg-0 mt-md-0 clr-text"
+                  >
+                    <i class="fas fa-play"></i>
+                    {data?.video_button_text}{" "}
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -52,37 +67,50 @@ const Style28 = ({ data }) => {
                   class="design-agency-two-hero__bottom-content__icon d-flex
                             align-items-center justify-content-center"
                 >
-                  <img src="assets/img/design-agency/two/alarm.png" alt="" />
+                  <img
+                    src={`${assetRoute}/assets/img/design-agency/two/alarm.png`}
+                    alt=""
+                  />
                 </div>
                 <h5 class="design-agency-two-hero__bottom-content__title mt-4 clr-text">
-                  Authoritatively network synergistic materials after
-                  performance based.
+                  {data?.bottom_title}
                 </h5>
                 <div class="design-agency-two-hero__bottom-content__user-box mt-4 d-flex align-items-center gap-5">
-                  <img src="assets/img/design-agency/two/users.png" alt="" />
-                  <span class="dat-user-text">1000+ worldwide</span>
+                  <img
+                    src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                      data?.image5
+                    }`}
+                    alt={data?.image5_alt_tag}
+                  />
+                  <span class="dat-user-text">{data?.image5_title}</span>
                 </div>
               </div>
             </div>
             <div class="col-lg-7 col-sm-12">
               <div class="design-agency-two-hero__bottom-img position-relative">
                 <img
-                  src="assets/img/design-agency/two/hero_main.png"
-                  alt=""
+                  src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                    data?.banner_image
+                  }`}
+                  alt={data?.banner_image_alt_tag}
                   class="main-img"
                 />
                 <img
-                  src="assets/img/design-agency/two/hero_2.png"
-                  alt=""
+                  src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                    data?.image1
+                  }`}
+                  alt={data?.image1_alt_tag}
                   class="position-absolute hero-two"
                 />
                 <img
-                  src="assets/img/design-agency/two/hero_3.png"
-                  alt=""
+                  src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                    data?.image2
+                  }`}
+                  alt={data?.image2_alt_tag}
                   class="position-absolute hero-three"
                 />
                 <img
-                  src="assets/img/design-agency/hero_shape.png"
+                  src={`${assetRoute}/assets/img/design-agency/hero_shape.png`}
                   alt=""
                   class="position-absolute hero-four"
                 />
@@ -93,7 +121,7 @@ const Style28 = ({ data }) => {
       </div>
       {showVideo && (
         <VideoModal
-          videoUrl={"http://www.youtube.com/watch?v=hAP2QF--2Dg"}
+          videoUrl={data?.video_button_url}
           setShowVideo={setShowVideo}
         />
       )}

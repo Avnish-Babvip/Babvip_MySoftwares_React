@@ -1,44 +1,42 @@
-import React from 'react'
-import Style1 from './Style1'
-import Style2 from './Style2'
-import Style3 from './Style3'
-import Style4 from './Style4'
-import Style5 from './Style5'
-import Style6 from './Style6'
-import Style7 from './Style7'
-import Style8 from './Style8'
-import Style9 from './Style9'
-import Style10 from './Style10'
-import Style11 from './Style11'
-import Style12 from './Style12'
-import Style13 from './Style13'
-import Style14 from './Style14'
-import Style15 from './Style15'
-import Style16 from './Style16'
-import Style17 from './Style17'
-import Style18 from './Style18'
-import Style19 from './Style19'
-import Style20 from './Style20'
-import Style21 from './Style21'
-import Style22 from './Style22'
-import Style23 from './Style23'
-import Style24 from './Style24'
-import Style25 from './Style25'
-import Style26 from './Style26'
-import Style27 from './Style27'
-import Style28 from './Style28'
-import Style29 from './Style29'
-import Style30 from './Style30'
-import Style31 from './Style31'
-import Style32 from './Style32'
-import Style33 from './Style33'
-import Style34 from './Style34'
-import Style35 from './Style35'
-import Style36 from './Style36'
+import React from "react";
+import Style1 from "./Style1";
+import Style2 from "./Style2";
+import Style3 from "./Style3";
+import Style4 from "./Style4";
+import Style5 from "./Style5";
+import Style6 from "./Style6";
+import Style7 from "./Style7";
+import Style8 from "./Style8";
+import Style9 from "./Style9";
+import Style10 from "./Style10";
+import Style11 from "./Style11";
+import Style12 from "./Style12";
+import Style13 from "./Style13";
+import Style14 from "./Style14";
+import Style15 from "./Style15";
+import Style16 from "./Style16";
+import Style17 from "./Style17";
+import Style18 from "./Style18";
+import Style19 from "./Style19";
+import Style20 from "./Style20";
+import Style21 from "./Style21";
+import Style22 from "./Style22";
+import Style23 from "./Style23";
+import Style24 from "./Style24";
+import Style25 from "./Style25";
+import Style26 from "./Style26";
+import Style27 from "./Style27";
+import Style28 from "./Style28";
+import Style29 from "./Style29";
+import Style30 from "./Style30";
+import Style31 from "./Style31";
+import Style32 from "./Style32";
+import Style33 from "./Style33";
+import Style34 from "./Style34";
+import Style35 from "./Style35";
+import Style36 from "./Style36";
 
-
-const HeroSection = ({data,styleName}) => {
-
+const HeroSection = ({ data, styleName }) => {
   const componentMap = {
     "Style 1": Style1,
     "Style 2": Style2,
@@ -78,11 +76,9 @@ const HeroSection = ({data,styleName}) => {
     "Style 36": Style36,
   };
 
-  const Component =  componentMap[styleName]
+  const Component = componentMap[styleName];
 
-    return (
-            <Component data={data} />
-  )
-}
+  return <Component data={data} />;
+};
 
-export default HeroSection
+export default HeroSection;

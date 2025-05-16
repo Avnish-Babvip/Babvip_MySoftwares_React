@@ -1,36 +1,41 @@
 import React from "react";
 
 const Style27 = ({ data }) => {
+  const assetRoute = `${
+    import.meta.env.VITE_PRODUCTION === "true"
+      ? import.meta.env.VITE_ASSETS
+      : ""
+  }`;
   return (
     <>
       <div class="design-agency-hero bg-design-agency position-relative">
         <img
-          src="assets/img/design-agency/line_shape.png"
+          src={`${assetRoute}/assets/img/design-agency/line_shape.png`}
           alt=""
           class="position-absolute w-100 shape_one"
         />
         <img
-          src="assets/img/design-agency/shape_three.png"
+          src={`${assetRoute}/assets/img/design-agency/shape_three.png`}
           alt=""
           class="position-absolute shape_three"
         />
         <img
-          src="assets/img/design-agency/shape_four.png"
+          src={`${assetRoute}/assets/img/design-agency/shape_four.png`}
           alt=""
           class="position-absolute shape_four"
         />
         <img
-          src="assets/img/design-agency/shape_five.png"
+          src={`${assetRoute}/assets/img/design-agency/shape_five.png`}
           alt=""
           class="position-absolute shape_five"
         />
         <img
-          src="assets/img/design-agency/shape_six.png"
+          src={`${assetRoute}/assets/img/design-agency/shape_six.png`}
           alt=""
           class="position-absolute shape_six"
         />
         <img
-          src="assets/img/design-agency/shape_seven.png"
+          src={`${assetRoute}/assets/img/design-agency/shape_seven.png`}
           alt=""
           class="position-absolute shape_seven"
         />
@@ -39,32 +44,26 @@ const Style27 = ({ data }) => {
             <div class="col-lg-12">
               <div class="text-center position-relative z-5">
                 <h1 class="design-agency-hero__title clr-white">
-                  DIGITAL PR
-                  <span>
-                    <img
-                      src="assets/img/design-agency/o_shape1.png"
-                      class="design-agency-hero_title-shape"
-                      alt=""
-                    />
-                  </span>
-                  DUCT
+                  {data?.banner_title}
                 </h1>
                 <h2 class="design-agency-hero__title title-2 clr-white margin-bottom-20">
-                  AGENCY COMPNAY
+                  {data?.sub_title}
                 </h2>
                 <div class="design-agency-hero__img-box position-relative">
                   <img
-                    src="assets/img/design-agency/hero_img.png"
-                    alt=""
+                    src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                      data?.banner_image
+                    }`}
+                    alt={data?.banner_image_alt_tag}
                     class="design-agency-hero__img position-relative"
                   />
                   <img
-                    src="assets/img/design-agency/hero_shape.png"
+                    src={`${assetRoute}/assets/img/design-agency/hero_shape.png`}
                     alt=""
                     class="shape position-absolute"
                   />
                   <img
-                    src="assets/img/design-agency/shape_two.png"
+                    src={`${assetRoute}/assets/img/design-agency/shape_two.png`}
                     alt=""
                     class="shape_two position-absolute"
                   />

@@ -18,7 +18,7 @@ const Style1 = ({ data }) => {
             <p class="lead">{data?.banner_description}</p>
           </div>
         </div>
-        <div class="bg-circle rounded-circle circle-shape-3 position-absolute bg-dark-light right-5"></div>
+        {/* <div class="bg-circle rounded-circle circle-shape-3 position-absolute bg-dark-light right-5"></div> */}
       </div>
     </section>
   );

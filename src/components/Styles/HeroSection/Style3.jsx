@@ -44,15 +44,22 @@ const Style3 = ({ data }) => {
                   data-aos="fade-up"
                   data-aos-delay="100"
                 >
-                  <Link
-                    to={data?.button_url1}
-                    class="btn btn-primary me-lg-3 me-sm-3"
-                  >
-                    {data?.button_text1}
-                  </Link>
-                  <Link to={data?.button_url2} class="btn btn-outline-primary">
-                    {data?.button_text2}
-                  </Link>
+                  {data?.button_text1 && (
+                    <Link
+                      to={data?.button_url1}
+                      class="btn btn-primary me-lg-3 me-sm-3"
+                    >
+                      {data?.button_text1}
+                    </Link>
+                  )}
+                  {data?.button_text2 && (
+                    <Link
+                      to={data?.button_url2}
+                      class="btn btn-outline-primary"
+                    >
+                      {data?.button_text2}
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

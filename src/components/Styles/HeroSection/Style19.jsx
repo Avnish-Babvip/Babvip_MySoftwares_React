@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import VideoModal from "../../VideoModal/VideoModal";
 import { Link } from "react-router-dom";
 
 const Style19 = ({ data }) => {
   const [showVideo, setShowVideo] = useState(false);
+  const assetRoute = `${
+    import.meta.env.VITE_PRODUCTION === "true"
+      ? import.meta.env.VITE_ASSETS
+      : ""
+  }`;
+
   return (
     <>
       <section
@@ -17,40 +23,46 @@ const Style19 = ({ data }) => {
             <div class="row align-items-md-center">
               <div class="col-lg-6">
                 <div class="event-hero-content">
-                  <span class="text-pink fw-bold">
-                    22- 23 November 2022 | ExCeL London
-                  </span>
+                  <span class="text-pink fw-bold">{data?.sub_title}</span>
                   <h1 class="fw-bold display-5">
-                    <span class="display-2 fw-bold">Design</span> <br />
-                    Conference-2022
+                    <span class="display-2 fw-bold">{data?.banner_title}</span>{" "}
+                    <br />
+                    {data?.highlighted_title}
                   </h1>
-                  <p class="mb-4">
-                    Intrinsicly drive high standards in scenarios and
-                    stand-alone applications assertively streamline stand-alone
-                    alignments via resource maximizing core.
-                  </p>
+                  <p class="mb-4">{data?.banner_description}</p>
                   <div class="action-btns mt-4 align-items-center d-block d-sm-flex d-lg-flex d-md-flex">
-                    <Link to="#" class="btn btn-primary bg-pink me-3 mb-3">
-                      Register Now
-                    </Link>
-                    <Link to="#" class="btn border-pink text-pink mb-3">
-                      Download PDF
-                    </Link>
+                    {data?.button_text_1 && (
+                      <Link
+                        to={data?.button_url_1}
+                        target="_blank"
+                        class="btn btn-primary bg-pink me-3 mb-3"
+                      >
+                        {data?.button_text_1}
+                      </Link>
+                    )}
+                    {data?.button_text_2 && (
+                      <Link
+                        to={data?.button_url_2}
+                        target="_blank"
+                        class="btn border-pink text-pink mb-3"
+                      >
+                        {data?.button_text_2}
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
               <div class="col-lg-6">
                 <div class="mt-5 mt-lg-0 event-hero-img">
                   <img
-                    src="assets/img/event/h-spea.png"
+                    src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                      data?.banner_image
+                    }`}
+                    alt={data?.banner_1_image_alt_tag}
                     class="img-fluid"
-                    alt="Event"
                   />
                   <Link
-                    onClick={() =>
-                      "http://www.youtube.com/watch?v=hAP2QF--2Dg" &&
-                      setShowVideo(true)
-                    }
+                    onClick={() => data?.you_tube_url && setShowVideo(true)}
                     class="popup-youtube"
                   >
                     <i class="fas fa-play"></i>
@@ -60,23 +72,26 @@ const Style19 = ({ data }) => {
             </div>
             <ul class="list-unstyled ev-hero-shape d-none d-xl-block m-0">
               <li>
-                <img src="assets/img/event/star.png" alt="star" />
+                <img
+                  src={`${assetRoute}/assets/img/event/star.png`}
+                  alt="star"
+                />
               </li>
               <li></li>
               <li></li>
               <li></li>
               <li>
-                <img src="assets/img/event/square.png" alt="shape" />
+                <img
+                  src={`${assetRoute}/assets/img/event/square.png`}
+                  alt="shape"
+                />
               </li>
             </ul>
           </div>
         </div>
       </section>
       {showVideo && (
-        <VideoModal
-          videoUrl={"http://www.youtube.com/watch?v=hAP2QF--2Dg"}
-          setShowVideo={setShowVideo}
-        />
+        <VideoModal videoUrl={data?.you_tube_url} setShowVideo={setShowVideo} />
       )}
     </>
   );

@@ -5,6 +5,11 @@ import "swiper/css";
 
 const Style32 = ({ data }) => {
   const swiperRef = useRef(null);
+  const assetRoute = `${
+    import.meta.env.VITE_PRODUCTION === "true"
+      ? import.meta.env.VITE_ASSETS
+      : ""
+  }`;
   useEffect(() => {
     const swiperInstance = new Swiper(".digi-logo-slider", {
       slidesPerView: 1,
@@ -44,24 +49,28 @@ const Style32 = ({ data }) => {
           <div class="row">
             <div class="col-lg-6">
               <h1 class="it-company-hero-title it-company-color fs-64 mb-30">
-                <span class="fs-40 fw-600">Solve Your Business</span>
-                Challenges With IT
+                <span class="fs-40 fw-600">{data?.banner_title}</span>{" "}
+                {data?.sub_title}
               </h1>
               <p class="clr-paragraph fs-18 fw-500 flh-28 fch-50 mb-40">
-                Be available right where your customers need it and give your
-                team the automatically.
+                {data?.banner_description}
               </p>
-              <Link
-                href=""
-                class="btn it-company-bg ca-two-bg-hover-two rounded-5 text-white fs-16"
-              >
-                Get Started
-              </Link>
+              {data?.button_text && (
+                <Link
+                  to={data?.button_url}
+                  target="_blank"
+                  class="btn it-company-bg ca-two-bg-hover-two rounded-5 text-white fs-16"
+                >
+                  {data?.button_text}
+                </Link>
+              )}
             </div>
             <div class="col-lg-6">
               <img
-                src="assets/img/it_company/hero.png"
-                alt=""
+                src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                  data?.banner_image
+                }`}
+                alt={data?.banner_image_alt_tag}
                 class="it-company-img img-fluid"
               />
             </div>
@@ -70,198 +79,32 @@ const Style32 = ({ data }) => {
             <div class="col-lg-12">
               <div class="swiper digi-logo-slider">
                 <div class="swiper-wrapper align-items-center">
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo.png"
-                        class="img-fluid"
-                        height="30"
-                        alt="logo"
-                      />
+                  {data?.step_data.map((item, idx) => (
+                    <div class="swiper-slide ">
+                      <div class="single-logo text-center p-3 risk-btn-hover">
+                        <img
+                          src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                            item?.step_image
+                          }`}
+                          alt={item?.step_image_alt_tag}
+                          class="img-fluid"
+                          height="30"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div class="swiper-slide  ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_2.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide  ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_3.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_4.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_5.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo.png"
-                        class="img-fluid"
-                        height="30"
-                        alt="logo"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_2.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_3.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_4.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_5.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo.png"
-                        class="img-fluid"
-                        height="30"
-                        alt="logo"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide  ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_2.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide  ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_3.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_4.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo_5.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
-                  <div class="swiper-slide ">
-                    <div class="single-logo text-center p-3 risk-btn-hover">
-                      <img
-                        src="assets/img/creative-agency-2/logo.png"
-                        class="img-fluid"
-                        alt="logo"
-                        height="30"
-                      />
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
         </div>
         <img
-          src="assets/img/it_company/shape/hero.png"
+          src={`${assetRoute}/assets/img/it_company/shape/hero.png`}
           alt=""
           class="s-one position-absolute"
         />
         <img
-          src="assets/img/it_company/shape/hero_2.png"
+          src={`${assetRoute}/assets/img/it_company/shape/hero_2.png`}
           alt=""
           class="s-two position-absolute"
         />

@@ -331,6 +331,7 @@ const Header = () => {
                             </div>
                           </Link>
                           <Link
+                            target="_blank"
                             to={"https://my.babvipsoftwares.com/dealer/login"}
                             className="col-md-6 "
                             onClick={() => setActiveDropdown2(null)}
@@ -582,6 +583,7 @@ const Header = () => {
                       </Link>
                       <Link
                         to={"https://my.babvipsoftwares.com/dealer/login"}
+                        target="_blank"
                         onClick={closeOffcanvas} // Close offcanvas on click
                         class="dropdown-link"
                       >

@@ -33,9 +33,11 @@ const Style11 = ({ data }) => {
               </span>
               <h2 class="mt-2 mb-3 clr-text">{data?.sub_title}</h2>
               <p class="mb-0">{data?.description} </p>
-              <Link to={data?.button_url} class="btn crm-primary-btn mt-40">
-                {data?.button_text}
-              </Link>
+              {data?.button_text && (
+                <Link to={data?.button_url} class="btn crm-primary-btn mt-40">
+                  {data?.button_text}
+                </Link>
+              )}
             </div>
           </div>
         </div>

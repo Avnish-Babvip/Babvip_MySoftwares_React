@@ -4,6 +4,11 @@ import Swiper from "swiper";
 import "swiper/css";
 
 const Style30 = ({ data }) => {
+  const assetRoute = `${
+    import.meta.env.VITE_PRODUCTION === "true"
+      ? import.meta.env.VITE_ASSETS
+      : ""
+  }`;
   const swiperRef = useRef(null);
   useEffect(() => {
     const swiperInstance = new Swiper(".digi-logo-slider", {
@@ -45,7 +50,7 @@ const Style30 = ({ data }) => {
           <div class="container p-0">
             <div class="position-relative">
               <img
-                src="assets/img/creative-agency-2/shape/1.png"
+                src={`${assetRoute}/assets/img/creative-agency-2/shape/1.png`}
                 alt=""
                 class="one position-absolute"
               />
@@ -53,20 +58,21 @@ const Style30 = ({ data }) => {
                 <div class="col-xl-8">
                   <div class="position-relative">
                     <h1 class="clr-text fs-72 fw-600 mb-30">
-                      We Drive Growth with Digital Creation.
+                      {data?.banner_title}
                     </h1>
                     <div class="ca-two-hero-content d-flex align-items-center gap-15">
                       <p class="ca-two-body-clr flh-24 fch-55 mb-0">
-                        Access your account via your mobile phone View balance,
-                        transfer funds, view transactions wherever happy clients
-                        all around.
+                        {data?.banner_description}
                       </p>
-                      <Link
-                        href=""
-                        class="btn dg-outline-btn ca-two-body-clr ca-two-bg-hover-two"
-                      >
-                        Get in Touch
-                      </Link>
+                      {data?.button_text && (
+                        <Link
+                          target="_blank"
+                          to={data?.button_url}
+                          class="btn dg-outline-btn ca-two-body-clr ca-two-bg-hover-two"
+                        >
+                          {data?.button_text}
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -74,202 +80,29 @@ const Style30 = ({ data }) => {
               <div class="row">
                 <div class="col-lg-12">
                   <img
-                    src="assets/img/creative-agency-2/hero.png"
-                    alt=""
+                    src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                      data?.banner_image
+                    }`}
+                    alt={data?.banner_image_alt_tag}
                     class="ca-two-hero-img img-fluid"
                   />
                   <div class="swiper digi-logo-slider mt-40 ">
-                    <div
-                      class="swiper-wrapper align-items-center"
-                      id="swiper-wrapper-918c24b360e77bf8"
-                      aria-live="off"
-                    >
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo.png"
-                            class="img-fluid"
-                            height="30"
-                            alt="logo"
-                          />
+                    <div class="swiper-wrapper align-items-center">
+                      {data?.step_data.map((item, idx) => (
+                        <div class="swiper-slide ">
+                          <div class="single-logo">
+                            <img
+                              src={`${
+                                import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                              }/${item?.step_image}`}
+                              alt={item?.step_image_alt_tag}
+                              class="img-fluid"
+                              height="30"
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_2.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_3.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_4.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_5.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo.png"
-                            class="img-fluid"
-                            height="30"
-                            alt="logo"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_2.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_3.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_4.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_5.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo.png"
-                            class="img-fluid"
-                            height="30"
-                            alt="logo"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_2.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_3.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_4.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo_5.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
-                      <div class="swiper-slide ">
-                        <div class="single-logo">
-                          <img
-                            src="assets/img/creative-agency-2/logo.png"
-                            class="img-fluid"
-                            alt="logo"
-                            height="30"
-                          />
-                        </div>
-                      </div>
+                      ))}
                     </div>
-                    <span
-                      class="swiper-notification"
-                      aria-live="assertive"
-                      aria-atomic="true"
-                    ></span>
                   </div>
                 </div>
               </div>

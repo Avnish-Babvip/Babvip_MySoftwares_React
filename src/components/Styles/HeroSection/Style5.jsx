@@ -48,15 +48,19 @@ const Style5 = ({ data }) => {
                 data-aos="fade-up"
                 data-aos-delay="50"
               >
-                <Link
-                  to={data?.button_url1}
-                  class="btn btn-primary me-lg-3 me-sm-3"
-                >
-                  {data?.button_text1}
-                </Link>
-                <Link to={data?.button_url2} class="btn btn-outline-light">
-                  {data?.button_text2}
-                </Link>
+                {data?.button_text1 && (
+                  <Link
+                    to={data?.button_url1}
+                    class="btn btn-primary me-lg-3 me-sm-3"
+                  >
+                    {data?.button_text1}
+                  </Link>
+                )}
+                {data?.button_text2 && (
+                  <Link to={data?.button_url2} class="btn btn-outline-light">
+                    {data?.button_text2}
+                  </Link>
+                )}
               </div>
               <ul
                 class="nav subscribe-feature-list d-flex justify-content-center justify-content-lg-start w-100 mt-3"

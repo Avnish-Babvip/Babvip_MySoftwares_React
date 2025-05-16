@@ -2,6 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Style31 = ({ data }) => {
+  const assetRoute = `${
+    import.meta.env.VITE_PRODUCTION === "true"
+      ? import.meta.env.VITE_ASSETS
+      : ""
+  }`;
   return (
     <>
       <div class="rm-hero pt-120 pb-120 position-relative overflow-hidden">
@@ -11,61 +16,54 @@ const Style31 = ({ data }) => {
               <div class="col-lg-6">
                 <h1 class="rm-hero-title text-white fs-72 fw-800 ff-risk-pri mb-20">
                   {" "}
-                  Streamlined Risk <span class="risk-gd-text">
-                    Management
-                  </span>{" "}
-                  <br />
-                  <span class="text-ind">-Software</span>{" "}
+                  {data?.banner_title1}
+                  <span class="risk-gd-text">{data?.banner_title2}</span> <br />
+                  <span class="text-ind">{data?.banner_title3}</span>{" "}
                   <span>
-                    <img src="assets/img/risk_managment/font.png" alt="" />
+                    <img
+                      src={`${assetRoute}/assets/img/risk_managment/font.png`}
+                      alt=""
+                    />
                   </span>
                 </h1>
                 <p class="text-white fs-20 ff-dmsans fw-500 flh-28">
-                  There are many variations of passages of Loren epsom available
-                  but the majority have suffered alteration by injected.
+                  {data?.banner_description}
                 </p>
-                <Link
-                  href=""
-                  class="btn risk-btn-bg risk-btn-hover clr-white ff-risk-pri fs-14 fw-600 mt-30"
-                >
-                  Start Free Trial
-                </Link>
+                {data?.button_text && (
+                  <Link
+                    to={data?.button_url}
+                    target="_blank"
+                    class="btn risk-btn-bg risk-btn-hover clr-white ff-risk-pri fs-14 fw-600 mt-30"
+                  >
+                    {data?.button_text}
+                  </Link>
+                )}
                 <div class="risk-customer-area mt-60">
                   <p class="text-white ff-risk-pri fw-600">
-                    See how over 7,700 customers{" "}
+                    {data?.bottom_title}{" "}
                     <span class="risk-highlight-color fw-800">
-                      Help the world work
+                      {data?.bottom_highlighted_title}
                     </span>
                   </p>
                   <div class="risk-customer-logo-wrapper d-flex align-items-center gap-10 flex-wrap">
-                    <img
-                      class="risk-customer-logo"
-                      src="assets/img/risk_managment/customer.png"
-                      alt=""
-                    />
-                    <img
-                      class="risk-customer-logo"
-                      src="assets/img/risk_managment/customer_2.png"
-                      alt=""
-                    />
-                    <img
-                      class="risk-customer-logo"
-                      src="assets/img/risk_managment/customer_3.png"
-                      alt=""
-                    />
-                    <img
-                      class="risk-customer-logo"
-                      src="assets/img/risk_managment/customer_4.png"
-                      alt=""
-                    />
+                    {data?.step_data.map((item, idx) => (
+                      <img
+                        src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                          item?.step_image
+                        }`}
+                        alt={item?.step_image_alt_tag}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
               <div class="col-lg-5 col-md-8">
                 <div class="position-relative">
                   <img
-                    src="assets/img/risk_managment/hero.png"
-                    alt=""
+                    src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                      data?.banner_image
+                    }`}
+                    alt={data?.banner_image_alt_tag}
                     class="risk-hero-img img-fluid"
                   />
                   <Link
@@ -87,48 +85,52 @@ const Style31 = ({ data }) => {
                     </svg>
                   </Link>
                   <div class="risk-social d-flex align-items-center flex-column gap-20">
-                    <a
+                    <Link
                       class="d-flex align-items-center gap-1 ff-risk-pri fs-14 fw-700"
-                      href=""
+                      to={data?.fb_url}
+                      target="_blank"
                     >
                       <span>
                         <i class="fa-brands fa-facebook-f"></i>
                       </span>
                       Facebook
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       class="d-flex align-items-center gap-1 ff-risk-pri fs-14 fw-700"
-                      href=""
+                      to={data?.linkdin_url}
+                      target="_blank"
                     >
                       <span>
                         <i class="fa-brands fa-linkedin"></i>
                       </span>
                       LinkedIn
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       class="d-flex align-items-center gap-1 ff-risk-pri fs-14 fw-700"
-                      href=""
+                      to={data?.insta_url}
+                      target="_blank"
                     >
                       <span>
                         <i class="fa-brands fa-instagram"></i>
                       </span>
                       Instagram
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       class="d-flex align-items-center gap-1 ff-risk-pri fs-14 fw-700"
-                      href=""
+                      to={data?.twitter_url}
+                      target="_blank"
                     >
                       <span>
                         <i class="fa-brands fa-twitter"></i>
                       </span>
                       Twitter
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
             </div>
             <img
-              src="assets/img/risk_managment/shape/hero.png"
+              src={`${assetRoute}/assets/img/risk_managment/shape/hero.png`}
               alt=""
               class="hero-shape position-absolute"
             />

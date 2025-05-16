@@ -41,9 +41,11 @@ const Style9 = ({ data }) => {
                 </ul>
               </div>
               <div class="action-btns mt-5">
-                <Link to={data?.button_url} class="btn btn-outline-light">
-                  {data?.button_text}
-                </Link>
+                {data?.button_text && (
+                  <Link to={data?.button_url} class="btn btn-outline-light">
+                    {data?.button_text}
+                  </Link>
+                )}
               </div>
             </div>
           </div>

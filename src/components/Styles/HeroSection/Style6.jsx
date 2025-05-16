@@ -19,12 +19,16 @@ const Style6 = ({ data }) => {
               <h1 class="fw-bold display-5">{data?.banner_title}</h1>
               <p class="lead">{data?.banner_description}</p>
               <div class="action-btns mt-5">
-                <Link to={data?.button_url1} class="btn btn-primary me-3">
-                  {data?.button_text1}
-                </Link>
-                <Link to={data?.button_url2} class="btn btn-outline-light">
-                  {data?.button_text2}
-                </Link>
+                {data?.button_text1 && (
+                  <Link to={data?.button_url1} class="btn btn-primary me-3">
+                    {data?.button_text1}
+                  </Link>
+                )}
+                {data?.button_text2 && (
+                  <Link to={data?.button_url2} class="btn btn-outline-light">
+                    {data?.button_text2}
+                  </Link>
+                )}
               </div>
             </div>
             <div class="row justify-content-lg-start mt-60">
