@@ -40,7 +40,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal; /* Ensure wrapping */
-  max-height: 3em; /* Adjust based on font size */
+  max-height: 4em; /* Adjust based on font size */
 }
 .truncate-1 {
   display: -webkit-box;

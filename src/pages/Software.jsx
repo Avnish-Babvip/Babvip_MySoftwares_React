@@ -8,28 +8,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSoftwareDataBySlug } from "../features/actions/category";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
-import ContactModal from "../components/SoftwareModal/ContactModal"
-
+import ContactModal from "../components/SoftwareModal/ContactModal";
 
 const Software = () => {
-   const swiperRef = useRef(null);
+  const swiperRef = useRef(null);
   const [showMoreStates, setShowMoreStates] = useState({});
 
   const [activeSection, setActiveSection] = useState("");
 
-
-const toggleShowMore = (idx) => {
-  setShowMoreStates((prevState) => ({
-    ...prevState,
-    [idx]: !prevState[idx], // Toggle the specific index
-  }));
-};
+  const toggleShowMore = (idx) => {
+    setShowMoreStates((prevState) => ({
+      ...prevState,
+      [idx]: !prevState[idx], // Toggle the specific index
+    }));
+  };
   const dispatch = useDispatch();
-  const {slug}= useParams()
-  const { softwareDetailData } = useSelector(
-    (action) => action.category
-  );
-  
+  const { slug } = useParams();
+  const { softwareDetailData } = useSelector((action) => action.category);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const mainSwiperRef = useRef(null);
   const thumbSwiperRef = useRef(null);
@@ -40,73 +36,82 @@ const toggleShowMore = (idx) => {
   };
 
   const [showImageModal, setShowImageModal] = useState(false);
-const [activeImage, setActiveImage] = useState(null);
-
+  const [activeImage, setActiveImage] = useState(null);
 
   const [isSticky, setIsSticky] = useState(false);
 
-  useEffect(()=>{
-    dispatch(getSoftwareDataBySlug(slug))
-  },[])
+  useEffect(() => {
+    dispatch(getSoftwareDataBySlug(slug));
+  }, []);
 
   useEffect(() => {
-    const sectionIds = ["description", "pricing", "faq", "specification", "features", "reviews"];
-  
+    const sectionIds = [
+      "description",
+      "pricing",
+      "faq",
+      "specification",
+      "features",
+      "reviews",
+    ];
+
     const handleScroll = () => {
       const descriptionSection = document.getElementById("description");
       if (descriptionSection) {
         const descriptionOffset = descriptionSection.offsetTop;
         setIsSticky(window.scrollY > descriptionOffset - 100);
       }
-  
+
       const scrollPos = window.scrollY + 150; // Add some offset to trigger earlier
-  
+
       for (let id of sectionIds) {
         const el = document.getElementById(id);
-        if (el && el.offsetTop <= scrollPos && el.offsetTop + el.offsetHeight > scrollPos) {
+        if (
+          el &&
+          el.offsetTop <= scrollPos &&
+          el.offsetTop + el.offsetHeight > scrollPos
+        ) {
           setActiveSection(id);
           break;
         }
       }
     };
-  
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  
 
   useEffect(() => {
     const swiperInstance = new Swiper2(".testimonialSwiperreview", {
       modules: [Navigation],
-           slidesPerView: 1,
-           speed: 700,
-           spaceBetween: 30,
-           slidesPerGroup: 1,
-           loop: false,
-           breakpoints: {
-             320: {
-               slidesPerView: 1,
-             },
-             640: {
-               slidesPerView: 1,
-             },
-             768: {
-               slidesPerView: 2,
-               spaceBetween: 20,
-             },
-             1024: {
-               slidesPerView: 3,
-               spaceBetween: 20,
-             },
-             1142: {
-               slidesPerView: 3,
-               spaceBetween: 25,
-             },
-           },
-           navigation: {
-             nextEl: ".swiper-button-next",
-             prevEl: ".swiper-button-prev",
-           },
+      slidesPerView: 1,
+      speed: 700,
+      spaceBetween: 30,
+      slidesPerGroup: 1,
+      loop: false,
+      breakpoints: {
+        320: {
+          slidesPerView: 1,
+        },
+        640: {
+          slidesPerView: 1,
+        },
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+        1142: {
+          slidesPerView: 3,
+          spaceBetween: 25,
+        },
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
     });
 
     // Store the Swiper instance in the ref
@@ -119,10 +124,8 @@ const [activeImage, setActiveImage] = useState(null);
       ) {
         swiperRef.current.destroy(true, true);
       }
-    
     };
   }, []);
-
 
   return (
     <>
@@ -392,21 +395,27 @@ const [activeImage, setActiveImage] = useState(null);
                 onSwiper={(swiper) => (mainSwiperRef.current = swiper)}
                 className="rounded"
               >
-                {Array.isArray(softwareDetailData?.software_images) && softwareDetailData?.software_images.map((image, index) => (
-                  <SwiperSlide key={index}>
-                   <img
-  src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-images/${image.image_path}`}
-  alt={`Product ${index + 1}`}
-  className="img-fluid rounded"
-  style={{ cursor: "pointer" }}
-  onClick={() => {
-    setActiveImage(`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-images/${image.image_path}`);
-    setShowImageModal(true);
-  }}
-/>
-
-                  </SwiperSlide>
-                ))}
+                {Array.isArray(softwareDetailData?.software_images) &&
+                  softwareDetailData?.software_images.map((image, index) => (
+                    <SwiperSlide key={index}>
+                      <img
+                        src={`${
+                          import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                        }/software-images/${image.image_path}`}
+                        alt={`Product ${index + 1}`}
+                        className="img-fluid rounded"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          setActiveImage(
+                            `${
+                              import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                            }/software-images/${image.image_path}`
+                          );
+                          setShowImageModal(true);
+                        }}
+                      />
+                    </SwiperSlide>
+                  ))}
               </Swiper>
 
               {/* Image Thumbnails Swiper */}
@@ -462,23 +471,26 @@ const [activeImage, setActiveImage] = useState(null);
                   }}
                   onSwiper={(swiper) => (thumbSwiperRef.current = swiper)}
                 >
-                  {Array.isArray(softwareDetailData.software_images) && softwareDetailData?.software_images.map((image, index) => (
-                    <SwiperSlide
-                      key={index}
-                      onClick={() => handleThumbnailClick(index)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <img
-                        src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-images/${image.image_path}`}
-                        alt={`Thumbnail ${index + 1}`}
-                        className={`img-thumbnail mx-1 ${
-                          activeIndex === index ? "border border-primary" : ""
-                        }`}
-                        width="60"
-                        height="60"
-                      />
-                    </SwiperSlide>
-                  ))}
+                  {Array.isArray(softwareDetailData.software_images) &&
+                    softwareDetailData?.software_images.map((image, index) => (
+                      <SwiperSlide
+                        key={index}
+                        onClick={() => handleThumbnailClick(index)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <img
+                          src={`${
+                            import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                          }/software-images/${image.image_path}`}
+                          alt={`Thumbnail ${index + 1}`}
+                          className={`img-thumbnail mx-1 ${
+                            activeIndex === index ? "border border-primary" : ""
+                          }`}
+                          width="60"
+                          height="60"
+                        />
+                      </SwiperSlide>
+                    ))}
                 </Swiper>
               </div>
             </div>
@@ -506,15 +518,17 @@ const [activeImage, setActiveImage] = useState(null);
               </div>
 
               {/* Price */}
-              <h4 className="text-danger mt-3">Price: ₹ {softwareDetailData?.price}</h4>
+              <h4 className="text-danger mt-3">
+                {softwareDetailData?.price
+                  ? `Price: ₹ ${softwareDetailData?.price}`
+                  : "Price not available"}
+              </h4>
 
               {/* Description */}
-              <p className="mt-3">
-              {softwareDetailData?.short_description}
-              </p>
+              <p className="mt-3">{softwareDetailData?.short_description}</p>
 
               {/* Buttons */}
-              <div className="mt-4">
+              <div className="mt-4 d-flex justify-content-center d-sm-block">
                 <button
                   type="button"
                   className="btn btn-primary me-2"
@@ -539,38 +553,40 @@ const [activeImage, setActiveImage] = useState(null);
       </section>
 
       {/* Sticky Header Section */}
-     <section
-  style={{
-    // even smaller vertical padding
-    height: "auto",
-    position: isSticky ? "fixed" : "static",
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: isSticky ? 1000 : "auto",
-    backgroundColor: "white",
-    boxShadow: isSticky ? "0 2px 10px rgba(0,0,0,0.1)" : "none",
-    transition: "all 0.3s ease",
-  }}
->
-
-        <div className="container m-3 ">
+      <section
+        style={{
+          // even smaller vertical padding
+          height: "auto",
+          position: isSticky ? "fixed" : "static",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: isSticky ? 1000 : "auto",
+          backgroundColor: "white",
+          boxShadow: isSticky ? "0 2px 10px rgba(0,0,0,0.1)" : "none",
+          transition: "all 0.3s ease",
+        }}
+      >
+        <div className="container my-3">
           <div className="row " id="tab-custom">
-            <div className="col-12">
+            <div className="col-12 ">
               <ul className="nav-custom feature-tab-list-2" id="nav-tab-2">
                 <li className="nav-item">
-                <a
-  className={`nav-link nav-link-custom ${activeSection === "description" ? "active" : ""}`}
-  href="#description"
-  onClick={(e) => scrollToSection("description", e)}
->
-  Description
-</a>
-
+                  <a
+                    className={`nav-link nav-link-custom ${
+                      activeSection === "description" ? "active" : ""
+                    }`}
+                    href="#description"
+                    onClick={(e) => scrollToSection("description", e)}
+                  >
+                    Description
+                  </a>
                 </li>
                 <li className="nav-item">
                   <a
-                    className={`nav-link nav-link-custom ${activeSection === "pricing" ? "active" : ""}`}
+                    className={`nav-link nav-link-custom ${
+                      activeSection === "pricing" ? "active" : ""
+                    }`}
                     href="#pricing"
                     onClick={(e) => scrollToSection("pricing", e)}
                   >
@@ -579,7 +595,9 @@ const [activeImage, setActiveImage] = useState(null);
                 </li>
                 <li className="nav-item">
                   <a
-                    className={`nav-link nav-link-custom ${activeSection === "faq" ? "active" : ""}`}
+                    className={`nav-link nav-link-custom ${
+                      activeSection === "faq" ? "active" : ""
+                    }`}
                     href="#faq"
                     onClick={(e) => scrollToSection("faq", e)}
                   >
@@ -588,7 +606,9 @@ const [activeImage, setActiveImage] = useState(null);
                 </li>
                 <li className="nav-item">
                   <a
-                    className={`nav-link nav-link-custom ${activeSection === "specification" ? "active" : ""}`}
+                    className={`nav-link nav-link-custom ${
+                      activeSection === "specification" ? "active" : ""
+                    }`}
                     href="#specification"
                     onClick={(e) => scrollToSection("specification", e)}
                   >
@@ -597,7 +617,9 @@ const [activeImage, setActiveImage] = useState(null);
                 </li>
                 <li className="nav-item">
                   <a
-                    className={`nav-link nav-link-custom ${activeSection === "features" ? "active" : ""}`}
+                    className={`nav-link nav-link-custom ${
+                      activeSection === "features" ? "active" : ""
+                    }`}
                     href="#features"
                     onClick={(e) => scrollToSection("features", e)}
                   >
@@ -606,7 +628,9 @@ const [activeImage, setActiveImage] = useState(null);
                 </li>
                 <li className="nav-item">
                   <a
-                    className={`nav-link nav-link-custom ${activeSection === "reviews" ? "active" : ""}`}
+                    className={`nav-link nav-link-custom ${
+                      activeSection === "reviews" ? "active" : ""
+                    }`}
                     href="#reviews"
                     onClick={(e) => scrollToSection("reviews", e)}
                   >
@@ -619,297 +643,387 @@ const [activeImage, setActiveImage] = useState(null);
         </div>
       </section>
 
-     
-        <section
-          class="feature-promo "
-          id="description"
-          style={{ paddingTop: isSticky ? "100px" : "0" }}
-        >
-          <div class="container mb-4">
-            <div class="row">
-              <div class="col-md-12">
-                <h4>Software Description:</h4>
-              {softwareDetailData?.description && parse(String(softwareDetailData?.description))}
-              </div>
+      <section
+        class="feature-promo "
+        id="description"
+        style={{ paddingTop: isSticky ? "100px" : "0" }}
+      >
+        <div class="container mb-4">
+          <div class="row">
+            <div class="col-md-12">
+              <h4>Software Description:</h4>
+              {softwareDetailData?.description &&
+                parse(String(softwareDetailData?.description))}
             </div>
           </div>
-        </section>
-  
-        <section
-          class="dg-pricing-section ptb-120 position-relative overflow-hidden z-1 "
-          id="pricing"
-          style={{ paddingTop: isSticky ? "100px" : "0" }}
-        >
-          <div class="container">
-            <div class="row">
-              <div class="col-xl-5">
-                <h4>Software Pricing Plans:</h4>
-              </div>
+        </div>
+      </section>
+
+      <section
+        class="dg-pricing-section ptb-120 position-relative overflow-hidden z-1 "
+        id="pricing"
+        style={{ paddingTop: isSticky ? "100px" : "0" }}
+      >
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-5">
+              <h4>Software Pricing Plans:</h4>
             </div>
-            <div class="dg-pricing-tab text-center">
-              <ul
-                class="nav nav-tabs border-0 d-inline-flex bg-white rounded overflow-hidden p-0"
-                role="tablist"
-              >
-                <li>
-                  <a
-                    href="#tabplan1"
-                    class="
+          </div>
+          <div class="dg-pricing-tab text-center">
+            <ul
+              class="nav nav-tabs border-0 d-inline-flex bg-white rounded overflow-hidden p-0"
+              role="tablist"
+            >
+              <li>
+                <a
+                  href="#tabplan1"
+                  class="
                                         active
                                         "
-                    data-bs-toggle="tab"
-                    aria-selected="true"
-                    role="tab"
-                  >
-                    Halfyearly
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#tabplan2"
-                    data-bs-toggle="tab"
-                    aria-selected="false"
-                    role="tab"
-                    tabindex="-1"
-                  >
-                    Yearly
-                  </a>
-                </li>
-              </ul>
-              <div class="tab-content mt-5">
-                <div
-                  class="tab-pane fade 
+                  data-bs-toggle="tab"
+                  aria-selected="true"
+                  role="tab"
+                >
+                  Halfyearly
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#tabplan2"
+                  data-bs-toggle="tab"
+                  aria-selected="false"
+                  role="tab"
+                  tabindex="-1"
+                >
+                  Yearly
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content mt-5">
+              <div
+                class="tab-pane fade 
                     active show
                 "
-                  id="tabplan1"
-                  role="tabpanel"
-                >
-               <div className="row g-4 justify-content-center">
-    {Array.isArray(softwareDetailData?.software_plans) &&
-      softwareDetailData?.software_plans.map((plan, idx) =>
-        plan?.plan_type?.plan_type_name === "Halfyearly" && (
-          <div key={idx} className="col-xl-4 col-md-6">
-            <div className="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
-             {plan?.badge_icon && <img
-                src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.badge_icon}`}
-                className="position-absolute top-0 offer-badge z-2"
-              />}
-
-              <div className="icon-wrapper d-inline-block rounded-circle bg-white">
-                <span className="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
-                  <img
-                    src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.plan_icon}`}
-                  />
-                </span>
-              </div>
-
-              <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
-              <p className="mb-4 fm">{plan?.plan_short_description}</p>
-
-              <ul className="dg-feature-list list-unstyled d-inline-block text-start p-0">
-  {Array.isArray(softwareDetailData?.software_module) &&
-    softwareDetailData?.software_module.map((module, moduleIdx) => (
-      <li className="fs-sm" key={moduleIdx} style={{ display: moduleIdx < 4 || showMoreStates[idx] ? "block" : "none" }}>
-        {module?.additional_info === 0 ? (
-          <span className="me-2">
-            <i className="fas fa-check"></i>
-          </span>
-        ) : (
-          <span className="me-2">
-            <i className="fa-solid fa-circle-check" style={{ color: "red" }}></i>
-          </span>
-        )}
-        {module?.module_name}
-      </li>
-    ))}
-</ul>
-
-
-
-              <button
-                className="btn btn-link p-0 fs-sm "
-                onClick={() => toggleShowMore(idx)}
+                id="tabplan1"
+                role="tabpanel"
               >
-                {showMoreStates[idx] ? "See Less" : "See More"}
-              </button>
+                <div className="row g-4 justify-content-center">
+                  {Array.isArray(softwareDetailData?.software_plans) &&
+                    softwareDetailData?.software_plans.map(
+                      (plan, idx) =>
+                        plan?.plan_type?.plan_type_name === "Halfyearly" && (
+                          <div key={idx} className="col-xl-4 col-md-6">
+                            <div className="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
+                              {plan?.badge_icon && (
+                                <img
+                                  src={`${
+                                    import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                                  }/software-plan/${plan?.badge_icon}`}
+                                  className="position-absolute top-0 offer-badge z-2"
+                                />
+                              )}
 
-              <div className="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
-                <h2 style={{ fontSize: "22px" }}>
-                  <span>₹ {plan?.plan_price}</span>
-                  <span className="ms-2 fs-md fw-normal">
-                    {plan?.plan_type?.duration_value} {plan?.plan_type?.duration_type}
-                  </span>
-                </h2>
-                <a href="#" className="btn dg-outline-btn rounded-pill">
-                  Purchase Now
-                </a>
-              </div>
-            </div>
-          </div>
-        )
-      )}
-  </div>
+                              <div className="icon-wrapper d-inline-block rounded-circle bg-white">
+                                <span className="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
+                                  <img
+                                    src={`${
+                                      import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                                    }/software-plan/${plan?.plan_icon}`}
+                                  />
+                                </span>
+                              </div>
+
+                              <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
+                              <p className="mb-4 fm">
+                                {plan?.plan_short_description}
+                              </p>
+
+                              <ul className="dg-feature-list list-unstyled d-inline-block text-start p-0">
+                                {Array.isArray(
+                                  softwareDetailData?.software_module
+                                ) &&
+                                  softwareDetailData?.software_module.map(
+                                    (module, moduleIdx) => (
+                                      <li
+                                        className="fs-sm"
+                                        key={moduleIdx}
+                                        style={{
+                                          display:
+                                            moduleIdx < 4 || showMoreStates[idx]
+                                              ? "block"
+                                              : "none",
+                                        }}
+                                      >
+                                        {module?.additional_info === 0 ? (
+                                          <span className="me-2">
+                                            <i className="fas fa-check"></i>
+                                          </span>
+                                        ) : (
+                                          <span className="me-2">
+                                            <i
+                                              className="fa-solid fa-circle-check"
+                                              style={{ color: "red" }}
+                                            ></i>
+                                          </span>
+                                        )}
+                                        {module?.module_name}
+                                      </li>
+                                    )
+                                  )}
+                              </ul>
+
+                              <button
+                                className="btn btn-link p-0 fs-sm "
+                                onClick={() => toggleShowMore(idx)}
+                              >
+                                {showMoreStates[idx] ? "See Less" : "See More"}
+                              </button>
+
+                              <div className="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
+                                <h2 style={{ fontSize: "22px" }}>
+                                  <span>₹ {plan?.plan_price}</span>
+                                  <span className="ms-2 fs-md fw-normal">
+                                    {plan?.plan_type?.duration_value}{" "}
+                                    {plan?.plan_type?.duration_type}
+                                  </span>
+                                </h2>
+                                <a
+                                  href="#"
+                                  className="btn dg-outline-btn rounded-pill"
+                                >
+                                  Purchase Now
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                    )}
                 </div>
-                <div
-                  class="tab-pane fade 
+              </div>
+              <div
+                class="tab-pane fade 
                 "
-                  id="tabplan2"
-                  role="tabpanel"
-                >
-                         <div className="row g-4 justify-content-center">
-    {Array.isArray(softwareDetailData?.software_plans) &&
-      softwareDetailData?.software_plans.map((plan, idx) =>
-        plan?.plan_type?.plan_type_name === "Yearly" && (
-          <div key={idx} className="col-xl-4 col-md-6">
-            <div className="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
-              <img
-                src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.badge_icon}`}
-                className="position-absolute top-0 offer-badge z-2"
-              />
-
-              <div className="icon-wrapper d-inline-block rounded-circle bg-white">
-                <span className="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
-                  <img
-                    src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-plan/${plan?.plan_icon}`}
-                  />
-                </span>
-              </div>
-
-              <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
-              <p className="mb-4 fm">{plan?.plan_short_description}</p>
-
-              <ul className="dg-feature-list list-unstyled d-inline-block text-start p-0">
-  {Array.isArray(softwareDetailData?.software_module) &&
-    softwareDetailData?.software_module.map((module, moduleIdx) => (
-      <li className="fs-sm" key={moduleIdx} style={{ display: moduleIdx < 4 || showMoreStates[idx] ? "block" : "none" }}>
-        {module?.additional_info === 0 ? (
-          <span className="me-2">
-            <i className="fas fa-check"></i>
-          </span>
-        ) : (
-          <span className="me-2">
-            <i className="fa-solid fa-circle-check" style={{ color: "red" }}></i>
-          </span>
-        )}
-        {module?.module_name}
-      </li>
-    ))}
-</ul>
-
-
-
-              <button
-                className="btn btn-link p-0 fs-sm "
-                onClick={() => toggleShowMore(idx)}
+                id="tabplan2"
+                role="tabpanel"
               >
-                {showMoreStates[idx] ? "See Less" : "See More"}
-              </button>
+                <div className="row g-4 justify-content-center">
+                  {Array.isArray(softwareDetailData?.software_plans) &&
+                    softwareDetailData?.software_plans.map(
+                      (plan, idx) =>
+                        plan?.plan_type?.plan_type_name === "Yearly" && (
+                          <div key={idx} className="col-xl-4 col-md-6">
+                            <div className="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
+                              <img
+                                src={`${
+                                  import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                                }/software-plan/${plan?.badge_icon}`}
+                                className="position-absolute top-0 offer-badge z-2"
+                              />
 
-              <div className="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
-                <h2 style={{ fontSize: "22px" }}>
-                  <span>₹ {plan?.plan_price}</span>
-                  <span className="ms-2 fs-md fw-normal">
-                    {plan?.plan_type?.duration_value} {plan?.plan_type?.duration_type}
-                  </span>
-                </h2>
-                <a href="#" className="btn dg-outline-btn rounded-pill">
-                  Purchase Now
-                </a>
-              </div>
-            </div>
-          </div>
-        )
-      )}
-  </div>
+                              <div className="icon-wrapper d-inline-block rounded-circle bg-white">
+                                <span className="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
+                                  <img
+                                    src={`${
+                                      import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                                    }/software-plan/${plan?.plan_icon}`}
+                                  />
+                                </span>
+                              </div>
+
+                              <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
+                              <p className="mb-4 fm">
+                                {plan?.plan_short_description}
+                              </p>
+
+                              <ul className="dg-feature-list list-unstyled d-inline-block text-start p-0">
+                                {Array.isArray(
+                                  softwareDetailData?.software_module
+                                ) &&
+                                  softwareDetailData?.software_module.map(
+                                    (module, moduleIdx) => (
+                                      <li
+                                        className="fs-sm"
+                                        key={moduleIdx}
+                                        style={{
+                                          display:
+                                            moduleIdx < 4 || showMoreStates[idx]
+                                              ? "block"
+                                              : "none",
+                                        }}
+                                      >
+                                        {module?.additional_info === 0 ? (
+                                          <span className="me-2">
+                                            <i className="fas fa-check"></i>
+                                          </span>
+                                        ) : (
+                                          <span className="me-2">
+                                            <i
+                                              className="fa-solid fa-circle-check"
+                                              style={{ color: "red" }}
+                                            ></i>
+                                          </span>
+                                        )}
+                                        {module?.module_name}
+                                      </li>
+                                    )
+                                  )}
+                              </ul>
+
+                              <button
+                                className="btn btn-link p-0 fs-sm "
+                                onClick={() => toggleShowMore(idx)}
+                              >
+                                {showMoreStates[idx] ? "See Less" : "See More"}
+                              </button>
+
+                              <div className="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
+                                <h2 style={{ fontSize: "22px" }}>
+                                  <span>₹ {plan?.plan_price}</span>
+                                  <span className="ms-2 fs-md fw-normal">
+                                    {plan?.plan_type?.duration_value}{" "}
+                                    {plan?.plan_type?.duration_type}
+                                  </span>
+                                </h2>
+                                <a
+                                  href="#"
+                                  className="btn dg-outline-btn rounded-pill"
+                                >
+                                  Purchase Now
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                    )}
                 </div>
               </div>
             </div>
-            <img
-              src="https://my.babvipsoftwares.com/site/assets/img/digital-agency/pr-doted.png"
-              alt="doted shape"
-              class="pr-doted position-absolute z--1"
-            />
           </div>
-        </section>
+          <img
+            src="https://my.babvipsoftwares.com/site/assets/img/digital-agency/pr-doted.png"
+            alt="doted shape"
+            class="pr-doted position-absolute z--1"
+          />
+        </div>
+      </section>
 
-        <section class="faq-section section-custom" id="faq">
-    <div class="container">
-        <div class="row justify-content-center">
+      <section class="faq-section section-custom" id="faq">
+        <div class="container">
+          <div class="row justify-content-center">
             <div class="col-lg-12 col-12">
-                <h4>Software Faq's:</h4>
-                <div class="accordion faq-accordion" id="accordionExample">
-                  {Array.isArray(softwareDetailData?.software_faq) && softwareDetailData?.software_faq.map((faq,faqIndex)=>
-                                                   <div key={faqIndex} class={`accordion-item border border-2 
-                                                   ${faqIndex === 0 && "active"}`}>
-                                                       <h5 class="accordion-header" >
-                                                           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${faqIndex}`} >
-                                                               {faq?.question}
-                                                           </button>
-                                                       </h5>
-                                                       <div id={`collapse-${faqIndex}`} class={`accordion-collapse collapse   
-                                                       ${faqIndex ===0 && "show"}`}  data-bs-parent="#accordionExample">
-                                                           <div class="accordion-body">
-                                                              {faq?.answer}
-                                                           </div>
-                                                       </div>
-                                                   </div>
-                  )}
-                           
-                
-                                        
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="bg-white section-custom" id="specification">
-    <div class="container custom-container">
-        <h4 class="custom-heading">Software Specification:</h4>
-        {Array.isArray(softwareDetailData?.software_specification) && softwareDetailData?.software_specification.map((spec,specIndex)=> 
-        <div key={specIndex} class="row justify-content-center custom-rowcontent">
-            <div class="col-md-3 custom-column-left">
-                <div class="row">
-                                        <div class="col-md-12 custom-item">{spec?.title}</div>
-                    
-                </div>
-            </div>
-                                    <div class="col-md-9 custom-column-right">
-
-                <div class="row">
-                    <div class="col-md-12 custom-faq-row">
-                    {Array.isArray(spec?.content?.step_data) && spec?.content?.step_data.map((step,stepIndex)=>
-                      <>
-                                                                        <img src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/software-images/${step?.step_image}`} alt=""/>
-                                                <div class="custom-faq-text">{step?.step_title}</div>
-                                                </>)}
-                                            </div>
-                </div>
-            </div>
-            
-        </div>
-        )}
-    </div>
-</section>
-
-<section class="faq-section section-custom" id="features">
-    <div class="container custom-container">
-        <h4 class="custom-heading">Software Features:</h4>
-        <div class="row justify-content-center">
-            
-        {Array.isArray(softwareDetailData?.software_feature) && softwareDetailData?.software_feature.map((feature,featureIndex)=>    <div key={featureIndex} class="col-md-12">
-                <h5>{feature?.feature_title}</h5>
-                <div class="row p-2">
-                                      {Array.isArray(feature?.feature_steps) && feature?.feature_steps.map((featureStep,featureStepIndex)=>    <div key={featureStepIndex} class="col-md-3"><i class="fa fa-check-circle custom-icon" aria-hidden="true"></i> {featureStep}</div>
-                                       )}
-                                    </div>
-            </div>
-          )}
+              <h4>Software Faq's:</h4>
+              <div class="accordion faq-accordion" id="accordionExample">
+                {Array.isArray(softwareDetailData?.software_faq) &&
+                  softwareDetailData?.software_faq.map((faq, faqIndex) => (
+                    <div
+                      key={faqIndex}
+                      class={`accordion-item border border-2 
+                                                   ${
+                                                     faqIndex === 0 && "active"
+                                                   }`}
+                    >
+                      <h5 class="accordion-header">
+                        <button
+                          class="accordion-button"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target={`#collapse-${faqIndex}`}
+                        >
+                          {faq?.question}
+                        </button>
+                      </h5>
+                      <div
+                        id={`collapse-${faqIndex}`}
+                        class={`accordion-collapse collapse   
+                                                       ${
+                                                         faqIndex === 0 &&
+                                                         "show"
+                                                       }`}
+                        data-bs-parent="#accordionExample"
+                      >
+                        <div class="accordion-body">{faq?.answer}</div>
+                      </div>
                     </div>
-    </div>
-</section>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<section class="feature-promo ptb-120" id="reviews">
+      <section class="bg-white section-custom" id="specification">
+        <div class="container custom-container">
+          <h4 class="custom-heading">Software Specification:</h4>
+          {Array.isArray(softwareDetailData?.software_specification) &&
+            softwareDetailData?.software_specification.map(
+              (spec, specIndex) => (
+                <div
+                  key={specIndex}
+                  class="row justify-content-center custom-rowcontent"
+                >
+                  <div class="col-md-3 custom-column-left">
+                    <div class="row">
+                      <div class="col-md-12 custom-item">{spec?.title}</div>
+                    </div>
+                  </div>
+                  <div class="col-md-9 custom-column-right">
+                    <div class="row">
+                      <div class="col-md-12 custom-faq-row">
+                        {Array.isArray(spec?.content?.step_data) &&
+                          spec?.content?.step_data.map((step, stepIndex) => (
+                            <>
+                              <img
+                                src={`${
+                                  import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                                }/software-images/${step?.step_image}`}
+                                alt=""
+                              />
+                              <div class="custom-faq-text">
+                                {step?.step_title}
+                              </div>
+                            </>
+                          ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            )}
+        </div>
+      </section>
+
+      <section class="faq-section section-custom" id="features">
+        <div class="container custom-container">
+          <h4 class="custom-heading">Software Features:</h4>
+          <div class="row justify-content-center">
+            {Array.isArray(softwareDetailData?.software_feature) &&
+              softwareDetailData?.software_feature.map(
+                (feature, featureIndex) => (
+                  <div key={featureIndex} class="col-md-12">
+                    <h5>{feature?.feature_title}</h5>
+                    <div class="row p-2">
+                      {Array.isArray(feature?.feature_steps) &&
+                        feature?.feature_steps.map(
+                          (featureStep, featureStepIndex) => (
+                            <div key={featureStepIndex} class="col-md-3">
+                              <i
+                                class="fa fa-check-circle custom-icon"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              {featureStep}
+                            </div>
+                          )
+                        )}
+                    </div>
+                  </div>
+                )
+              )}
+          </div>
+        </div>
+      </section>
+
+      <section class="feature-promo ptb-120" id="reviews">
         <div class="container">
           <div class="row mb-5">
             <div class="col-md-12">
@@ -1246,34 +1360,34 @@ const [activeImage, setActiveImage] = useState(null);
       </section>
 
       {showImageModal && (
-  <div
-    className="modal fade show d-block"
-    tabIndex="-1"
-    style={{
-      backgroundColor: "rgba(0,0,0,0.8)",
-      zIndex: 1050,
-    }}
-    onClick={() => setShowImageModal(false)}
-  >
-    <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
-      <div className="modal-content bg-transparent border-0">
-        <div className="modal-body text-center p-0">
-          <img
-            src={activeImage}
-            alt="Large View"
-            className="img-fluid rounded"
-            style={{ maxHeight: "90vh" }}
-          />
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          style={{
+            backgroundColor: "rgba(0,0,0,0.8)",
+            zIndex: 1050,
+          }}
+          onClick={() => setShowImageModal(false)}
+        >
+          <div
+            className="modal-dialog modal-dialog-centered"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-content bg-transparent border-0">
+              <div className="modal-body text-center p-0">
+                <img
+                  src={activeImage}
+                  alt="Large View"
+                  className="img-fluid rounded"
+                  style={{ maxHeight: "90vh" }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      
-      </div>
-    </div>
-  </div>
-)}
+      )}
 
-     
-
-      <ContactModal modalData={softwareDetailData}/>
+      <ContactModal modalData={softwareDetailData} />
     </>
   );
 };
