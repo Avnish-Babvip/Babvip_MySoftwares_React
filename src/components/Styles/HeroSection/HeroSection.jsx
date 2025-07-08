@@ -35,6 +35,10 @@ import Style33 from "./Style33";
 import Style34 from "./Style34";
 import Style35 from "./Style35";
 import Style36 from "./Style36";
+import Style37 from "./Style37";
+import Style38 from "./Style38";
+import Style39 from "./Style39";
+import Style40 from "./Style40";
 
 const HeroSection = ({ data, styleName }) => {
   const componentMap = {
@@ -74,6 +78,10 @@ const HeroSection = ({ data, styleName }) => {
     "Style 34": Style34,
     "Style 35": Style35,
     "Style 36": Style36,
+    "Style 37": Style37,
+    "Style 38": Style38,
+    "Style 39": Style39,
+    "Style 40": Style40,
   };
 
   const Component = componentMap[styleName];

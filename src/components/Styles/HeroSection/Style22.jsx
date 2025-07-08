@@ -11,9 +11,9 @@ const Style22 = ({ data }) => {
   return (
     <>
       <section
-        class="crm-hero ptb-120 position-relative overflow-hidden"
+        class="crm-hero ptb-custom-120 position-relative overflow-hidden"
         style={{
-          "background-image": `url('assets/img/shape/crm-hero-bg.png')`,
+          "background-image": `url('${assetRoute}/assets/img/shape/crm-hero-bg.png')`,
         }}
       >
         <img

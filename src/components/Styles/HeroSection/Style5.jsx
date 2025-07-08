@@ -26,7 +26,7 @@ const Style5 = ({ data }) => {
 
   return (
     <section
-      class="hero-section ptb-120 text-white bg-dark"
+      class="hero-section ptb-custom-120 text-white bg-dark"
       style={{
         background: `url(${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
           data?.banner_bg_image

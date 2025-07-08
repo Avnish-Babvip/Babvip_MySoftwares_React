@@ -29,7 +29,7 @@ const Style2 = ({ data }) => {
   return (
     <>
       <section
-        class="hero-section ptb-120 text-white bg-gradient"
+        class="hero-section ptb-custom-120 text-white bg-gradient"
         style={{
           background: `url('${assetRoute}/assets/img/hero-dot-bg.png')no-repeat center right`,
         }}

@@ -69,6 +69,19 @@ const Style3 = ({ data }) => {
               <h2 className="mb-0 clr-text">{data?.title}</h2>
             </div>
           </div>
+          {data?.button_text && (
+            <div class="col-lg-4 align-self-end">
+              <div class="text-center text-lg-end mt-40 mt-lg-0">
+                <Link
+                  to={data?.button_url}
+                  target="_blank"
+                  class="btn dg-outline-btn rounded-pill"
+                >
+                  {data?.button_text}
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Swiper Slider */}
@@ -98,6 +111,9 @@ const Style3 = ({ data }) => {
                   <div>
                     <h5 className="mt-3 mb-4">{item.step_title}</h5>
                   </div>
+                  <a class="read-more-link text-decoration-none">
+                    Explore More <i class="fas fa-arrow-right ms-2"></i>
+                  </a>
                 </div>
               </Link>
             ))}

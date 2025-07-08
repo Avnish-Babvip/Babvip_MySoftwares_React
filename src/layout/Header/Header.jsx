@@ -72,7 +72,7 @@ const Header = () => {
           </Link>
           {/* Hamburger */}
           <div
-            class="navbar-toggler position-absolute right-0 border-0"
+            class="navbar-toggler position-absolute  right-0 border-0"
             role="button"
           >
             <i

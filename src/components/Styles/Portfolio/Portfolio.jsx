@@ -12,6 +12,7 @@ import Style9 from "./Style9";
 import Style10 from "./Style10";
 import Style11 from "./Style11";
 import Style12 from "./Style12";
+import Style13 from "./Style13";
 
 const Portfolio = ({ data, styleName }) => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const Portfolio = ({ data, styleName }) => {
     "Style 10": Style10,
     "Style 11": Style11,
     "Style 12": Style12,
+    "Style 13": Style13,
   };
 
   const Component = componentMap[styleName];

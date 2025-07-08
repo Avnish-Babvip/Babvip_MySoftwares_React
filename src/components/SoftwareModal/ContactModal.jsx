@@ -14,7 +14,9 @@ const ContactModal = ({ modalData }) => {
   const { countryData, stateData, cityData } = useSelector(
     (state) => state.countryStateCity
   );
-  const { isLoading } = useSelector((state) => state.submission);
+  const { isLoading, addContactDetailsStatus } = useSelector(
+    (state) => state.submission
+  );
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
@@ -23,6 +25,7 @@ const ContactModal = ({ modalData }) => {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -34,6 +37,12 @@ const ContactModal = ({ modalData }) => {
   useEffect(() => {
     dispatch(getAllCountries());
   }, []);
+  useEffect(() => {
+    console.log(addContactDetailsStatus);
+    if (addContactDetailsStatus) {
+      reset();
+    }
+  }, [addContactDetailsStatus]);
 
   return (
     <div className="modal fade bs-example-modal-xl" id="btn-enquiry-1">

@@ -24,7 +24,7 @@ const Style8 = ({ data }) => {
                         item?.step_image
                       }`}
                       alt={item?.step_image_icon_alt_tag}
-                      className="object-fit-contain p-0"
+                      className=" object-fit-contain p-0"
                     />
                   </div>
                   <div class="feature-content">

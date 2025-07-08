@@ -22,6 +22,22 @@ export const getLatestThreeBlogs = createAsyncThunk(
   }
 );
 
+// Fetch three Blogs
+export const getLatestTwoBlogs = createAsyncThunk(
+  "/site/twoblogs",
+  async (_, { rejectWithValue }) => {
+    try {
+        const {data} = await instance.get(`/site/twoblogs`, {
+            withCredentials: false,
+            headers: headers
+          });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message || "Failed to fetch blogs.");
+    }
+  }
+);
+
 //Fetch 11 blogs in one page
 export const getPaginateBlogs = createAsyncThunk(
   "site/paginateBlogs",

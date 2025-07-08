@@ -12,7 +12,7 @@ const Style1 = ({ data }) => {
   }, []);
 
   return (
-    <section class="home-blog-section ptb-60 bg-light-subtle">
+    <section class="home-blog-section ptb-120 bg-light-subtle">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-6 col-md-10">

@@ -15,6 +15,7 @@ const formattedDate = new Date().toLocaleString("en-US", {
 const initialState = {
   isLoading: false,
   errorMessage: "",
+  addContactDetailsStatus: false,
 };
 
 
@@ -42,8 +43,8 @@ const initialState = {
       })
       .addCase(addContactDetails.rejected, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = false;
         state.errorMessage = action.payload || "Failed to fetch head menu.";
+        
         toast("Submission is failed. Please try again", {
             description: formattedDate,
           });
@@ -92,10 +93,14 @@ const initialState = {
       .addCase(addCustomerLeads.pending, (state) => {
         state.isLoading = true;
         state.errorMessage = "";
+         state.addContactDetailsStatus= false;
+
       })
       .addCase(addCustomerLeads.fulfilled, (state, action) => {
         state.isLoading = false;
         state.errorMessage = "";
+                state.addContactDetailsStatus= true;
+
         console.log(action.payload )  
         toast(action.payload.status == 409 ? action.payload.message : "Your form has been submitted.", {
             description: formattedDate,
@@ -104,7 +109,8 @@ const initialState = {
       })
       .addCase(addCustomerLeads.rejected, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = false;
+                 state.addContactDetailsStatus= false;
+
         state.errorMessage = action.payload || "Failed to fetch customer leads.";
         toast("Failed to submit the form. Please try again", {
             description: formattedDate,

@@ -9,15 +9,15 @@ const Style31 = ({ data }) => {
   }`;
   return (
     <>
-      <div class="rm-hero pt-120 pb-120 position-relative overflow-hidden">
+      <div class="rm-hero pt-100 pb-120 position-relative overflow-hidden">
         <div class="container">
           <div class="position-relative">
             <div class="row align-items-center justify-content-between">
               <div class="col-lg-6">
                 <h1 class="rm-hero-title text-white fs-72 fw-800 ff-risk-pri mb-20">
-                  {" "}
                   {data?.banner_title1}
-                  <span class="risk-gd-text">{data?.banner_title2}</span> <br />
+                  <span class="risk-gd-text"> {data?.banner_title2}</span>{" "}
+                  <br />
                   <span class="text-ind">{data?.banner_title3}</span>{" "}
                   <span>
                     <img

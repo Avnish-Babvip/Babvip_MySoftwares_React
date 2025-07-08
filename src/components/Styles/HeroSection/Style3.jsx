@@ -21,7 +21,7 @@ const Style3 = ({ data }) => {
   return (
     <>
       <section
-        class="hero-section ptb-120 position-relative overflow-hidden"
+        class="hero-section ptb-custom-120 position-relative overflow-hidden"
         style={{
           background: `url(${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
             data?.banner_bg_image

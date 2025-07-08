@@ -1,5 +1,4 @@
 import React from "react";
-import SubscribeForm from "../../SubscribeForm/SubscribeForm";
 
 const Style3 = ({ data }) => {
   const assetRoute = `${
@@ -17,7 +16,27 @@ const Style3 = ({ data }) => {
                 <h2>{data?.title}</h2>
                 <p>{data?.description}</p>
                 <div class="form-block-banner mt-5">
-                  <SubscribeForm buttonText="Join!" />
+                  <form
+                    id="email-form"
+                    name="email-form"
+                    class="subscribe-form d-flex"
+                  >
+                    <input
+                      type="email"
+                      class="form-control me-2"
+                      name="Email"
+                      data-name="Email"
+                      placeholder="Your email"
+                      id="Email"
+                      required=""
+                    />
+                    <input
+                      type="submit"
+                      value="Join!"
+                      data-wait="Please wait..."
+                      class="btn btn-primary"
+                    />
+                  </form>
                 </div>
               </div>
             </div>

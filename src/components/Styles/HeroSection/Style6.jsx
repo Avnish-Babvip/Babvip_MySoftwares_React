@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Style6 = ({ data }) => {
   return (
     <section
-      class="hero-section ptb-120  d-flex align-items-center bg-dark text-white position-relative overflow-hidden"
+      class="hero-section ptb-custom-120  d-flex align-items-center bg-dark text-white position-relative overflow-hidden"
       style={{
         background: `url(${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
           data?.banner_bg_image

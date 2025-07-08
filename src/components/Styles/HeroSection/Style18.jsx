@@ -11,7 +11,7 @@ const Style18 = ({ data }) => {
   const [showVideo, setShowVideo] = useState(false);
   return (
     <>
-      <section class="digi-hero ptb-120">
+      <section class="digi-hero ptb-custom-120">
         <div class="container">
           <div class="row align-items-center">
             <div class="col-lg-5 col-md-6">

@@ -141,7 +141,7 @@ const Style1 = ({ data }) => {
                   </div>
                   <div class="col-sm-6 mb-3">
                     <label for="phone" class="mb-1">
-                      Phone <span class="text-danger">*</span>
+                      Phone Number <span class="text-danger">*</span>
                     </label>
                     <div class="input-group ">
                       <input
@@ -153,7 +153,7 @@ const Style1 = ({ data }) => {
                         class="form-control"
                         id="phone"
                         required=""
-                        placeholder="Phone"
+                        placeholder="Phone Number"
                         aria-label="Phone"
                         name="phone"
                       />

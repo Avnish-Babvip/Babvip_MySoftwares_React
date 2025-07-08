@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
@@ -8,9 +8,8 @@ export default defineConfig({
   },
 });
 
-
-// import { defineConfig } from 'vite'; 
-// import react from '@vitejs/plugin-react';
+// import { defineConfig } from "vite";
+// import react from "@vitejs/plugin-react";
 
 // export default defineConfig({
 //   plugins: [react()],
@@ -21,5 +20,5 @@ export default defineConfig({
 //   build: {
 //     outDir: "public/react", // 👈 Output build files to Laravel's public/react/
 //     emptyOutDir: true, // Clean old files before building
-//   }
+//   },
 // });

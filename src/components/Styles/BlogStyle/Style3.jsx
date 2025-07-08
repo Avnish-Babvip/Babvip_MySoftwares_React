@@ -21,7 +21,7 @@ const Style3 = ({ data }) => {
   };
 
   return (
-    <section class="related-blog-list ptb-80 bg-light-subtle">
+    <section class="related-blog-list ptb-120 bg-light-subtle">
       <div class="container">
         <div class="row align-items-center justify-content-between">
           <div class="">

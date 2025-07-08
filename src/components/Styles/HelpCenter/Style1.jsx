@@ -19,7 +19,7 @@ const Style1 = ({ data }) => {
   return (
     <>
       <section
-        class="page-header position-relative overflow-hidden ptb-120 bg-dark"
+        class="page-header position-relative overflow-hidden pt-100 pb-40 bg-dark"
         style={{
           background: `url(${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
             data?.banner_bg_image

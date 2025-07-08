@@ -131,7 +131,7 @@ const Style3 = ({ data }) => {
                         })}
                         type="text"
                         class="form-control"
-                        placeholder="Phone"
+                        placeholder="Phone Number"
                       />
                     </div>
                     {errors.phone && (
@@ -174,7 +174,10 @@ const Style3 = ({ data }) => {
                     )}
                   </div>
                   <div class="col-3">
-                    <button class="mt-4 btn rounded-pill bg-orange">
+                    <button
+                      disabled={isLoading}
+                      class="mt-4 btn rounded-pill bg-orange"
+                    >
                       {isLoading ? <ButtonLoader /> : "Get in Touch"}
                     </button>
                   </div>

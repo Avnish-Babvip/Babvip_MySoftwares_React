@@ -21,9 +21,12 @@ const Style3 = ({ data }) => {
               >
                 {data?.step_data?.map((item, idx) => (
                   <li>
-                    <div class="icon-box">
-                      <i class="fas fa-users text-white bg-primary rounded"></i>
-                    </div>
+                    <img
+                      src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
+                        item?.step_image
+                      }`}
+                      alt={item?.step_image_icon_alt_tag}
+                    />
                     <h3 class="h5">{item?.step_title}</h3>
                     <p>{item?.step_description}</p>
                   </li>

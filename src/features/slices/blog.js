@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getDetailBlogBySlug, getLatestThreeBlogs, getPaginateBlogs } from "../actions/blog";
+import { getDetailBlogBySlug, getLatestThreeBlogs, getLatestTwoBlogs, getPaginateBlogs } from "../actions/blog";
 
 
 const initialState = {
   isLoading: false,
   blogData: [],
   latestBlogData: [],
+  twoBlogData: [],
   detailBlogData:{},
   errorMessage: "",
 };
@@ -29,6 +30,21 @@ const initialState = {
         state.latestBlogData = action.payload.data; 
       })
       .addCase(getLatestThreeBlogs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.errorMessage = action.payload || "Failed to fetch blog data.";
+      })
+   
+      .addCase(getLatestTwoBlogs.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(getLatestTwoBlogs.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        state.twoBlogData = action.payload.data; 
+      })
+      .addCase(getLatestTwoBlogs.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.errorMessage = action.payload || "Failed to fetch blog data.";
