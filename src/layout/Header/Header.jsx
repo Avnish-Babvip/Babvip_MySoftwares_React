@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { customerLogout } from "../../features/actions/authentication";
@@ -9,7 +9,7 @@ const Header = () => {
       ? import.meta.env.VITE_ASSETS
       : ""
   }`;
-
+  const profileDropdownRef = useRef(null);
   const dispatch = useDispatch();
   const { customer } = useSelector((state) => state.dashboard.profileData);
 
@@ -21,6 +21,23 @@ const Header = () => {
   const { siteSetting } = useSelector(
     (state) => state.siteSettings.siteSettingsData
   );
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Function to close offcanvas menu on link click
   const closeOffcanvas = () => {
@@ -331,8 +348,7 @@ const Header = () => {
                             </div>
                           </Link>
                           <Link
-                            target="_blank"
-                            to={"https://my.babvipsoftwares.com/dealer/login"}
+                            to={"login/dealer"}
                             className="col-md-6 "
                             onClick={() => setActiveDropdown2(null)}
                             style={{ cursor: "pointer" }}
@@ -383,7 +399,10 @@ const Header = () => {
             </ul>
           </div>
           {isUserLoggedIn && (
-            <div className="position-relative d-none d-xl-block">
+            <div
+              className="position-relative d-none d-xl-block"
+              ref={profileDropdownRef}
+            >
               <div
                 className="d-flex align-items-center gap-2"
                 style={{ cursor: "pointer" }}
@@ -582,8 +601,7 @@ const Header = () => {
                         </div>
                       </Link>
                       <Link
-                        to={"https://my.babvipsoftwares.com/dealer/login"}
-                        target="_blank"
+                        to={"login/dealer"}
                         onClick={closeOffcanvas} // Close offcanvas on click
                         class="dropdown-link"
                       >

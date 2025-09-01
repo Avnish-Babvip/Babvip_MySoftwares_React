@@ -18,6 +18,7 @@ import countryStateCity from "./slices/countryStateCity";
 import authentication from "./slices/authentication";
 import dashboard from "./slices/dashboard";
 import privacy from "./slices/privacy";
+import references from "./slices/references";
 
 const rootReducer = combineReducers({
   headMenu,
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   authentication,
   dashboard,
   privacy,
+  references,
 });
 
 // Redux-persist configuration

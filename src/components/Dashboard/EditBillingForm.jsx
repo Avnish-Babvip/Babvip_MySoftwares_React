@@ -10,7 +10,7 @@ import ButtonLoader from "../Loader/ButtonLoader";
 import { updateProfileDashboard } from "../../features/actions/dashboard";
 import { Card } from "react-bootstrap";
 
-const EditProfileModal = () => {
+const EditBillingForm = () => {
   const dispatch = useDispatch();
   const { countryData, stateData, cityData } = useSelector(
     (state) => state.countryStateCity
@@ -59,8 +59,9 @@ const EditProfileModal = () => {
   }, []);
 
   return (
-    <Card className="px-4 py-4">
-      <form id="customer-lead-form" onSubmit={handleSubmit(onSubmit)}>
+    <Card className="px-4 py-3 mb-3">
+      <h6 className="pb-2">Billing Information</h6>
+      <form id="customer-lead-form " onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <div className="col-md-6">
             <div className="mb-3">
@@ -252,4 +253,4 @@ const EditProfileModal = () => {
   );
 };
 
-export default EditProfileModal;
+export default EditBillingForm;

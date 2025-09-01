@@ -8,13 +8,21 @@ import Loader from "../components/Loader/Loader";
 import Category from "../pages/Category";
 import Software from "../pages/Software";
 import Dashboard from "../pages/Dashboard/Dashboard";
-import Payment from "../pages/Dashboard/Payment";
-import MySoftware from "../pages/Dashboard/MySoftware";
-import Profile from "../pages/Dashboard/Profile";
+import DealerDashboard from "../pages/DealerDashboard/Dashboard";
 import Login from "../pages/Authentication/Login";
 import ForgotPassword from "../pages/Authentication/ForgotPassword";
 import ChangePassword from "../pages/Authentication/ChangePassword";
 import DashboardChangePassword from "../pages/Dashboard/DashboardChangePassword";
+import DealerLogin from "../pages/DealerAuthentication/DealerLogin";
+import DealerSignUp from "../pages/DealerAuthentication/DealerSignUp";
+import DealerProfile from "../pages/DealerDashboard/DealerProfile";
+import DynamicLeads from "../pages/DealerDashboard/Leads/DynamicLeads";
+import CustomersTable from "../pages/DealerDashboard/ManageCustomers/CustomersTable";
+import AddOns from "../pages/Dashboard/Addons";
+import ProfileTab from "../pages/Dashboard/AccountCenterTabData/ProfileTab";
+import BillingTab from "../pages/Dashboard/AccountCenterTabData/BillingTab";
+import ProductTab from "../pages/Dashboard/AccountCenterTabData/ProductTab";
+import SecurityTab from "../pages/Dashboard/AccountCenterTabData/SecurityTab";
 
 // Lazy Loading 😴
 const Blog = lazy(() => import("../pages/Blog"));
@@ -53,7 +61,15 @@ export const appRouter = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/login/password-reset", // 👈 separate route
+        path: "/login/dealer", // 👈 separate route
+        element: <DealerLogin />,
+      },
+      {
+        path: "/signUp/dealer", // 👈 separate route
+        element: <DealerSignUp />,
+      },
+      {
+        path: "/login/customer/password-reset", // 👈 separate route
         element: <ForgotPassword />,
       },
       {
@@ -65,22 +81,57 @@ export const appRouter = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "/customer/myProducts", // 👈 separate dashboard routes
-        element: <MySoftware />,
-      },
-      {
-        path: "/customer/payment", // 👈 separate dashboard routes
-        element: <Payment />,
-      },
-      {
         path: "/customer/profile", // 👈 separate dashboard routes
-        element: <Profile />,
+        element: <ProfileTab />,
+      },
+      {
+        path: "/customer/billing", // 👈 separate dashboard routes
+        element: <BillingTab />,
+      },
+      {
+        path: "/customer/products", // 👈 separate dashboard routes
+        element: <ProductTab />,
+      },
+      {
+        path: "/customer/security", // 👈 separate dashboard routes
+        element: <SecurityTab />,
+      },
+      {
+        path: "/customer/add-ons", // 👈 separate dashboard routes
+        element: <AddOns />,
       },
       {
         path: "/customer/changePassword", // 👈 separate dashboard routes
         element: <DashboardChangePassword />,
       },
-
+      {
+        path: "/dealer/dashboard", // 👈 separate dealer dashboard routes
+        element: <DealerDashboard />,
+      },
+      {
+        path: "/dealer/profile", // 👈 separate dealer dashboard routes
+        element: <DealerProfile />,
+      },
+      {
+        path: "/dealer/leads/new", // 👈 separate dealer dashboard routes
+        element: <DynamicLeads />,
+      },
+      {
+        path: "/dealer/leads/progress", // 👈 separate dealer dashboard routes
+        element: <DynamicLeads />,
+      },
+      {
+        path: "/dealer/leads/pending", // 👈 separate dealer dashboard routes
+        element: <DynamicLeads />,
+      },
+      {
+        path: "/dealer/leads/rejected", // 👈 separate dealer dashboard routes
+        element: <DynamicLeads />,
+      },
+      {
+        path: "/dealer/customers/all", // 👈 separate dealer dashboard routes
+        element: <CustomersTable />,
+      },
       {
         path: "/blog/:slug",
         element: (

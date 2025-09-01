@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ButtonLoader from "../../components/Loader/ButtonLoader";
 import { resetForgotPasswordState } from "../../features/slices/authentication";
 
-const Login = () => {
+const DealerLogin = () => {
   const assetRoute = `${
     import.meta.env.VITE_PRODUCTION === "true"
       ? import.meta.env.VITE_ASSETS
@@ -32,7 +32,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    isUserLoggedIn && navigate("/customer/dashboard");
+    isUserLoggedIn && navigate("/dealer/dashboard");
   }, [isUserLoggedIn]);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const Login = () => {
                   <div class="row">
                     <div class="col-sm-12 mb-3 ">
                       <label for="customer_id" class="mb-1">
-                        Customer Id <span class="text-danger">*</span>
+                        Dealer Id <span class="text-danger">*</span>
                       </label>
                       <div class="input-group ">
                         <input
@@ -138,10 +138,12 @@ const Login = () => {
                   </div>
                   <p class="font-monospace fw-medium text-center text-muted mt-3 pt-4 mb-0">
                     Don’t have an account?{" "}
-                    <Link class="text-decoration-none">Sign up Today</Link>
+                    <Link to={"/signUp/dealer"} class="text-decoration-none">
+                      Sign up Today
+                    </Link>
                     <br />
                     <Link
-                      to={"/login/customer/password-reset"}
+                      to={"/login/dealer/password-reset"}
                       class="text-decoration-none"
                     >
                       Forgot password
@@ -157,4 +159,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default DealerLogin;

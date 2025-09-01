@@ -1,16 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "sonner";
-import { changePasswordDashboard, getDashboardData, getProfileData, updateProfileDashboard, updateProfilePhotoDashboard } from "../actions/dashboard";
-  
+import {
+  changePasswordDashboard,
+  getDashboardData,
+  getProfileData,
+  updateProfileDashboard,
+  updateProfilePhotoDashboard,
+} from "../actions/dashboard";
 
 const initialState = {
   isLoading: false,
   isImageLoading: false,
-  isUserLoggedIn:false,
+  isUserLoggedIn: false,
   dashboardData: {},
-  profileData:{},
+  profileData: {},
   errorMessage: "",
-  updateResponse:{}
+  updateResponse: {},
 };
 
 const formattedDate = new Date().toLocaleString("en-US", {
@@ -23,10 +28,9 @@ const formattedDate = new Date().toLocaleString("en-US", {
   hour12: true,
 });
 
-
 // ---------------------------------------------------------------------------------------
 
- const dashboardSlice = createSlice({
+const dashboardSlice = createSlice({
   name: "dashboardSlice",
   initialState,
   reducers: {
@@ -36,7 +40,7 @@ const formattedDate = new Date().toLocaleString("en-US", {
   },
   extraReducers: (builder) => {
     builder
-      
+
       .addCase(getDashboardData.pending, (state) => {
         state.isLoading = true;
         state.errorMessage = "";
@@ -44,24 +48,18 @@ const formattedDate = new Date().toLocaleString("en-US", {
       .addCase(getDashboardData.fulfilled, (state, action) => {
         state.isLoading = false;
         state.errorMessage = "";
-        state.dashboardData= action.payload.data
-
+        state.dashboardData = action.payload.data;
       })
       .addCase(getDashboardData.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
-
       })
       .addCase(getProfileData.pending, (state) => {
-      
         state.errorMessage = "";
       })
       .addCase(getProfileData.fulfilled, (state, action) => {
-  
         state.errorMessage = "";
-        state.profileData= action.payload.data
-
-
+        state.profileData = action.payload.data;
       })
       .addCase(getProfileData.rejected, (state, action) => {
         state.errorMessage = action.payload;
@@ -74,16 +72,15 @@ const formattedDate = new Date().toLocaleString("en-US", {
         state.isLoading = false;
         state.errorMessage = "";
         toast("Password changed successfully.", {
-                    description: formattedDate,
-                  });
+          description: formattedDate,
+        });
       })
       .addCase(changePasswordDashboard.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
         toast(action.payload, {
-                    description: formattedDate,
-                  });
-
+          description: formattedDate,
+        });
       })
       .addCase(updateProfileDashboard.pending, (state) => {
         state.isLoading = true;
@@ -92,19 +89,17 @@ const formattedDate = new Date().toLocaleString("en-US", {
       .addCase(updateProfileDashboard.fulfilled, (state, action) => {
         state.isLoading = false;
         state.errorMessage = "";
-        state.updateResponse= action.payload
+        state.updateResponse = action.payload;
         toast("Profile updated successfully.", {
-                    description: formattedDate,
-                  });
-        
+          description: formattedDate,
+        });
       })
       .addCase(updateProfileDashboard.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
         toast(action.payload, {
-                    description: formattedDate,
-                  });
-
+          description: formattedDate,
+        });
       })
       .addCase(updateProfilePhotoDashboard.pending, (state) => {
         state.isImageLoading = true;
@@ -113,27 +108,23 @@ const formattedDate = new Date().toLocaleString("en-US", {
       .addCase(updateProfilePhotoDashboard.fulfilled, (state, action) => {
         state.isImageLoading = false;
         state.errorMessage = "";
-        state.updateResponse= action.payload
+        state.updateResponse = action.payload;
         toast("Profile photo updated successfully.", {
-                    description: formattedDate,
-                  });
-        
+          description: formattedDate,
+        });
       })
       .addCase(updateProfilePhotoDashboard.rejected, (state, action) => {
         state.isImageLoading = false;
         state.errorMessage = action.payload;
         toast(action.payload, {
-                    description: formattedDate,
-                  });
-
-      })
-      
-
+          description: formattedDate,
+        });
+      });
   },
 });
 
 // -------------------------------------------------------------------------
 
 // Action creators are generated for each case reducer function
-export const {resetUpdateResponse} = dashboardSlice.actions;
+export const { resetUpdateResponse } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

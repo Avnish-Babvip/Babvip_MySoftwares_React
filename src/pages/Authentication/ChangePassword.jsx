@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ButtonLoader from "../../components/Loader/ButtonLoader";
 import { changePassword } from "../../features/actions/authentication";
+import { resetErrorMessage } from "../../features/slices/authentication";
 
 const ChangePassword = () => {
   const assetRoute = `${
@@ -47,6 +48,10 @@ const ChangePassword = () => {
     isPasswordChanged && navigate("/login/customer");
   }, [isPasswordChanged]);
 
+  useEffect(() => {
+    dispatch(resetErrorMessage());
+  }, []);
+
   return (
     <>
       <section
@@ -68,7 +73,7 @@ const ChangePassword = () => {
                 />
               </a>
               <div class="register-wrap p-5 bg-light-subtle shadow rounded-custom">
-                <h1 class="h3">Reset Password</h1>
+                <h1 class="h3">Change Password</h1>
                 <p class="text-muted">Please enter your new password.</p>
 
                 <form
