@@ -9,10 +9,16 @@ import { HelmetProvider } from "react-helmet-async";
 import Loader from "./components/Loader/Loader";
 import { Toaster } from "sonner";
 import { getAllSiteSettings } from "./features/actions/siteSettings";
+import { getCustomerCartData } from "./features/actions/cart";
+import { clearCredentialResponse } from "./features/slices/cart";
 
 function App() {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.siteSettings);
+
+  const { customerData, isUserLoggedIn } = useSelector(
+    (state) => state.authentication
+  );
   const { siteSetting } = useSelector(
     (state) => state.siteSettings.siteSettingsData
   );
@@ -43,6 +49,10 @@ function App() {
       document.head.innerHTML += siteSetting?.setting_data?.header_script;
     }
   }, [siteSetting]);
+
+  useEffect(() => {
+    dispatch(clearCredentialResponse());
+  });
 
   useEffect(() => {
     if (siteSetting?.setting_data?.footer_script) {
@@ -87,7 +97,11 @@ function App() {
   //   };
   // }, []);
 
-  console.log(isLoading);
+  useEffect(() => {
+    if (isUserLoggedIn) {
+      dispatch(getCustomerCartData(customerData?.login_token));
+    }
+  }, [isUserLoggedIn]);
 
   return (
     <HelmetProvider>

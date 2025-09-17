@@ -9,12 +9,19 @@ import { getSoftwareDataBySlug } from "../features/actions/category";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import ContactModal from "../components/SoftwareModal/ContactModal";
+import { IoCart } from "react-icons/io5";
+import { addToCart, getCustomerCartData } from "../features/actions/cart";
 
 const Software = () => {
   const swiperRef = useRef(null);
   const [showMoreStates, setShowMoreStates] = useState({});
 
   const [activeSection, setActiveSection] = useState("");
+
+  const { customerData, isUserLoggedIn } = useSelector(
+    (state) => state.authentication
+  );
+  const { updateResponse } = useSelector((state) => state.cart);
 
   const toggleShowMore = (idx) => {
     setShowMoreStates((prevState) => ({
@@ -35,10 +42,29 @@ const Software = () => {
     mainSwiperRef.current?.slideTo(index);
   };
 
+  const handleAddToCart = (plan_id) =>
+    dispatch(
+      addToCart({
+        software_id: softwareDetailData?.id,
+        plan_id,
+        loginToken: customerData?.login_token,
+      })
+    );
+
   const [showImageModal, setShowImageModal] = useState(false);
   const [activeImage, setActiveImage] = useState(null);
 
   const [isSticky, setIsSticky] = useState(false);
+
+  const scrollToPricing = (e) => {
+    e.preventDefault();
+    const section = document.getElementById("pricing");
+    if (section) {
+      const yOffset = -80; // adjust offset for sticky header
+      const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     dispatch(getSoftwareDataBySlug(slug));
@@ -79,6 +105,12 @@ const Software = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (updateResponse?.status) {
+      dispatch(getCustomerCartData(customerData?.login_token));
+    }
+  }, [updateResponse]);
 
   useEffect(() => {
     const swiperInstance = new Swiper2(".testimonialSwiperreview", {
@@ -140,9 +172,6 @@ const Software = () => {
             display: inline-block;
         }
 
-
-  
-     /* Styling pagination */
     .circle-badge {
         position: absolute;
         top: -2px;
@@ -528,25 +557,36 @@ const Software = () => {
               <p className="mt-3">{softwareDetailData?.short_description}</p>
 
               {/* Buttons */}
-              <div className="mt-4 d-flex justify-content-center d-sm-block">
-                <button
-                  type="button"
-                  className="btn btn-primary me-2"
-                  data-bs-toggle="modal"
-                  data-bs-target=".bs-example-modal-xl"
-                >
-                  Get a Free Demo <i className="fa fa-handshake"></i>
-                </button>
+              {!isUserLoggedIn ? (
+                <div className="mt-4 d-flex justify-content-center d-sm-block">
+                  <button
+                    type="button"
+                    className="btn btn-primary me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target=".bs-example-modal-xl"
+                  >
+                    Get a Free Demo <i className="fa fa-handshake"></i>
+                  </button>
 
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  data-bs-toggle="modal"
-                  data-bs-target=".bs-example-modal-xl"
-                >
-                  Enquire Now
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target=".bs-example-modal-xl"
+                  >
+                    Enquire Now
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-4 d-flex justify-content-center d-sm-block">
+                  <button
+                    onClick={scrollToPricing}
+                    className="btn btn-success me-2 d-flex gap-3 align-items-center"
+                  >
+                    Add to cart <IoCart size={20} />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -788,12 +828,12 @@ const Software = () => {
                                     {plan?.plan_type?.duration_type}
                                   </span>
                                 </h2>
-                                <a
-                                  href="#"
+                                <button
+                                  onClick={() => handleAddToCart(plan?.id)}
                                   className="btn dg-outline-btn rounded-pill"
                                 >
                                   Purchase Now
-                                </a>
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -885,12 +925,12 @@ const Software = () => {
                                     {plan?.plan_type?.duration_type}
                                   </span>
                                 </h2>
-                                <a
-                                  href="#"
+                                <button
+                                  onClick={() => handleAddToCart(plan?.id)}
                                   className="btn dg-outline-btn rounded-pill"
                                 >
                                   Purchase Now
-                                </a>
+                                </button>
                               </div>
                             </div>
                           </div>

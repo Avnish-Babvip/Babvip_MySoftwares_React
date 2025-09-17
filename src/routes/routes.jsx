@@ -23,6 +23,8 @@ import ProfileTab from "../pages/Dashboard/AccountCenterTabData/ProfileTab";
 import BillingTab from "../pages/Dashboard/AccountCenterTabData/BillingTab";
 import ProductTab from "../pages/Dashboard/AccountCenterTabData/ProductTab";
 import SecurityTab from "../pages/Dashboard/AccountCenterTabData/SecurityTab";
+import CheckoutPage from "../pages/Dashboard/Checkout";
+import PaymentStatus from "../pages/Dashboard/PaymentStatus";
 
 // Lazy Loading 😴
 const Blog = lazy(() => import("../pages/Blog"));
@@ -81,6 +83,10 @@ export const appRouter = createBrowserRouter([
         element: <Dashboard />,
       },
       {
+        path: "/customer/checkout", // 👈 separate dashboard routes
+        element: <CheckoutPage />,
+      },
+      {
         path: "/customer/profile", // 👈 separate dashboard routes
         element: <ProfileTab />,
       },
@@ -99,6 +105,10 @@ export const appRouter = createBrowserRouter([
       {
         path: "/customer/add-ons", // 👈 separate dashboard routes
         element: <AddOns />,
+      },
+      {
+        path: "/payment-status/redirect", // 👈 separate dashboard routes
+        element: <PaymentStatus />,
       },
       {
         path: "/customer/changePassword", // 👈 separate dashboard routes

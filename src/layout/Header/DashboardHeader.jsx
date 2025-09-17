@@ -2,12 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { customerLogout } from "../../features/actions/authentication";
-import { FiShoppingCart } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa";
-import { MdPayment, MdVpnKey } from "react-icons/md";
+import { MdDelete, MdPayment, MdVpnKey } from "react-icons/md";
 import { RiBox3Fill } from "react-icons/ri";
 import { LuLogOut } from "react-icons/lu";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { FaCartShopping } from "react-icons/fa6";
 
 const DashboardHeader = ({ onHamburgerClick }) => {
   const assetRoute = `${
@@ -15,24 +15,51 @@ const DashboardHeader = ({ onHamburgerClick }) => {
       ? import.meta.env.VITE_ASSETS
       : ""
   }`;
-
   const dispatch = useDispatch();
   const { customer } = useSelector((state) => state.dashboard.profileData);
+  const { cartData } = useSelector((state) => state.cart);
   const { customerData } = useSelector((state) => state.authentication);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
   const dropdownRef = useRef();
-  const cartRef = useRef();
 
-  // Close dropdowns on outside click
+  const [desktopCartOpen, setDesktopCartOpen] = useState(false);
+  const [mobileCartOpen, setMobileCartOpen] = useState(false);
+
+  const desktopCartRef = useRef(null);
+  const mobileCartRef = useRef(null);
+
+  const cartTotalPrice = cartData.reduce(
+    (acc, cart) => acc + Number(cart?.plan?.plan_price || 0),
+    0
+  );
+
+  function useOutsideClick(ref, handler) {
+    useEffect(() => {
+      const listener = (event) => {
+        if (!ref.current || ref.current.contains(event.target)) {
+          return;
+        }
+        handler();
+      };
+
+      document.addEventListener("mousedown", listener);
+      document.addEventListener("touchstart", listener);
+
+      return () => {
+        document.removeEventListener("mousedown", listener);
+        document.removeEventListener("touchstart", listener);
+      };
+    }, [ref, handler]);
+  }
+
+  useOutsideClick(desktopCartRef, () => setDesktopCartOpen(false));
+  useOutsideClick(mobileCartRef, () => setMobileCartOpen(false));
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
-      }
-      if (cartRef.current && !cartRef.current.contains(event.target)) {
-        setCartOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -63,50 +90,198 @@ const DashboardHeader = ({ onHamburgerClick }) => {
           />
 
           {/* Cart with dropdown */}
-          <div className="position-relative" ref={cartRef}>
-            <FiShoppingCart
-              size={20}
-              color="#171717"
-              style={{ cursor: "pointer" }}
-              onClick={() => setCartOpen(!cartOpen)}
-            />
-            {cartOpen && (
-              <div
-                className="dropdown-menu show mt-2 p-3 shadow rounded-3"
-                style={{
-                  right: 0,
-                  left: "auto",
-                  minWidth: "365px",
-                  position: "absolute",
-                }}
-              >
-                <div className="fw-semibold mb-2">Cart</div>
-                <div className="d-flex justify-content-between mb-2">
-                  <div>
-                    <div className="fw-medium">VPS Ultimate</div>
-                    <small>Web Hosting</small>
-                  </div>
-                  <div>
-                    <select className="form-select form-select-sm">
-                      <option>6 Months</option>
-                      <option>12 Months</option>
-                    </select>
-                    <div className="text-end fw-semibold">₹40314.00</div>
-                  </div>
-                </div>
-                <hr />
-                <div className="d-flex justify-content-between fw-bold mb-2">
-                  <span>Subtotal</span>
-                  <span>₹40314.00</span>
-                </div>
-                <Link
-                  to="/checkout"
-                  className="btn btn-primary w-100 fw-medium"
+          <div className="d-xl-none">
+            <div className="position-relative" ref={mobileCartRef}>
+              <FaCartShopping
+                size={20}
+                color="#171717"
+                style={{ cursor: "pointer" }}
+                onClick={() => setMobileCartOpen(!mobileCartOpen)}
+              />
+              {/* Badge on cart icon */}
+              {cartData?.length > 0 && (
+                <span
+                  className="position-absolute top-0 text-white start-100 translate-middle badge rounded-pill bg-danger"
+                  style={{ fontSize: "0.7rem" }}
                 >
-                  Go to Checkout
-                </Link>
-              </div>
-            )}
+                  {cartData?.length}
+                </span>
+              )}
+
+              {mobileCartOpen && (
+                <div
+                  className="dropdown-menu show mt-2 p-3 shadow rounded-4 d-xl-none"
+                  style={{
+                    width: "75vw",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    position: "fixed",
+                    top: "70px",
+                    maxHeight: "80vh",
+                    overflowY: "auto",
+                    border: "1px solid #eee",
+                    zIndex: 1050,
+                  }}
+                >
+                  {/* Cart heading with total items */}
+                  <div className="fw-bold fs-5 mb-3 border-bottom pb-2 d-flex justify-content-between align-items-center">
+                    <span>Cart</span>
+                    <span className="badge bg-danger">
+                      {cartData?.length} items
+                    </span>
+                  </div>
+
+                  {Array.isArray(cartData) && cartData.length > 0 ? (
+                    cartData.map((cart, idx) => (
+                      <div
+                        key={idx}
+                        className="d-flex justify-content-between align-items-start mb-3 pb-2 border-bottom"
+                      >
+                        <div>
+                          <div className="fw-semibold text-dark">
+                            {cart?.software?.software_name}
+                          </div>
+                          <small className="text-muted">
+                            {cart?.plan?.plan_name}
+                          </small>
+                        </div>
+                        <div className="text-end">
+                          <div className="fw-bold text-success">
+                            ₹ {cart?.plan?.plan_price}
+                          </div>
+                          <button
+                            className="btn btn-sm btn-light border mt-1"
+                            style={{
+                              borderRadius: "50%",
+                              width: "28px",
+                              height: "28px",
+                              padding: "0",
+                            }}
+                            onClick={() => handleDelete(cart?.id)}
+                          >
+                            <MdDelete size={20} color="#DC143C" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-muted text-center py-3">
+                      Cart is Empty
+                    </div>
+                  )}
+
+                  {/* Totals */}
+                  <div className="mt-3 border-top pt-3">
+                    <div className="d-flex justify-content-between fw-semibold fs-6 mb-2">
+                      <span>Subtotal</span>
+                      <span>₹ {cartTotalPrice?.toFixed(2)}</span>
+                    </div>
+                    <Link
+                      to="/customer/checkout"
+                      className="btn btn-primary w-100 fw-semibold"
+                    >
+                      Go to Checkout
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="d-xl-flex gap-5 align-items-center d-none ">
+            {" "}
+            <div className="position-relative" ref={desktopCartRef}>
+              <FaCartShopping
+                size={20}
+                color="#171717"
+                style={{ cursor: "pointer" }}
+                onClick={() => setDesktopCartOpen(!desktopCartOpen)}
+              />
+              {cartData?.length > 0 && (
+                <span
+                  className="position-absolute top-0 start-100  text-white translate-middle badge rounded-pill bg-danger"
+                  style={{ fontSize: "0.7rem" }}
+                >
+                  {cartData?.length}
+                </span>
+              )}
+
+              {desktopCartOpen && (
+                <div
+                  className="dropdown-menu show mt-2 p-3 shadow rounded-4"
+                  style={{
+                    width: "30vw",
+                    left: "30%", // center relative to cart icon
+                    transform: "translateX(-80%)",
+                    position: "absolute", // relative to parent
+                    top: "100%", // just below icon
+                    maxHeight: "80vh",
+                    overflowY: "auto",
+                    border: "1px solid #eee",
+                    zIndex: 1050,
+                  }}
+                >
+                  <div className="fw-bold fs-5 mb-3 border-bottom pb-2 d-flex justify-content-between align-items-center">
+                    <span>Cart</span>
+                    <span className="badge bg-danger text-white">
+                      {cartData?.length} items
+                    </span>
+                  </div>
+
+                  {Array.isArray(cartData) && cartData.length > 0 ? (
+                    cartData.map((cart, idx) => (
+                      <div
+                        key={idx}
+                        className="d-flex justify-content-between align-items-start mb-3 pb-2 border-bottom"
+                      >
+                        <div>
+                          <div className="fw-semibold text-dark">
+                            {cart?.software?.software_name}
+                          </div>
+                          <small className="text-muted">
+                            {cart?.plan?.plan_name}
+                          </small>
+                        </div>
+                        <div className="text-end">
+                          <div className="fw-bold text-success">
+                            ₹ {cart?.plan?.plan_price}
+                          </div>
+                          <button
+                            className="btn btn-sm btn-light border mt-1"
+                            style={{
+                              borderRadius: "50%",
+                              width: "28px",
+                              height: "28px",
+                              padding: "0",
+                            }}
+                            onClick={() => handleDelete(cart?.id)}
+                          >
+                            <MdDelete size={20} color="#DC143C" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-muted text-center py-3">
+                      Cart is Empty
+                    </div>
+                  )}
+
+                  <div className="mt-3 border-top pt-3">
+                    <div className="d-flex justify-content-between fw-semibold fs-6 mb-2">
+                      <span>Subtotal</span>
+                      <span>₹ {cartTotalPrice?.toFixed(2)}</span>
+                    </div>
+                    <Link
+                      to="/customer/checkout"
+                      className="btn btn-primary w-100 fw-semibold"
+                    >
+                      Go to Checkout
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Profile with dropdown */}

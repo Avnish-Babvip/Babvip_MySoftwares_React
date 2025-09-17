@@ -19,6 +19,7 @@ import authentication from "./slices/authentication";
 import dashboard from "./slices/dashboard";
 import privacy from "./slices/privacy";
 import references from "./slices/references";
+import cart from "./slices/cart";
 
 const rootReducer = combineReducers({
   headMenu,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   dashboard,
   privacy,
   references,
+  cart,
 });
 
 // Redux-persist configuration

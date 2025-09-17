@@ -46,10 +46,6 @@ const DashboardSidebar = ({ closeSidebar }) => {
   //   "Sell Products",
   // ].includes(activeMenu);
 
-  useEffect(() => {
-    console.log("first");
-  }, [activeTab]);
-
   return (
     <div className="d-flex flex-column align-items-center w-100 py-4">
       {/* Logo */}
