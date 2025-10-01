@@ -126,7 +126,7 @@ const DashboardHeader = ({ onHamburgerClick }) => {
                   {/* Cart heading with total items */}
                   <div className="fw-bold fs-5 mb-3 border-bottom pb-2 d-flex justify-content-between align-items-center">
                     <span>Cart</span>
-                    <span className="badge bg-danger">
+                    <span className="badge bg-danger text-white">
                       {cartData?.length} items
                     </span>
                   </div>
@@ -177,6 +177,7 @@ const DashboardHeader = ({ onHamburgerClick }) => {
                       <span>₹ {cartTotalPrice?.toFixed(2)}</span>
                     </div>
                     <Link
+                      onClick={() => setMobileCartOpen(!mobileCartOpen)}
                       to="/customer/checkout"
                       className="btn btn-primary w-100 fw-semibold"
                     >
@@ -273,6 +274,7 @@ const DashboardHeader = ({ onHamburgerClick }) => {
                       <span>₹ {cartTotalPrice?.toFixed(2)}</span>
                     </div>
                     <Link
+                      onClick={() => setDesktopCartOpen(!desktopCartOpen)}
                       to="/customer/checkout"
                       className="btn btn-primary w-100 fw-semibold"
                     >

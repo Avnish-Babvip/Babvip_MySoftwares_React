@@ -36,7 +36,6 @@ const Portfolio = lazy(() => import("../pages/Portfolio"));
 // import Portfolio from "../components/Home/Portfolio/Portfolio";
 
 // ---------------------------------------------------------------------------------------------------
-console.log("enter inside the routes page");
 
 const NotFound = () => (
   <p className="text-center text-primary fw-bold fs-5 mt-5 mx-5">

@@ -46,10 +46,25 @@ export default function CheckoutPage() {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email) || "Please enter a valid email address";
   };
-
+  console.log(checkoutData?.customer?.customer_billing);
   const onSubmit = (data) => {
+    const country = countryData.find(
+      (c) => c.id === Number(data.billing_country)
+    );
+    const state = stateData.find((s) => s.id === Number(data.billing_state));
+    const city = cityData.find((c) => c.id === Number(data.billing_city));
+    // const payload = {
+    //   ...data,
+    //   billing_country: country?.country_name,
+    //   billing_state: state?.state_name,
+    //   billing_city: city?.city_name,
+    // };
+    // console.log(payload);
     const payload = {
       ...data,
+      billing_country: country?.country_name,
+      billing_state: state?.state_name,
+      billing_city: city?.city_name,
       tid,
       merchant_param1: transactionNumber,
       merchant_id: "3902775",
@@ -58,10 +73,10 @@ export default function CheckoutPage() {
       currency: "INR",
       redirect_url: `${
         import.meta.env.VITE_REACT_APP_FRONTEND_URL
-      }/payment-status/redirect`,
+      }/api/customer/paymentresponse`,
       cancel_url: `${
         import.meta.env.VITE_REACT_APP_FRONTEND_URL
-      }/payment-status/redirect`,
+      }/api/customer/paymentresponse`,
       language: "EN",
     };
     dispatch(
@@ -73,8 +88,48 @@ export default function CheckoutPage() {
   };
 
   useEffect(() => {
-    if (!checkoutData?.customer) return;
+    if (!checkoutData || !countryData.length) return;
 
+    const billing = checkoutData?.customer?.customer_billing || {};
+
+    const country = countryData.find(
+      (c) => c.country_name === billing?.billing_country
+    );
+    const state = stateData.find(
+      (s) => s.state_name === billing?.billing_state
+    );
+    const city = cityData.find((c) => c.city_name === billing?.billing_city);
+
+    setValue(
+      "billing_name",
+      billing?.billing_name || checkoutData?.customer.first_name
+    );
+    setValue(
+      "billing_email",
+      billing?.billing_email || checkoutData?.customer.email
+    );
+    setValue(
+      "billing_tel",
+      billing?.billing_tel || checkoutData?.customer.phone_number
+    );
+    setValue(
+      "billing_zip",
+      billing?.billing_zip || checkoutData?.customer.postal_code
+    );
+    setValue(
+      "billing_address",
+      billing?.billing_address || checkoutData?.customer.address
+    );
+
+    if (country) setValue("billing_country", country.id);
+    if (state) setValue("billing_state", state.id);
+    if (city) setValue("billing_city", city.id);
+  }, [checkoutData, countryData, stateData, cityData]);
+
+  useEffect(() => {
+    if (!checkoutData) return;
+
+    // Always fetch countries
     dispatch(getAllCountries());
 
     if (checkoutData?.customer.country_id) {
@@ -84,16 +139,7 @@ export default function CheckoutPage() {
     if (checkoutData?.customer.state_id) {
       dispatch(getAllCityById(checkoutData?.customer.state_id));
     }
-
-    setValue("billing_name", checkoutData?.customer.first_name);
-    setValue("billing_email", checkoutData?.customer.email);
-    setValue("billing_tel", checkoutData?.customer.phone_number);
-    setValue("billing_zip", checkoutData?.customer.postal_code);
-    setValue("billing_address", checkoutData?.customer.address);
-    // setValue("billing_country", checkoutData?.customer.country_id);
-    // setValue("billing_state", checkoutData?.customer.state_id);
-    // setValue("billing_city", checkoutData?.customer.city_id);
-  }, []);
+  }, [checkoutData]);
 
   useEffect(() => {
     dispatch(getCustomerCheckoutData(customerData?.login_token));
@@ -140,7 +186,7 @@ export default function CheckoutPage() {
             <h5 className="mb-3">Payment Information</h5>
             <Form.Check
               type="radio"
-              label="Pay with PayU"
+              label="Pay Online"
               name="paymentMethod"
               defaultChecked
               className="mb-3"
@@ -224,7 +270,7 @@ export default function CheckoutPage() {
                   >
                     <option value="">Select Country</option>
                     {countryData.map((country) => (
-                      <option key={country?.id} value={country?.country_name}>
+                      <option key={country?.id} value={country?.id}>
                         {country?.country_name}
                       </option>
                     ))}
@@ -255,7 +301,7 @@ export default function CheckoutPage() {
                   >
                     <option value="">Select State</option>
                     {stateData.map((state) => (
-                      <option key={state?.id} value={state?.state_name}>
+                      <option key={state?.id} value={state?.id}>
                         {state?.state_name}
                       </option>
                     ))}
@@ -279,7 +325,7 @@ export default function CheckoutPage() {
                   >
                     <option value="">Select City</option>
                     {cityData?.map((city) => (
-                      <option key={city?.id} value={city?.city_name}>
+                      <option key={city?.id} value={city?.id}>
                         {city?.city_name}
                       </option>
                     ))}
@@ -350,7 +396,12 @@ export default function CheckoutPage() {
               ) : (
                 <div>
                   <Form.Label>GST ID</Form.Label>
-                  <Form.Control placeholder="Enter GST ID" />
+                  <Form.Control
+                    placeholder="Enter GST ID"
+                    {...register("gst_number", {
+                      required: "GST number is required", // 👈 optional validation
+                    })}
+                  />
                 </div>
               )}
             </Col>

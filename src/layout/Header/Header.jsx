@@ -360,8 +360,10 @@ const Header = () => {
                                 </div>
                               </div>
                             </Link>
-                            <Link
-                              to={"login/dealer"}
+                            <a
+                              href={
+                                "https://my.babvipsoftwares.com/dealer/login"
+                              }
                               className="col-md-6 "
                               onClick={() => setActiveDropdown2(null)}
                               style={{ cursor: "pointer" }}
@@ -395,7 +397,7 @@ const Header = () => {
                                   </div>
                                 </div>
                               </div>
-                            </Link>
+                            </a>
                           </div>
                         </div>
                       </div>
@@ -827,8 +829,8 @@ const Header = () => {
                           <p className=" truncate-1">Login as a Customer </p>
                         </div>
                       </Link>
-                      <Link
-                        to={"login/dealer"}
+                      <a
+                        href={"https://my.babvipsoftwares.com/dealer/login"}
                         onClick={closeOffcanvas} // Close offcanvas on click
                         class="dropdown-link"
                       >
@@ -843,7 +845,7 @@ const Header = () => {
                           </div>
                           <p className=" truncate-1">Login as a Dealer </p>
                         </div>
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>
