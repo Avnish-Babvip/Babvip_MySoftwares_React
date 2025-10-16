@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { getSoftwareDataBySlug } from "../features/actions/category";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import ContactModal from "../components/SoftwareModal/ContactModal";
 import { IoCart } from "react-icons/io5";
@@ -14,6 +14,7 @@ import { addToCart, getCustomerCartData } from "../features/actions/cart";
 import { checkSoftwareExist } from "../features/actions/authentication";
 
 const Software = () => {
+  const navigate = useNavigate();
   const swiperRef = useRef(null);
   const [showMoreStates, setShowMoreStates] = useState({});
 
@@ -594,13 +595,14 @@ const Software = () => {
               ) : checkSoftwareResponse?.expiry === "Active" ? (
                 <div className="mt-4 d-flex justify-content-center d-sm-block">
                   <Link
-                    to={`/customer/renew-checkout/${checkSoftwareResponse?.data?.id}`}
+                    to={`/customer/renew-checkout`}
+                    state={{ productId: checkSoftwareResponse?.data?.id }}
                     className="btn btn-primary me-2"
                   >
                     Renew Now
                   </Link>
 
-                  <button type="button" className="btn btn-danger">
+                  <button onClick={scrollToPricing} className="btn btn-danger">
                     Upgrade Now
                   </button>
                 </div>
@@ -810,9 +812,7 @@ const Software = () => {
                                 {/* Name + Description */}
                                 <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
                                 <p className="mb-4 fm truncate-2">
-                                  Lorem ipsum dolor sit amet consectetur
-                                  adipisicing elit. Ex blanditiis voluptatum
-                                  minus sapiente architecto sit.
+                                  {plan?.plan_short_description}
                                 </p>
 
                                 {/* Features */}
@@ -877,12 +877,39 @@ const Software = () => {
                                     {plan?.plan_type?.duration_type}
                                   </span>
                                 </h2>
-                                <button
-                                  onClick={() => handleAddToCart(plan?.id)}
-                                  className="btn dg-outline-btn rounded-pill"
-                                >
-                                  Purchase Now
-                                </button>
+                                {isUserLoggedIn && (
+                                  <button
+                                    disabled={
+                                      plan?.id ==
+                                      checkSoftwareResponse?.data?.plan_id
+                                    }
+                                    onClick={() =>
+                                      checkSoftwareResponse?.expiry !== "Active"
+                                        ? handleAddToCart(plan?.id)
+                                        : navigate(
+                                            `/customer/upgrade-checkout`,
+                                            {
+                                              state: {
+                                                softwareName:
+                                                  softwareDetailData?.software_name,
+                                                productId:
+                                                  checkSoftwareResponse?.data
+                                                    ?.id,
+                                                planId: plan?.id,
+                                              },
+                                            }
+                                          )
+                                    }
+                                    className="btn dg-outline-btn rounded-pill"
+                                  >
+                                    {checkSoftwareResponse?.expiry !== "Active"
+                                      ? "Add to cart"
+                                      : plan?.id ==
+                                        checkSoftwareResponse?.data?.plan_id
+                                      ? "Active"
+                                      : "Upgrade Now"}
+                                  </button>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -931,9 +958,7 @@ const Software = () => {
                                 {/* Name + Description */}
                                 <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
                                 <p className="mb-4 fm truncate-2">
-                                  Lorem ipsum dolor sit amet consectetur
-                                  adipisicing elit. Ex blanditiis voluptatum
-                                  minus sapiente architecto sit.
+                                  {plan?.plan_short_description}
                                 </p>
 
                                 {/* Features */}
@@ -998,12 +1023,39 @@ const Software = () => {
                                     {plan?.plan_type?.duration_type}
                                   </span>
                                 </h2>
-                                <button
-                                  onClick={() => handleAddToCart(plan?.id)}
-                                  className="btn dg-outline-btn rounded-pill"
-                                >
-                                  Purchase Now
-                                </button>
+                                {isUserLoggedIn && (
+                                  <button
+                                    disabled={
+                                      plan?.id ==
+                                      checkSoftwareResponse?.data?.plan_id
+                                    }
+                                    onClick={() =>
+                                      checkSoftwareResponse?.expiry !== "Active"
+                                        ? handleAddToCart(plan?.id)
+                                        : navigate(
+                                            `/customer/upgrade-checkout`,
+                                            {
+                                              state: {
+                                                softwareName:
+                                                  softwareDetailData?.software_name,
+                                                productId:
+                                                  checkSoftwareResponse?.data
+                                                    ?.id,
+                                                planId: plan?.id,
+                                              },
+                                            }
+                                          )
+                                    }
+                                    className="btn dg-outline-btn rounded-pill"
+                                  >
+                                    {checkSoftwareResponse?.expiry !== "Active"
+                                      ? "Add to cart"
+                                      : plan?.id ==
+                                        checkSoftwareResponse?.data?.plan_id
+                                      ? "Active"
+                                      : "Upgrade Now"}
+                                  </button>
+                                )}
                               </div>
                             </div>
                           </div>

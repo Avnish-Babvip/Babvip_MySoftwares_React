@@ -6,6 +6,7 @@ import {
   getCustomerCartData,
   getCustomerCheckoutData,
   getRenewCheckoutData,
+  getUpgradeCheckoutData,
   paymentProcess,
   renewPaymentProcess,
 } from "../actions/cart";
@@ -20,6 +21,8 @@ const initialState = {
   isLoadingOrder: false,
   paymentCredentials: null,
   renewPaymentCredentials: null,
+  upgradePaymentCredentials: null,
+  upgradeCheckoutData: null,
 };
 
 const formattedDate = new Date().toLocaleString("en-US", {
@@ -125,6 +128,20 @@ const cartSlice = createSlice({
         state.renewPaymentCredentials = null;
       })
       .addCase(getRenewCheckoutData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+      })
+      .addCase(getUpgradeCheckoutData.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(getUpgradeCheckoutData.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        state.upgradeCheckoutData = action.payload.data;
+        state.upgradePaymentCredentials = null;
+      })
+      .addCase(getUpgradeCheckoutData.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
       })

@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getRenewCheckoutData,
+  getUpgradeCheckoutData,
   renewPaymentProcess,
 } from "../../../features/actions/cart";
 import { useForm } from "react-hook-form";
@@ -23,17 +23,18 @@ import {
 import { clearCredentialResponse } from "../../../features/slices/cart";
 import { useLocation } from "react-router-dom";
 
-export default function RenewCheckout() {
+export default function UpgradeCheckout() {
   const [showGst, setShowGst] = useState(false);
   const location = useLocation();
-  const { productId } = location.state;
+  const { softwareName, productId, planId } = location.state;
+
   const { countryData, stateData, cityData } = useSelector(
     (state) => state.countryStateCity
   );
   const dispatch = useDispatch();
   const { customerData } = useSelector((state) => state.authentication);
 
-  const { isLoadingOrder, renewCheckoutData, renewPaymentCredentials } =
+  const { isLoadingOrder, upgradeCheckoutData, upgradePaymentCredentials } =
     useSelector((state) => state.cart);
 
   const [tid, setTid] = useState("");
@@ -70,8 +71,8 @@ export default function RenewCheckout() {
       tid,
       merchant_param1: transactionNumber,
       merchant_id: "3902775",
-      order_id: renewCheckoutData?.order_number,
-      amount: renewCheckoutData?.payable_amount,
+      order_id: upgradeCheckoutData?.order_number,
+      amount: upgradeCheckoutData?.payable_amount,
       currency: "INR",
       redirect_url: `${
         import.meta.env.VITE_REACT_APP_FRONTEND_URL
@@ -90,9 +91,9 @@ export default function RenewCheckout() {
   };
 
   useEffect(() => {
-    if (!renewCheckoutData || !countryData.length) return;
+    if (!upgradeCheckoutData || !countryData.length) return;
 
-    const billing = renewCheckoutData?.customer?.customer_billing || {};
+    const billing = upgradeCheckoutData?.customer?.customer_billing || {};
 
     const country = countryData.find(
       (c) => c.country_name === billing?.billing_country
@@ -104,53 +105,55 @@ export default function RenewCheckout() {
 
     setValue(
       "billing_name",
-      billing?.billing_name || renewCheckoutData?.customer.first_name
+      billing?.billing_name || upgradeCheckoutData?.customer.first_name
     );
     setValue(
       "billing_email",
-      billing?.billing_email || renewCheckoutData?.customer.email
+      billing?.billing_email || upgradeCheckoutData?.customer.email
     );
     setValue(
       "billing_tel",
-      billing?.billing_tel || renewCheckoutData?.customer.phone_number
+      billing?.billing_tel || upgradeCheckoutData?.customer.phone_number
     );
     setValue(
       "billing_zip",
-      billing?.billing_zip || renewCheckoutData?.customer.postal_code
+      billing?.billing_zip || upgradeCheckoutData?.customer.postal_code
     );
     setValue(
       "billing_address",
-      billing?.billing_address || renewCheckoutData?.customer.address
+      billing?.billing_address || upgradeCheckoutData?.customer.address
     );
 
     if (country) setValue("billing_country", country.id);
     if (state) setValue("billing_state", state.id);
     if (city) setValue("billing_city", city.id);
-  }, [renewCheckoutData, countryData, stateData, cityData]);
+  }, [upgradeCheckoutData, countryData, stateData, cityData]);
 
   useEffect(() => {
-    if (!renewCheckoutData) return;
+    if (!upgradeCheckoutData) return;
 
     // Always fetch countries
     dispatch(getAllCountries());
 
-    if (renewCheckoutData?.customer.country_id) {
-      dispatch(getAllStatesById(renewCheckoutData?.customer.country_id));
+    if (upgradeCheckoutData?.customer.country_id) {
+      dispatch(getAllStatesById(upgradeCheckoutData?.customer.country_id));
     }
 
-    if (renewCheckoutData?.customer.state_id) {
-      dispatch(getAllCityById(renewCheckoutData?.customer.state_id));
+    if (upgradeCheckoutData?.customer.state_id) {
+      dispatch(getAllCityById(upgradeCheckoutData?.customer.state_id));
     }
-  }, [renewCheckoutData]);
+  }, [upgradeCheckoutData]);
 
   useEffect(() => {
-    if (productId) {
+    if (productId && planId) {
       dispatch(
-        getRenewCheckoutData({
+        getUpgradeCheckoutData({
           loginToken: customerData?.login_token,
           productId,
+          planId,
         })
       );
+      console.log("first");
     }
   }, []);
 
@@ -163,8 +166,8 @@ export default function RenewCheckout() {
   // 2. When API gives encRequest + access_code → auto submit form
   useEffect(() => {
     if (
-      renewPaymentCredentials?.encrypted_data &&
-      renewPaymentCredentials?.accessCode
+      upgradePaymentCredentials?.encrypted_data &&
+      upgradePaymentCredentials?.accessCode
     ) {
       const form = document.createElement("form");
       form.method = "post";
@@ -174,22 +177,22 @@ export default function RenewCheckout() {
       const enc = document.createElement("input");
       enc.type = "hidden";
       enc.name = "encRequest";
-      enc.value = renewPaymentCredentials?.encrypted_data;
+      enc.value = upgradePaymentCredentials?.encrypted_data;
       form.appendChild(enc);
 
       const access = document.createElement("input");
       access.type = "hidden";
       access.name = "access_code";
-      access.value = renewPaymentCredentials?.accessCode;
+      access.value = upgradePaymentCredentials?.accessCode;
       form.appendChild(access);
 
       document.body.appendChild(form);
       form.submit();
       dispatch(clearCredentialResponse());
     }
-  }, [renewPaymentCredentials]);
+  }, [upgradePaymentCredentials]);
 
-  return renewCheckoutData && productId ? (
+  return upgradeCheckoutData && productId ? (
     <Container className="my-5">
       <form id="customer-lead-form" onSubmit={handleSubmit(onSubmit)}>
         <h3 className="mb-4">Shopping Cart</h3>
@@ -428,24 +431,29 @@ export default function RenewCheckout() {
               <thead>
                 <tr>
                   <th>Software Name</th>
-                  <th>Plan</th>
+                  <th>Current Plan</th>
+                  <th>Upgraded Plan</th>
                   <th>Quantity</th>
                   <th>Subtotal</th>
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(renewCheckoutData?.items) &&
-                  renewCheckoutData?.items.map((item, idx) => (
-                    <tr>
-                      <td>{item?.software?.software_name}</td>
-                      <td>{item?.plan?.plan_name}</td>
-                      <td>
-                        {item?.plan?.plan_type?.duration_value}{" "}
-                        {item?.plan?.plan_type?.duration_type}{" "}
-                      </td>
-                      <td>₹{item?.plan?.plan_price}</td>
-                    </tr>
-                  ))}
+                <tr>
+                  <td>{softwareName}</td>
+                  <td>{upgradeCheckoutData?.current_plan?.plan_name}</td>
+                  <td>{upgradeCheckoutData?.upgraded_plan?.plan_name}</td>
+                  <td>
+                    {
+                      upgradeCheckoutData?.upgraded_plan?.plan_type
+                        ?.duration_value
+                    }{" "}
+                    {
+                      upgradeCheckoutData?.upgraded_plan?.plan_type
+                        ?.duration_type
+                    }{" "}
+                  </td>
+                  <td>₹{upgradeCheckoutData?.upgraded_plan?.plan_price}</td>
+                </tr>
               </tbody>
             </Table>
 
@@ -454,33 +462,33 @@ export default function RenewCheckout() {
               <Col md={4}>
                 <div className="d-flex justify-content-between">
                   <span>Subtotal</span>
-                  <strong>₹{renewCheckoutData?.subtotal}</strong>
+                  <strong>₹{upgradeCheckoutData?.subtotal}</strong>
                 </div>
-                {renewCheckoutData?.discount != 0 && (
+                {upgradeCheckoutData?.discount != 0 && (
                   <div className="d-flex justify-content-between">
                     <span>Discount</span>
-                    <strong>- ₹{renewCheckoutData?.discount}</strong>
+                    <strong>- ₹{upgradeCheckoutData?.discount}</strong>
                   </div>
                 )}
                 <div className="d-flex justify-content-between">
-                  <span>CGST {renewCheckoutData?.gst?.gst_rate}%</span>
-                  <strong>₹{renewCheckoutData?.gst?.cgst}</strong>
+                  <span>CGST {upgradeCheckoutData?.gst?.gst_rate}%</span>
+                  <strong>₹{upgradeCheckoutData?.gst?.cgst}</strong>
                 </div>
                 <div className="d-flex justify-content-between">
-                  <span>SGST {renewCheckoutData?.gst?.gst_rate}%</span>
-                  <strong>₹{renewCheckoutData?.gst?.sgst}</strong>
+                  <span>SGST {upgradeCheckoutData?.gst?.gst_rate}%</span>
+                  <strong>₹{upgradeCheckoutData?.gst?.sgst}</strong>
                 </div>
-                {renewCheckoutData?.gst?.igst !== "0.00" && (
+                {upgradeCheckoutData?.gst?.igst !== "0.00" && (
                   <div className="d-flex justify-content-between">
-                    <span>IGST {renewCheckoutData?.gst?.gst_rate}%</span>
-                    <strong>₹{renewCheckoutData?.gst?.igst}</strong>
+                    <span>IGST {upgradeCheckoutData?.gst?.gst_rate}%</span>
+                    <strong>₹{upgradeCheckoutData?.gst?.igst}</strong>
                   </div>
                 )}
                 <hr />
                 <div className="d-flex justify-content-between">
                   <span>Payable Amount</span>
                   <h5 className="fw-bold text-success">
-                    ₹{renewCheckoutData?.payable_amount}
+                    ₹{upgradeCheckoutData?.payable_amount}
                   </h5>
                 </div>
               </Col>

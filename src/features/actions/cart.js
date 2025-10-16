@@ -158,3 +158,26 @@ export const getRenewCheckoutData = createAsyncThunk(
     }
   }
 );
+
+export const getUpgradeCheckoutData = createAsyncThunk(
+  "/customer/upgradesoftware/id/planid",
+  async ({ loginToken, productId, planId }, { rejectWithValue }) => {
+    try {
+      const { data } = await instance.get(
+        `/customer/upgradecheckout/${productId}/${planId}`,
+        {
+          withCredentials: false,
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${loginToken}`,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response.data.message || "Failed checkout API "
+      );
+    }
+  }
+);

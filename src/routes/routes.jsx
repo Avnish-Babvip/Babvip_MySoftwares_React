@@ -26,6 +26,7 @@ import SecurityTab from "../pages/Dashboard/AccountCenterTabData/SecurityTab";
 import PaymentStatus from "../pages/Dashboard/PaymentStatus";
 import CartCheckout from "../pages/Dashboard/Checkout/CartCheckout";
 import RenewCheckout from "../pages/Dashboard/Checkout/RenewCheckout";
+import UpgradeCheckout from "../pages/Dashboard/Checkout/UpgradeCheckout";
 
 // Lazy Loading 😴
 const Blog = lazy(() => import("../pages/Blog"));
@@ -87,8 +88,12 @@ export const appRouter = createBrowserRouter([
         element: <CartCheckout />,
       },
       {
-        path: "/customer/renew-checkout/:productId", // 👈 separate dashboard routes
+        path: "/customer/renew-checkout", // 👈 separate dashboard routes
         element: <RenewCheckout />,
+      },
+      {
+        path: "/customer/upgrade-checkout", // 👈 separate dashboard routes
+        element: <UpgradeCheckout />,
       },
       {
         path: "/customer/profile", // 👈 separate dashboard routes
