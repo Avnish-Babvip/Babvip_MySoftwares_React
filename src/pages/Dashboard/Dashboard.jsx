@@ -7,6 +7,15 @@ import {
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    });
+  };
+
   const dispatch = useDispatch();
 
   const { customerData } = useSelector((state) => state.authentication);
@@ -29,7 +38,7 @@ const Dashboard = () => {
           {Array.isArray(customer_software) &&
             customer_software.map((item, idx) => (
               <Link
-                to={`/customer/dashboard/${item?.id}`}
+                to={`/software/${item?.software?.software_slug}`}
                 className="col-md-4"
                 key={idx}
               >
@@ -60,10 +69,24 @@ const Dashboard = () => {
                         {item?.plan?.plan_name}
                       </p>
                       <span
-                        className="text-capitalize"
+                        className="text-capitalize  fw-semibold"
                         style={{ fontSize: "14px" }}
                       >
                         {item?.status}
+                      </span>
+                    </div>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <p
+                        className="mb-0 text-danger fw-semibold"
+                        style={{ fontSize: "14px" }}
+                      >
+                        {formatDate(item?.software_start_date)}
+                      </p>
+                      <span
+                        className="text-capitalize  fw-semibold text-danger"
+                        style={{ fontSize: "14px" }}
+                      >
+                        {formatDate(item?.software_end_date)}
                       </span>
                     </div>
                   </div>

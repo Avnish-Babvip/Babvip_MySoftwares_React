@@ -116,9 +116,11 @@ const Style1 = ({ data }) => {
             <div class="section-heading text-center my-5 my-lg-0 my-xl-0">
               <h4 class="text-primary h5">{data?.subtitle}</h4>
               <h2>{data?.title}</h2>
-              <Link to={data?.button_url} class="mt-4 btn btn-primary">
-                {data?.button_text}
-              </Link>
+              {data?.button_url && (
+                <Link to={data?.button_url} class="mt-4 btn btn-primary">
+                  {data?.button_text}
+                </Link>
+              )}
             </div>
           </div>
           <div class="col-lg-3">

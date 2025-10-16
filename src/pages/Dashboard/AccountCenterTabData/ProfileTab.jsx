@@ -172,20 +172,6 @@ const ProfileTab = () => {
                         </Button>
                       </Card.Body>
                     </Card>
-                    <Card className="mb-3">
-                      <Card.Body>
-                        <h6>cPanel language settings</h6>
-                        <Form.Group controlId="languageSelect">
-                          <Form.Label>Selected language</Form.Label>
-                          <Form.Select defaultValue="hi">
-                            <option value="en">English</option>
-                            <option value="ar">العربية (Arabic)</option>
-                            <option value="hi">हिन्दी (Hindi)</option>
-                            <option value="fr">Français (French)</option>
-                          </Form.Select>
-                        </Form.Group>
-                      </Card.Body>
-                    </Card>
                   </Col>
 
                   {/* Contact Information only in Profile */}

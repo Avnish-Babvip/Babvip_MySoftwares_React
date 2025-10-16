@@ -15,9 +15,11 @@ const Style2 = ({ data }) => {
             <div class="position-relative z-5">
               <h2>{data?.title}</h2>
               <p>{data?.description}</p>
-              <Link to={data?.button_url} class="btn btn-primary mt-4">
-                {data?.button_text}
-              </Link>
+              {data?.button_url && (
+                <Link to={data?.button_url} class="btn btn-primary mt-4">
+                  {data?.button_text}
+                </Link>
+              )}
             </div>
           </div>
           <div class="col-lg-6 col-md-12">

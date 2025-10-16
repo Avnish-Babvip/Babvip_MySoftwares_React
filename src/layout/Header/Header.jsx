@@ -505,7 +505,7 @@ const Header = () => {
                           <span>₹ {cartTotalPrice?.toFixed(2)}</span>
                         </div>
                         <Link
-                          to="/customer/checkout"
+                          to="/customer/cart-checkout"
                           className="btn btn-primary w-100 fw-semibold"
                         >
                           Go to Checkout
@@ -614,7 +614,7 @@ const Header = () => {
                           <span>₹ {cartTotalPrice?.toFixed(2)}</span>
                         </div>
                         <Link
-                          to="/customer/checkout"
+                          to="/customer/cart-checkout"
                           className="btn btn-primary w-100 fw-semibold"
                         >
                           Go to Checkout

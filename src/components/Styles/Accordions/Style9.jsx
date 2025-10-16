@@ -37,12 +37,14 @@ const Style9 = ({ data }) => {
             <div class="col-lg-6">
               <h4 class="heading-4 margin-bottom-8 clr-text">{data?.title}</h4>
               <p class="clr-paragraph margin-bottom-10">{data?.description}</p>
-              <Link
-                to={data?.button_url}
-                class="link d-inline-flex padding-y-3 padding-x-10 margin-bottom-10 text-center rounded-pill bgc-primary font-weight-bold clr-white :clr-white"
-              >
-                {data?.button_text}
-              </Link>
+              {data?.button_url && (
+                <Link
+                  to={data?.button_url}
+                  class="link d-inline-flex padding-y-3 padding-x-10 margin-bottom-10 text-center rounded-pill bgc-primary font-weight-bold clr-white :clr-white"
+                >
+                  {data?.button_text}
+                </Link>
+              )}
               <div class="accordion ca-accordion" id="technologicalQuery">
                 {data?.step_data.map((item, idx) => (
                   <div class="accordion-item">

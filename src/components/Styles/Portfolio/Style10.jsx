@@ -170,9 +170,11 @@ const Style10 = ({ data }) => {
           </div>
           <div class="col-lg-6">
             <div class="text-lg-end">
-              <Link to={data?.button_url} class="btn btn-primary rounded-5">
-                {data?.button_text}
-              </Link>
+              {data?.button_url && (
+                <Link to={data?.button_url} class="btn btn-primary rounded-5">
+                  {data?.button_text}
+                </Link>
+              )}
             </div>
           </div>
         </div>

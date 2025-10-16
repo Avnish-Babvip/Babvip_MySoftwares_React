@@ -2,7 +2,7 @@ import React from "react";
 
 const Style1 = ({ data }) => {
   return (
-    <section class="services-section ptb-60">
+    <section class="services-section ptb-120">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-6 col-md-10">

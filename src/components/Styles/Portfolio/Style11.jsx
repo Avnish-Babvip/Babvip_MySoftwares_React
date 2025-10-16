@@ -215,13 +215,15 @@ const Style11 = ({ data }) => {
         </div>
 
         <div class="text-center mt-5">
-          <Link
-            to={data?.button_url}
-            target="_blank"
-            class="btn dg-outline-btn"
-          >
-            {data?.button_text}
-          </Link>
+          {data?.button_url && (
+            <Link
+              to={data?.button_url}
+              target="_blank"
+              class="btn dg-outline-btn"
+            >
+              {data?.button_text}
+            </Link>
+          )}
         </div>
       </div>
     </div>

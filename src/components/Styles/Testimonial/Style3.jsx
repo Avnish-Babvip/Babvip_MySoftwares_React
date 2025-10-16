@@ -16,9 +16,11 @@ const Style3 = ({ data }) => {
               <h5 class="h6 text-primary">{data?.sub_title}</h5>
               <h2>{data?.title}</h2>
               <p>{data?.description}</p>
-              <Link to={data?.button_url} class="btn btn-primary mt-4">
-                {data?.button_text}
-              </Link>
+              {data?.button_url && (
+                <Link to={data?.button_url} class="btn btn-primary mt-4">
+                  {data?.button_text}
+                </Link>
+              )}
             </div>
           </div>
           <div class="col-md-12 col-lg-6 mt-5 mt-lg-0">

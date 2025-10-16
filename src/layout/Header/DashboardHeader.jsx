@@ -176,13 +176,15 @@ const DashboardHeader = ({ onHamburgerClick }) => {
                       <span>Subtotal</span>
                       <span>₹ {cartTotalPrice?.toFixed(2)}</span>
                     </div>
-                    <Link
-                      onClick={() => setMobileCartOpen(!mobileCartOpen)}
-                      to="/customer/checkout"
-                      className="btn btn-primary w-100 fw-semibold"
-                    >
-                      Go to Checkout
-                    </Link>
+                    {cartData.length > 0 && (
+                      <Link
+                        onClick={() => setMobileCartOpen(!mobileCartOpen)}
+                        to="/customer/cart-checkout"
+                        className="btn btn-primary w-100 fw-semibold"
+                      >
+                        Go to Checkout
+                      </Link>
+                    )}
                   </div>
                 </div>
               )}
@@ -273,13 +275,15 @@ const DashboardHeader = ({ onHamburgerClick }) => {
                       <span>Subtotal</span>
                       <span>₹ {cartTotalPrice?.toFixed(2)}</span>
                     </div>
-                    <Link
-                      onClick={() => setDesktopCartOpen(!desktopCartOpen)}
-                      to="/customer/checkout"
-                      className="btn btn-primary w-100 fw-semibold"
-                    >
-                      Go to Checkout
-                    </Link>
+                    {cartData.length > 0 && (
+                      <Link
+                        onClick={() => setDesktopCartOpen(!desktopCartOpen)}
+                        to="/customer/cart-checkout"
+                        className="btn btn-primary w-100 fw-semibold"
+                      >
+                        Go to Checkout
+                      </Link>
+                    )}
                   </div>
                 </div>
               )}

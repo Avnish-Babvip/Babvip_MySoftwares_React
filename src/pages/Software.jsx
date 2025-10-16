@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import Swiper2 from "swiper";
@@ -6,11 +6,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { getSoftwareDataBySlug } from "../features/actions/category";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import ContactModal from "../components/SoftwareModal/ContactModal";
 import { IoCart } from "react-icons/io5";
 import { addToCart, getCustomerCartData } from "../features/actions/cart";
+import { checkSoftwareExist } from "../features/actions/authentication";
 
 const Software = () => {
   const swiperRef = useRef(null);
@@ -18,7 +19,7 @@ const Software = () => {
 
   const [activeSection, setActiveSection] = useState("");
 
-  const { customerData, isUserLoggedIn } = useSelector(
+  const { customerData, isUserLoggedIn, checkSoftwareResponse } = useSelector(
     (state) => state.authentication
   );
   const { updateResponse } = useSelector((state) => state.cart);
@@ -67,8 +68,21 @@ const Software = () => {
   };
 
   useEffect(() => {
-    dispatch(getSoftwareDataBySlug(slug));
-  }, []);
+    if (slug) dispatch(getSoftwareDataBySlug(slug));
+  }, [slug]);
+
+  useEffect(() => {
+    if (Array.isArray(softwareDetailData?.software_plans))
+      dispatch(
+        checkSoftwareExist({
+          payload: {
+            software_id: softwareDetailData?.id,
+            plan_id: softwareDetailData?.software_plans[0]?.id,
+          },
+          loginToken: customerData?.login_token,
+        })
+      );
+  }, [softwareDetailData]);
 
   useEffect(() => {
     const sectionIds = [
@@ -577,6 +591,19 @@ const Software = () => {
                     Enquire Now
                   </button>
                 </div>
+              ) : checkSoftwareResponse?.expiry === "Active" ? (
+                <div className="mt-4 d-flex justify-content-center d-sm-block">
+                  <Link
+                    to={`/customer/renew-checkout/${checkSoftwareResponse?.data?.id}`}
+                    className="btn btn-primary me-2"
+                  >
+                    Renew Now
+                  </Link>
+
+                  <button type="button" className="btn btn-danger">
+                    Upgrade Now
+                  </button>
+                </div>
               ) : (
                 <div className="mt-4 d-flex justify-content-center d-sm-block">
                   <button
@@ -754,7 +781,8 @@ const Software = () => {
                       (plan, idx) =>
                         plan?.plan_type?.plan_type_name === "Halfyearly" && (
                           <div key={idx} className="col-xl-4 col-md-6">
-                            <div className="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
+                            <div className="dg-pricing-column text-center bg-white rounded-4 position-relative z-1 h-100 d-flex flex-column justify-content-between p-4 shadow-sm">
+                              {/* Badge */}
                               {plan?.badge_icon && (
                                 <img
                                   src={`${
@@ -764,29 +792,35 @@ const Software = () => {
                                 />
                               )}
 
-                              <div className="icon-wrapper d-inline-block rounded-circle bg-white">
-                                <span className="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
-                                  <img
-                                    src={`${
-                                      import.meta.env.VITE_REACT_APP_IMAGE_PATH
-                                    }/software-plan/${plan?.plan_icon}`}
-                                  />
-                                </span>
-                              </div>
+                              {/* Icon */}
+                              <div>
+                                <div className="icon-wrapper d-inline-block rounded-circle bg-white shadow-sm">
+                                  <span className="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100 p-3">
+                                    <img
+                                      src={`${
+                                        import.meta.env
+                                          .VITE_REACT_APP_IMAGE_PATH
+                                      }/software-plan/${plan?.plan_icon}`}
+                                      alt="plan-icon"
+                                      className="img-fluid"
+                                    />
+                                  </span>
+                                </div>
 
-                              <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
-                              <p className="mb-4 fm">
-                                {plan?.plan_short_description}
-                              </p>
+                                {/* Name + Description */}
+                                <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
+                                <p className="mb-4 fm truncate-2">
+                                  Lorem ipsum dolor sit amet consectetur
+                                  adipisicing elit. Ex blanditiis voluptatum
+                                  minus sapiente architecto sit.
+                                </p>
 
-                              <ul className="dg-feature-list list-unstyled d-inline-block text-start p-0">
-                                {Array.isArray(
-                                  softwareDetailData?.software_module
-                                ) &&
-                                  softwareDetailData?.software_module.map(
-                                    (module, moduleIdx) => (
+                                {/* Features */}
+                                <ul className="dg-feature-list list-unstyled d-inline-block text-start p-0 mb-3">
+                                  {Array.isArray(plan?.modules) &&
+                                    plan?.modules.map((module, moduleIdx) => (
                                       <li
-                                        className="fs-sm"
+                                        className="fs-sm mb-2"
                                         key={moduleIdx}
                                         style={{
                                           display:
@@ -795,35 +829,50 @@ const Software = () => {
                                               : "none",
                                         }}
                                       >
-                                        {module?.additional_info === 0 ? (
-                                          <span className="me-2">
-                                            <i className="fas fa-check"></i>
-                                          </span>
-                                        ) : (
-                                          <span className="me-2">
-                                            <i
-                                              className="fa-solid fa-circle-check"
-                                              style={{ color: "red" }}
-                                            ></i>
-                                          </span>
-                                        )}
+                                        <span className="me-2">
+                                          <i
+                                            className={
+                                              module?.additional_info === 0
+                                                ? "fas fa-check text-success"
+                                                : "fa-solid fa-circle-check text-danger"
+                                            }
+                                          ></i>
+                                        </span>
                                         {module?.module_name}
                                       </li>
-                                    )
+                                    ))}
+                                </ul>
+
+                                {/* Conditionally render "See More / Less" */}
+                                {Array.isArray(plan?.modules) &&
+                                  plan.modules.some(
+                                    (m) => m.additional_info !== 0
+                                  ) && (
+                                    <button
+                                      className="btn btn-link ps-1 fs-sm"
+                                      onClick={() => toggleShowMore(idx)}
+                                    >
+                                      {showMoreStates[idx]
+                                        ? "See Less"
+                                        : "See More"}
+                                    </button>
                                   )}
-                              </ul>
+                              </div>
 
-                              <button
-                                className="btn btn-link p-0 fs-sm "
-                                onClick={() => toggleShowMore(idx)}
+                              {/* Price Box — stays at bottom and centered */}
+                              <div
+                                className="dg-pricing-amount mt-auto pt-3 pb-3 px-4 rounded-4 bg-dg-primary text-white mx-auto text-center"
+                                style={{
+                                  width: "fit-content",
+                                  minWidth: "80%",
+                                }}
                               >
-                                {showMoreStates[idx] ? "See Less" : "See More"}
-                              </button>
-
-                              <div className="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
-                                <h2 style={{ fontSize: "22px" }}>
+                                <h2
+                                  className="mb-3"
+                                  style={{ fontSize: "22px" }}
+                                >
                                   <span>₹ {plan?.plan_price}</span>
-                                  <span className="ms-2 fs-md fw-normal">
+                                  <span className="ms-2 fs-md fw-normal text-light">
                                     {plan?.plan_type?.duration_value}{" "}
                                     {plan?.plan_type?.duration_type}
                                   </span>
@@ -853,37 +902,46 @@ const Software = () => {
                       (plan, idx) =>
                         plan?.plan_type?.plan_type_name === "Yearly" && (
                           <div key={idx} className="col-xl-4 col-md-6">
-                            <div className="dg-pricing-column text-center bg-white rounded-4 position-relative z-1">
-                              <img
-                                src={`${
-                                  import.meta.env.VITE_REACT_APP_IMAGE_PATH
-                                }/software-plan/${plan?.badge_icon}`}
-                                className="position-absolute top-0 offer-badge z-2"
-                              />
+                            <div className="dg-pricing-column text-center bg-white rounded-4 position-relative z-1 h-100 d-flex flex-column justify-content-between p-4 shadow-sm">
+                              {/* Badge */}
+                              {plan?.badge_icon && (
+                                <img
+                                  src={`${
+                                    import.meta.env.VITE_REACT_APP_IMAGE_PATH
+                                  }/software-plan/${plan?.badge_icon}`}
+                                  className="position-absolute top-0 offer-badge z-2"
+                                />
+                              )}
 
-                              <div className="icon-wrapper d-inline-block rounded-circle bg-white">
-                                <span className="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100">
-                                  <img
-                                    src={`${
-                                      import.meta.env.VITE_REACT_APP_IMAGE_PATH
-                                    }/software-plan/${plan?.plan_icon}`}
-                                  />
-                                </span>
-                              </div>
+                              {/* Icon */}
+                              <div>
+                                <div className="icon-wrapper d-inline-block rounded-circle bg-white shadow-sm">
+                                  <span className="d-inline-flex align-items-center justify-content-center rounded-circle w-100 h-100 p-3">
+                                    <img
+                                      src={`${
+                                        import.meta.env
+                                          .VITE_REACT_APP_IMAGE_PATH
+                                      }/software-plan/${plan?.plan_icon}`}
+                                      alt="plan-icon"
+                                      className="img-fluid"
+                                    />
+                                  </span>
+                                </div>
 
-                              <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
-                              <p className="mb-4 fm">
-                                {plan?.plan_short_description}
-                              </p>
+                                {/* Name + Description */}
+                                <h5 className="mt-4 mb-3">{plan?.plan_name}</h5>
+                                <p className="mb-4 fm truncate-2">
+                                  Lorem ipsum dolor sit amet consectetur
+                                  adipisicing elit. Ex blanditiis voluptatum
+                                  minus sapiente architecto sit.
+                                </p>
 
-                              <ul className="dg-feature-list list-unstyled d-inline-block text-start p-0">
-                                {Array.isArray(
-                                  softwareDetailData?.software_module
-                                ) &&
-                                  softwareDetailData?.software_module.map(
-                                    (module, moduleIdx) => (
+                                {/* Features */}
+                                <ul className="dg-feature-list list-unstyled d-inline-block text-start p-0 mb-3">
+                                  {Array.isArray(plan?.modules) &&
+                                    plan?.modules.map((module, moduleIdx) => (
                                       <li
-                                        className="fs-sm"
+                                        className="fs-sm mb-2"
                                         key={moduleIdx}
                                         style={{
                                           display:
@@ -892,35 +950,50 @@ const Software = () => {
                                               : "none",
                                         }}
                                       >
-                                        {module?.additional_info === 0 ? (
-                                          <span className="me-2">
-                                            <i className="fas fa-check"></i>
-                                          </span>
-                                        ) : (
-                                          <span className="me-2">
-                                            <i
-                                              className="fa-solid fa-circle-check"
-                                              style={{ color: "red" }}
-                                            ></i>
-                                          </span>
-                                        )}
+                                        <span className="me-2">
+                                          <i
+                                            className={
+                                              module?.additional_info === 0
+                                                ? "fas fa-check text-success"
+                                                : "fa-solid fa-circle-check text-danger"
+                                            }
+                                          ></i>
+                                        </span>
                                         {module?.module_name}
                                       </li>
-                                    )
+                                    ))}
+                                </ul>
+
+                                {/* Conditionally render "See More / Less" */}
+                                {Array.isArray(plan?.modules) &&
+                                  plan.modules.some(
+                                    (m) => m.additional_info !== 0
+                                  ) && (
+                                    <button
+                                      className="btn btn-link ps-1 fs-sm"
+                                      onClick={() => toggleShowMore(idx)}
+                                    >
+                                      {showMoreStates[idx]
+                                        ? "See Less"
+                                        : "See More"}
+                                    </button>
                                   )}
-                              </ul>
+                              </div>
 
-                              <button
-                                className="btn btn-link p-0 fs-sm "
-                                onClick={() => toggleShowMore(idx)}
+                              {/* Price Box — stays at bottom and centered */}
+                              <div
+                                className="dg-pricing-amount mt-auto pt-3 pb-3 px-4 rounded-4 bg-dg-primary text-white mx-auto text-center"
+                                style={{
+                                  width: "fit-content",
+                                  minWidth: "80%",
+                                }}
                               >
-                                {showMoreStates[idx] ? "See Less" : "See More"}
-                              </button>
-
-                              <div className="dg-pricing-amount d-inline-block rounded-4 bg-dg-primary">
-                                <h2 style={{ fontSize: "22px" }}>
+                                <h2
+                                  className="mb-3"
+                                  style={{ fontSize: "22px" }}
+                                >
                                   <span>₹ {plan?.plan_price}</span>
-                                  <span className="ms-2 fs-md fw-normal">
+                                  <span className="ms-2 fs-md fw-normal text-light">
                                     {plan?.plan_type?.duration_value}{" "}
                                     {plan?.plan_type?.duration_type}
                                   </span>

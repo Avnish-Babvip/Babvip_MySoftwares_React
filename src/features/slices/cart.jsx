@@ -5,7 +5,9 @@ import {
   deleteCartItem,
   getCustomerCartData,
   getCustomerCheckoutData,
+  getRenewCheckoutData,
   paymentProcess,
+  renewPaymentProcess,
 } from "../actions/cart";
 
 const initialState = {
@@ -14,8 +16,10 @@ const initialState = {
   cartData: [],
   updateResponse: {},
   checkoutData: null,
+  renewCheckoutData: null,
   isLoadingOrder: false,
   paymentCredentials: null,
+  renewPaymentCredentials: null,
 };
 
 const formattedDate = new Date().toLocaleString("en-US", {
@@ -39,6 +43,7 @@ const cartSlice = createSlice({
     },
     clearCredentialResponse: (state) => {
       state.paymentCredentials = null;
+      state.renewPaymentCredentials = null;
     },
   },
   extraReducers: (builder) => {
@@ -109,6 +114,20 @@ const cartSlice = createSlice({
         state.isLoading = false;
         state.errorMessage = action.payload;
       })
+      .addCase(getRenewCheckoutData.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(getRenewCheckoutData.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        state.renewCheckoutData = action.payload.data;
+        state.renewPaymentCredentials = null;
+      })
+      .addCase(getRenewCheckoutData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+      })
       .addCase(paymentProcess.pending, (state) => {
         state.isLoadingOrder = true;
         state.errorMessage = "";
@@ -119,6 +138,19 @@ const cartSlice = createSlice({
         state.paymentCredentials = action.payload.data;
       })
       .addCase(paymentProcess.rejected, (state, action) => {
+        state.isLoadingOrder = false;
+        state.errorMessage = action.payload;
+      })
+      .addCase(renewPaymentProcess.pending, (state) => {
+        state.isLoadingOrder = true;
+        state.errorMessage = "";
+      })
+      .addCase(renewPaymentProcess.fulfilled, (state, action) => {
+        state.isLoadingOrder = false;
+        state.errorMessage = "";
+        state.renewPaymentCredentials = action.payload.data;
+      })
+      .addCase(renewPaymentProcess.rejected, (state, action) => {
         state.isLoadingOrder = false;
         state.errorMessage = action.payload;
       });

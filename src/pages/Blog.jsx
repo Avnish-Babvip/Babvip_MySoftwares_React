@@ -44,7 +44,21 @@ const ViewBlog = () => {
     dispatch(getLatestThreeBlogs());
   }, [slug]);
 
-  console.log(data, newsSetting);
+  useEffect(() => {
+    const canonicalUrl = window.location.href.split("?")[0]; // remove query params if you want
+    let link = document.querySelector("link[rel='canonical']");
+
+    if (link) {
+      // update existing
+      link.setAttribute("href", canonicalUrl);
+    } else {
+      // create new
+      link = document.createElement("link");
+      link.setAttribute("rel", "canonical");
+      link.setAttribute("href", canonicalUrl);
+      document.head.appendChild(link);
+    }
+  }, [slug]);
 
   return (
     <>
@@ -54,6 +68,7 @@ const ViewBlog = () => {
           name="description"
           content={data?.blog_short_details1 || "Babvip Description"}
         />
+
         {/* ✅ Inject head script safely */}
         {/* {pageHeadScripts && (
           <script dangerouslySetInnerHTML={{ __html: pageHeadScripts }} />
@@ -93,6 +108,7 @@ const ViewBlog = () => {
                       </p>
                     </blockquote>
                   </div>
+
                   <img
                     src={`${import.meta.env.VITE_REACT_APP_IMAGE_PATH}/${
                       data?.blog_image2
@@ -101,6 +117,13 @@ const ViewBlog = () => {
                     class="img-fluid mt-4 rounded-custom"
                     loading="lazy"
                   />
+                  <blockquote class="bg-white custom-shadow p-5 mt-5 rounded-custom border-4 border-primary border-top">
+                    <p class="text-muted">
+                      <i class="fas fa-quote-left me-2 text-primary"></i>
+                      {data?.blog_short_details2}
+                      <i class="fas fa-quote-right ms-2 text-primary"></i>
+                    </p>
+                  </blockquote>
                   <div class="job-details-info mt-5">
                     {parse(String(data?.blog_details2))}
                   </div>

@@ -80,35 +80,45 @@ const Style2 = ({ data }) => {
               <div class="ins-gallery-info mt-3 mt-xl-0">
                 <p class="ins-text mb-30">{data?.main_description}</p>
                 <div class="d-flex align-items-center ins-gallery-info-btns flex-wrap">
-                  <Link to={data?.button_url} class="ins-btn ins-secondary-btn">
-                    {data?.button_text}
-                    <span class="ms-1">
-                      <svg
-                        width="22"
-                        height="9"
-                        viewBox="0 0 22 9"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M0.776428 4.55017L15.7133 4.55017"
-                          stroke="white"
-                          stroke-width="1.49369"
-                        ></path>
-                        <path
-                          d="M21.6888 4.54934L15.7141 7.99887L15.7141 1.09981L21.6888 4.54934Z"
-                          fill="white"
-                        ></path>
-                      </svg>
-                    </span>
-                  </Link>
-                  <Link
-                    onClick={() => data?.video_url && setShowVideo(true)}
-                    class="video-icon popup-youtube text-decoration-none"
-                  >
-                    <i class="fas fa-play"></i>{" "}
-                    <span class="ms-2 fs-md fw-bold"> {data?.video_text}</span>
-                  </Link>
+                  {data?.button_url && (
+                    <Link
+                      to={data?.button_url}
+                      class="ins-btn ins-secondary-btn"
+                    >
+                      {data?.button_text}
+                      <span class="ms-1">
+                        <svg
+                          width="22"
+                          height="9"
+                          viewBox="0 0 22 9"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M0.776428 4.55017L15.7133 4.55017"
+                            stroke="white"
+                            stroke-width="1.49369"
+                          ></path>
+                          <path
+                            d="M21.6888 4.54934L15.7141 7.99887L15.7141 1.09981L21.6888 4.54934Z"
+                            fill="white"
+                          ></path>
+                        </svg>
+                      </span>
+                    </Link>
+                  )}
+                  {data?.video_url && (
+                    <Link
+                      onClick={() => data?.video_url && setShowVideo(true)}
+                      class="video-icon popup-youtube text-decoration-none"
+                    >
+                      <i class="fas fa-play"></i>{" "}
+                      <span class="ms-2 fs-md fw-bold">
+                        {" "}
+                        {data?.video_text}
+                      </span>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

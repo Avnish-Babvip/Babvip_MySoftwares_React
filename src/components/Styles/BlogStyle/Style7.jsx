@@ -60,7 +60,7 @@ const Style7 = ({ data }) => {
                         {item?.blog_short_details1}
                       </p>
 
-                      <a href="javascript:;">
+                      <a>
                         <div class="d-flex align-items-center pt-4">
                           <div class="avatar">
                             <img

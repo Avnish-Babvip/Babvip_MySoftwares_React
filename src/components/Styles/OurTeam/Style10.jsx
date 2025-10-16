@@ -318,8 +318,11 @@ const Style10 = ({ data }) => {
                     </div>
 
                     <div class="member-info">
-                      <h5>James Carter</h5>
-                      <h6>CEO & Founder</h6>
+                      <h5>
+                        {" "}
+                        {item?.name} {item?.lastname || ""}
+                      </h5>
+                      <h6> {item?.designation}</h6>
                     </div>
                   </div>
                 </div>

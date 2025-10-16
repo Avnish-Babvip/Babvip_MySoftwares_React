@@ -94,7 +94,7 @@ const Style5 = ({ data }) => {
                       <div class="article-content">
                         <div class="article-info d-flex py-3">
                           <div class="pe-3">
-                            <a href="#" class="text-decoration-none">
+                            <a class="text-decoration-none">
                               <img
                                 src={`${
                                   import.meta.env.VITE_REACT_APP_IMAGE_PATH
@@ -104,7 +104,7 @@ const Style5 = ({ data }) => {
                             </a>
                           </div>
                           <div>
-                            <a href="#" class="text-decoration-none">
+                            <a class="text-decoration-none">
                               <i class="fas fa-calendar pe-2"></i>
                               <span class="text-muted">
                                 {" "}
@@ -113,15 +113,12 @@ const Style5 = ({ data }) => {
                             </a>
                           </div>
                         </div>
-                        <a href="blog-single.html" class="text-decoration-none">
+                        <a class="text-decoration-none">
                           <h2 class="h5 article-title limit-2-line-text">
                             {item?.blog_title}
                           </h2>
                         </a>
-                        <a
-                          href="service-single.html"
-                          class="link-with-icon text-decoration-none"
-                        >
+                        <a class="link-with-icon text-decoration-none">
                           Read more <i class="fas fa-arrow-right"></i>
                         </a>
                       </div>

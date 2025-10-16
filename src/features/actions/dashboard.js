@@ -29,7 +29,6 @@ export const getDashboardData = createAsyncThunk(
   }
 );
 
-
 export const getProfileData = createAsyncThunk(
   "/customer/profile",
   async (loginToken, { rejectWithValue }) => {
@@ -78,6 +77,28 @@ export const updateProfileDashboard = createAsyncThunk(
     try {
       const { data } = await instance.post(
         `/customer/updateprofile`,
+        { ...payload, _token: await getCsrfToken() },
+        {
+          withCredentials: false,
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${loginToken}`,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const updateBillingDashboard = createAsyncThunk(
+  "/customer/savecustomerbilling",
+  async ({ payload, loginToken }, { rejectWithValue }) => {
+    try {
+      const { data } = await instance.post(
+        `/customer/savecustomerbilling`,
         { ...payload, _token: await getCsrfToken() },
         {
           withCredentials: false,

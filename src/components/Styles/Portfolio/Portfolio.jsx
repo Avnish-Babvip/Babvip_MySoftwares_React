@@ -13,14 +13,16 @@ import Style10 from "./Style10";
 import Style11 from "./Style11";
 import Style12 from "./Style12";
 import Style13 from "./Style13";
+import Style14 from "./Style14";
+import Style15 from "./Style15";
+import Style16 from "./Style16";
+import Style17 from "./Style17";
+import Style18 from "./Style18";
+import Style19 from "./Style19";
+import Style20 from "./Style20";
 
 const Portfolio = ({ data, styleName }) => {
   const dispatch = useDispatch();
-  // const { teamData } = useSelector((state) => state.team);
-
-  // useEffect(() => {
-  //   dispatch(getTeam());
-  // }, []);
 
   const componentMap = {
     "Style 1": Style1,
@@ -36,6 +38,13 @@ const Portfolio = ({ data, styleName }) => {
     "Style 11": Style11,
     "Style 12": Style12,
     "Style 13": Style13,
+    "Style 14": Style14,
+    "Style 15": Style15,
+    "Style 16": Style16,
+    "Style 17": Style17,
+    "Style 18": Style18,
+    "Style 19": Style19,
+    "Style 20": Style20,
   };
 
   const Component = componentMap[styleName];

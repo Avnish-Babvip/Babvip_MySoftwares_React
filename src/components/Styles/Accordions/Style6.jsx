@@ -58,9 +58,11 @@ const Style6 = ({ data }) => {
               </div>
               <div class="col-lg-3">
                 <div class="text-lg-end">
-                  <Link to={data?.button_url} class="btn btn-secondary">
-                    {data?.button_text}
-                  </Link>
+                  {data?.button_url && (
+                    <Link to={data?.button_url} class="btn btn-secondary">
+                      {data?.button_text}
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

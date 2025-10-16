@@ -28,18 +28,22 @@ const Style7 = ({ data }) => {
                 {data?.description}
               </p>
               <div class="ca-two-btn-area d-flex align-items-center gap-10  mt-50">
-                <Link
-                  to={data?.button_url}
-                  class="btn dg-outline-btn ca-two-body-clr ca-two-bg-hover-two"
-                >
-                  {data?.button_text}
-                </Link>
-                <Link
-                  to={data?.link_url}
-                  class="ca-two-call-btn ca-two-body-clr-two d-flex align-items-center gap-5"
-                >
-                  <h6 class="fw-500 fs-20">{data?.link_text}</h6>
-                </Link>
+                {data?.button_url && (
+                  <Link
+                    to={data?.button_url}
+                    class="btn dg-outline-btn ca-two-body-clr ca-two-bg-hover-two"
+                  >
+                    {data?.button_text}
+                  </Link>
+                )}
+                {data?.link_url && (
+                  <Link
+                    to={data?.link_url}
+                    class="ca-two-call-btn ca-two-body-clr-two d-flex align-items-center gap-5"
+                  >
+                    <h6 class="fw-500 fs-20">{data?.link_text}</h6>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

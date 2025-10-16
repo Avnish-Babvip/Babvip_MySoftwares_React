@@ -4,6 +4,7 @@ import {
   changePasswordDashboard,
   getDashboardData,
   getProfileData,
+  updateBillingDashboard,
   updateProfileDashboard,
   updateProfilePhotoDashboard,
 } from "../actions/dashboard";
@@ -95,6 +96,25 @@ const dashboardSlice = createSlice({
         });
       })
       .addCase(updateProfileDashboard.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+        toast(action.payload, {
+          description: formattedDate,
+        });
+      })
+      .addCase(updateBillingDashboard.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = "";
+      })
+      .addCase(updateBillingDashboard.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        state.updateResponse = action.payload;
+        toast("Billing details updated successfully.", {
+          description: formattedDate,
+        });
+      })
+      .addCase(updateBillingDashboard.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
         toast(action.payload, {

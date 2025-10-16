@@ -113,3 +113,48 @@ export const paymentProcess = createAsyncThunk(
     }
   }
 );
+
+export const renewPaymentProcess = createAsyncThunk(
+  "/customer/renewpaymentprocess",
+  async ({ payload, loginToken }, { rejectWithValue }) => {
+    try {
+      const { data } = await instance.post(
+        `/customer/customerrenewprocesspayment`,
+        { ...payload, _token: await getCsrfToken() },
+        {
+          withCredentials: false,
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${loginToken}`,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getRenewCheckoutData = createAsyncThunk(
+  "/customer/renewsoftware/id",
+  async ({ loginToken, productId }, { rejectWithValue }) => {
+    try {
+      const { data } = await instance.get(
+        `/customer/renewsoftware/${productId}`,
+        {
+          withCredentials: false,
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${loginToken}`,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response.data.message || "Failed checkout API "
+      );
+    }
+  }
+);

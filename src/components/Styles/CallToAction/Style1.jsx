@@ -24,12 +24,16 @@ const Style1 = ({ data }) => {
                   ))}
                 </ul>
                 <div class="action-btns mt-5">
-                  <Link to={data?.button_url1} class="btn btn-primary me-3">
-                    {data?.button_text1}
-                  </Link>
-                  <Link to={data?.button_url2} class="btn btn-outline-light">
-                    {data?.button_text2}
-                  </Link>
+                  {data?.button_url1 && (
+                    <Link to={data?.button_url1} class="btn btn-primary me-3">
+                      {data?.button_text1}
+                    </Link>
+                  )}
+                  {data?.button_url2 && (
+                    <Link to={data?.button_url2} class="btn btn-outline-light">
+                      {data?.button_text2}
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

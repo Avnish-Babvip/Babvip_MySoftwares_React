@@ -63,13 +63,15 @@ const Style12 = ({ data }) => {
                   </li>
                 ))}
               </ul>
-              <Link
-                to={data?.button_url}
-                class="link-with-icon text-decoration-none mt-3 btn btn-primary"
-              >
-                {data?.button_text}
-                <i class="fas fa-arrow-right"></i>
-              </Link>
+              {data?.button_url && (
+                <Link
+                  to={data?.button_url}
+                  class="link-with-icon text-decoration-none mt-3 btn btn-primary"
+                >
+                  {data?.button_text}
+                  <i class="fas fa-arrow-right"></i>
+                </Link>
+              )}
             </div>
           </div>
         </div>

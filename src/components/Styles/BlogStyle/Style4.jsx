@@ -47,7 +47,7 @@ const Style4 = ({ data }) => {
                   <h6 class="risk-sub-text fs-16 ff-risk-pri fw-600 ch-mb-10">
                     {item?.category?.category_name}
                   </h6>
-                  <a href="">
+                  <a>
                     <h5 class="risk-color fs-20 ff-risk-pri fw-800 flh-28 mb-20">
                       {item?.blog_title}
                     </h5>

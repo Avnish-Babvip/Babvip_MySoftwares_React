@@ -64,9 +64,11 @@ const Style16 = ({ data }) => {
                 <span class="mk-subtitle mb-3 fw-bold">{data?.sub_title}</span>
                 <h3 class="mk-heading lh-lg mb-3">{data?.title1}</h3>
                 <p class="mb-0">{data?.description2}</p>
-                <Link to={data?.button_url} class="btn btn-primary mt-40">
-                  {data?.button_text}
-                </Link>
+                {data?.button_url && (
+                  <Link to={data?.button_url} class="btn btn-primary mt-40">
+                    {data?.button_text}
+                  </Link>
+                )}
               </div>
             </div>
             <div class="col-xl-6">
